@@ -8,26 +8,27 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib ./src/components/BlockExplorer.vue",
     "test": "vue-cli-service test",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.3",
     "@fortawesome/fontawesome-free-regular": "^5.0.6",
     "@fortawesome/fontawesome-free-solid": "^5.0.6",
     "@fortawesome/vue-fontawesome": "^0.0.22",
-    "axios": "^0.18.0",
-    "bootstrap-vue": "^2.0.0-rc.1",
-    "date-fns": "^1.29.0",
-    "open-iconic": "^1.1.1",
-    "tslib": "^1.9.0",
-    "vue-class-component": "^6.0.0",
-    "vue-property-decorator": "^6.0.0",
     "@vue/cli-plugin-babel": "^3.0.0-beta.1",
     "@vue/cli-plugin-typescript": "^3.0.0-beta.1",
     "@vue/cli-plugin-unit-mocha": "^3.0.0-beta.1",
     "@vue/cli-service": "^3.0.0-beta.1",
+    "axios": "^0.18.0",
+    "bootstrap-vue": "^2.0.0-rc.1",
+    "date-fns": "^1.29.0",
     "node-sass": "^4.7.2",
+    "open-iconic": "^1.1.1",
     "sass-loader": "^6.0.6",
+    "tslib": "^1.9.0",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^6.0.0",
     "vue-template-compiler": "^2.5.13"
   },
   "devDependencies": {
@@ -35,6 +36,9 @@
     "@types/mocha": "^2.2.46",
     "@vue/test-utils": "^1.0.0-beta.10",
     "chai": "^4.1.2",
+    "prettier": "1.10.2",
+    "tslint-config-prettier": "^1.8.0",
+    "tslint-config-standard": "^7.0.0",
     "vue": "^2.5.13"
   },
   "browserslist": [
