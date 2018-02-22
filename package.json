@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "yarn build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib ./src/components/BlockExplorer.vue",
     "test": "vue-cli-service test",
@@ -22,21 +23,21 @@
     "tslib": "^1.9.0",
     "vue": "^2.5.13",
     "vue-class-component": "^6.0.0",
-    "vue-property-decorator": "^6.0.0"
+    "vue-property-decorator": "^6.0.0",
+    "@vue/cli-plugin-babel": "^3.0.0-beta.1",
+    "@vue/cli-plugin-typescript": "^3.0.0-beta.1",
+    "@vue/cli-plugin-unit-mocha": "^3.0.0-beta.1",
+    "@vue/cli-service": "^3.0.0-beta.1",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "vue-template-compiler": "^2.5.13"
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",
     "@types/mocha": "^2.2.46",
-    "@vue/cli-plugin-babel": "^3.0.0-beta.1",
     "@vue/cli-plugin-e2e-cypress": "^3.0.0-beta.1",
-    "@vue/cli-plugin-typescript": "^3.0.0-beta.1",
-    "@vue/cli-plugin-unit-mocha": "^3.0.0-beta.1",
-    "@vue/cli-service": "^3.0.0-beta.1",
     "@vue/test-utils": "^1.0.0-beta.10",
-    "chai": "^4.1.2",
-    "node-sass": "^4.7.2",
-    "sass-loader": "^6.0.6",
-    "vue-template-compiler": "^2.5.13"
+    "chai": "^4.1.2"
   },
   "browserslist": [
     "> 1%",
