@@ -13,6 +13,9 @@ export default Vue.extend({
   computed: {
     isConnected(): boolean {
       return this.blockchain.isConnected
+    },
+    isUrlEditable(): boolean {
+      return this.blockchain.isUrlEditable
     }
   },
   methods: {

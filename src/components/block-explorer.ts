@@ -45,6 +45,7 @@ export enum BlockExplorerView {
 
 export interface IBlockchain {
   serverUrl: string
+  isServerUrlEditable: boolean
   isConnected: boolean
   blocks: IBlockhainBlockMeta[]
   transactions: IBlockchainTransaction[]
@@ -57,12 +58,15 @@ interface IBlockExplorerData {
 export default Vue.extend({
   name: 'BlockExplorer',
   props: {
-    view: { type: String }
+    view: { type: String },
+    defaultUrl: { type: String },
+    isUrlEditable: { type: Boolean, default: true }
   },
   data(): IBlockExplorerData {
     return {
       blockchain: {
-        serverUrl: 'http://localhost:46657',
+        serverUrl: this.defaultUrl,
+        isServerUrlEditable: this.isUrlEditable,
         isConnected: false,
         blocks: [],
         transactions: []

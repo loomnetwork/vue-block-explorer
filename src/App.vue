@@ -1,6 +1,14 @@
 <template>
   <div id="app">
-    <BlockExplorer/>
+    <b-container fluid>
+      <b-row>
+        <b-col cols="12">
+          <BlockExplorer
+            defaultUrl="https://stagewss.delegatecall.com"
+            :isUrlEditable="false"/>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
