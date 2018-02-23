@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
-import { IBlockchainTransaction } from './block-explorer'
+import { IBlockchainTransaction } from '../blockchain'
 
 export interface ITransactionTableItem {
   hash: string

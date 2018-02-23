@@ -7,7 +7,7 @@ import ConnectionStatus from './ConnectionStatus.vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import TransactionTable from './TransactionTable.vue'
 
-import { IBlockchain } from './block-explorer'
+import { Blockchain } from '../blockchain'
 import { IBlockInfoProps } from './block-info'
 import {
   ITransactionTableProps,
@@ -50,7 +50,7 @@ export default Vue.extend({
     txTableProps(): ITransactionTableProps {
       return {
         columns: txTableColumns,
-        transactions: (this.blockchain as IBlockchain).transactions,
+        transactions: (this.blockchain as Blockchain).transactions,
         onRowClicked: this.onRowClicked
       }
     },

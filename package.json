@@ -23,6 +23,7 @@
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.1",
     "date-fns": "^1.29.0",
+    "loom": "loomnetwork/loom-js",
     "node-sass": "^4.7.2",
     "open-iconic": "^1.1.1",
     "sass-loader": "^6.0.6",

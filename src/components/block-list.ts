@@ -6,15 +6,15 @@ import BlockInfo from './BlockInfo.vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import ConnectionStatus from './ConnectionStatus.vue'
 
-import { IBlockchain, IBlockhainBlockMeta } from './block-explorer'
 import { IBlockInfoProps } from './block-info'
+import { Blockchain, IBlockchainBlock } from '../blockchain'
 
 interface IBlockListItem {
   blockHeight: number
   numTransactions: number
   age: string
   speed: any
-  block: IBlockhainBlockMeta
+  block: IBlockchainBlock
 }
 
 interface IBlockListData {
@@ -52,12 +52,12 @@ export default Vue.extend({
   },
   computed: {
     blocks(): IBlockListItem[] {
-      return (this.blockchain as IBlockchain).blocks.map<IBlockListItem>(meta => ({
-        blockHeight: meta.header.height,
-        numTransactions: meta.header.num_txs,
-        age: distanceInWordsToNow(new Date(meta.header.time)),
+      return (this.blockchain as Blockchain).blocks.map<IBlockListItem>(block => ({
+        blockHeight: block.height,
+        numTransactions: block.numTxs,
+        age: distanceInWordsToNow(new Date(block.time)),
         speed: { time: 99, node: 66 },
-        block: meta
+        block
       }))
     },
     blockInfoProps(): IBlockInfoProps {
@@ -78,6 +78,10 @@ export default Vue.extend({
         this.isBlockInfoVisible = true
       }
       this.selectedItem = item
+
+      if (this.isBlockInfoVisible && (this.selectedItem.block.numTxs > 0)) {
+        (this.blockchain as Blockchain).fetchTxsInBlock(this.selectedItem.block)
+      }
     },
     closeBlockInfoOverlay() {
       this.isBlockInfoVisible = false

@@ -3,7 +3,7 @@ import Vue from 'vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import TransactionTable from './TransactionTable.vue'
 
-import { IBlockhainBlockMeta, IBlockchain, IBlockchainTransaction } from './block-explorer'
+import { Blockchain, IBlockchainBlock, IBlockchainTransaction } from '../blockchain'
 import {
   ITransactionTableProps,
   ITransactionTableColumn,
@@ -19,8 +19,8 @@ const txTableColumns: ITransactionTableColumn[] = [
 
 export interface IBlockInfoProps {
   transaction: IBlockchainTransaction | null
-  block: IBlockhainBlockMeta | null
-  blockchain: IBlockchain | null
+  block: IBlockchainBlock | null
+  blockchain: Blockchain | null
   onCloseBtnClicked: () => void
 }
 
@@ -56,8 +56,8 @@ export default Vue.extend({
   },
   computed: {
     blockTitle(): string {
-      const block: IBlockhainBlockMeta | null = this.block
-      return `Block #${block ? block.header.height.toString() : ''}`
+      const block: IBlockchainBlock | null = this.block
+      return `Block #${block ? block.height.toString() : ''}`
     },
     transactionTitle(): string {
       const tx: IBlockchainTransaction | null = this.selectedTx
@@ -77,8 +77,8 @@ export default Vue.extend({
       return 'Node #33'
     },
     blockTimestamp(): string {
-      const block: IBlockhainBlockMeta | null = this.block
-      return block ? block.header.time : ''
+      const block: IBlockchainBlock | null = this.block
+      return block ? block.time : ''
     },
     txTimestamp(): string {
       const tx: IBlockchainTransaction | null = this.selectedTx
@@ -88,23 +88,10 @@ export default Vue.extend({
       return true
     },
     txTableProps(): ITransactionTableProps {
-      const block = this.block as IBlockhainBlockMeta
-      const txs: IBlockchainTransaction[] = []
-      // TODO: Pull real tx data from somewhere.
-      if (block) {
-        for (let i = 0; i < 5; i++) {
-          txs.push({
-            hash: block.block_id.hash + i,
-            blockHeight: block.header.height,
-            txType: 'question',
-            time: block.header.time,
-            sender: 'alice'
-          })
-        }
-      }
+      const block = this.block as IBlockchainBlock
       return {
         columns: txTableColumns,
-        transactions: txs,
+        transactions: block ? (block.txs || []) : [],
         onRowClicked: this.onTxClicked
       }
     }
