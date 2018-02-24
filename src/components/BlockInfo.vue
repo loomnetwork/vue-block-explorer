@@ -17,6 +17,26 @@
 </template>
 
 <style lang="scss" scoped>
+  @import '~@/styles/app.scss';
+
+  .card {
+    background-color: lighten($body-bg, 5%);
+    border-color: lighten($body-bg, 10%);
+
+    .text-muted {
+      color: lighten($text-muted, 40%) !important;
+    }
+  }
+
+  button.close {
+    color: $white;
+    outline: none;
+
+    @include hover-focus {
+      color: $white;
+    }
+  }
+
   .breadcrumb {
     flex: 1 1 auto;
     flex-wrap: nowrap;
@@ -24,6 +44,10 @@
     padding-left: 0;
     padding-right: 0;
     background-color: transparent;
+
+    .breadcrumb-item {
+      color: $white;
+    }
   }
 </style>
 
