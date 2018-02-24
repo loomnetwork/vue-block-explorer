@@ -37,6 +37,7 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
+  data: DelegateCallTx
 }
 
 interface IBlockchainResponse {
@@ -161,7 +162,8 @@ export class Blockchain {
             blockHeight: block.height,
             txType: getTxType(data),
             time: block.time,
-            sender: getTxSender(data)
+            sender: getTxSender(data),
+            data
           })
         } catch (e) {
           console.log(e)

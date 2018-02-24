@@ -1,7 +1,9 @@
-import Vue from 'vue'
+import Vue, { VueConstructor } from 'vue'
 
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import TransactionTable from './TransactionTable.vue'
+// @ts-ignore
+import CreateAccountTxPreview from './delegatecall/CreateAccountTxPreview.vue'
 
 import { Blockchain, IBlockchainBlock, IBlockchainTransaction } from '../blockchain'
 import {
@@ -10,6 +12,7 @@ import {
   TransactionTableColumnKey,
   ITransactionTableItem
 } from './transaction-table'
+import { TxKind } from '../transaction-reader';
 
 const txTableColumns: ITransactionTableColumn[] = [
   { key: TransactionTableColumnKey.TxHash, sortable: false },
@@ -86,6 +89,16 @@ export default Vue.extend({
     },
     isVerified(): boolean {
       return true
+    },
+    txInfoComponent(): VueConstructor | null {
+      if (this.selectedTx) {
+        switch (this.selectedTx.txType) {
+          case TxKind.CreateAccount: {
+            return CreateAccountTxPreview
+          }
+        }
+      }
+      return null
     },
     txTableProps(): ITransactionTableProps {
       const block = this.block as IBlockchainBlock

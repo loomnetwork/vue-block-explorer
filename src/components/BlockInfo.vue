@@ -5,14 +5,12 @@
       <b-button-close @click="onCloseBtnClicked"/>
     </div>
     <div v-if="selectedTx">
-      <div>Created by {{ nodeName }}</div>
-      <div>On {{ txTimestamp }}</div>
-      Details
+      <component :is="txInfoComponent" :tx="selectedTx.data"/>
     </div>
     <div v-else>
-      <div v-if="block">Created by {{ nodeName }}</div>
-      <div v-if="block">On {{ blockTimestamp }}</div>
-      <div v-if="isVerified">Verified</div>
+      <div v-if="block" class="text-muted">Created by {{ nodeName }}</div>
+      <div v-if="block" class="text-muted">On {{ blockTimestamp }}</div>
+      <div v-if="isVerified" class="text-muted">Verified</div>
       <TransactionTable v-bind="txTableProps"/>
     </div>
   </b-card>
@@ -28,6 +26,5 @@
     background-color: transparent;
   }
 </style>
-
 
 <script lang="ts" src="./block-info.ts"></script>
