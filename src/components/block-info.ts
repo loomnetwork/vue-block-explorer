@@ -4,6 +4,8 @@ import Vue, { VueConstructor } from 'vue'
 import TransactionTable from './TransactionTable.vue'
 // @ts-ignore
 import CreateAccountTxPreview from './delegatecall/CreateAccountTxPreview.vue'
+// @ts-ignore
+import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue';
 
 import { Blockchain, IBlockchainBlock, IBlockchainTransaction } from '../blockchain'
 import {
@@ -92,10 +94,11 @@ export default Vue.extend({
     },
     txInfoComponent(): VueConstructor | null {
       if (this.selectedTx) {
-        switch (this.selectedTx.txType) {
-          case TxKind.CreateAccount: {
+        switch (this.selectedTx.data.txKind) {
+          case TxKind.CreateAccount:
             return CreateAccountTxPreview
-          }
+          case TxKind.PostComment:
+            return PostCommentTxPreview
         }
       }
       return null
