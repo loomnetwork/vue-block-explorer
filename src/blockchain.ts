@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-import { extractTxDataFromStr, DelegateCallTx, TxKind } from './transaction-reader';
+import { extractTxDataFromStr, DelegateCallTx, TxKind } from './transaction-reader'
 
 interface IBlockchainStatusResponse {
   result: {
@@ -63,9 +63,7 @@ export class Blockchain {
   }
 
   async fetchStatus(): Promise<IBlockchainStatus> {
-    const statusResp = await Axios.get<IBlockchainStatusResponse>(
-      `${this.serverUrl}/status`
-    )
+    const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`)
     return { latestBlockHeight: statusResp.data.result.latest_block_height }
   }
 
@@ -95,15 +93,12 @@ export class Blockchain {
       */
 
       const firstBlockNum = Math.max(latestBlockHeight - 10, 0)
-      const chainResp = await Axios.get<IBlockchainResponse>(
-        `${this.serverUrl}/blockchain`,
-        {
-          params: {
-            minHeight: firstBlockNum,
-            maxHeight: latestBlockHeight
-          }
+      const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/blockchain`, {
+        params: {
+          minHeight: firstBlockNum,
+          maxHeight: latestBlockHeight
         }
-      )
+      })
       this.isConnected = true
       this.blocks = chainResp.data.result.block_metas.map<IBlockchainBlock>(meta => ({
         hash: meta.block_id.hash,
@@ -143,15 +138,14 @@ export class Blockchain {
   }
 
   async fetchTxsInBlock(block: IBlockchainBlock) {
-    if ((block.numTxs === 0) || block.isFetchingTxs || block.didFetchTxs) {
+    if (block.numTxs === 0 || block.isFetchingTxs || block.didFetchTxs) {
       return
     }
     try {
       block.isFetchingTxs = true
-      const blockResp = await Axios.get<any>(
-        `${this.serverUrl}/block`,
-        { params: { height: block.height } }
-      )
+      const blockResp = await Axios.get<any>(`${this.serverUrl}/block`, {
+        params: { height: block.height }
+      })
       const rawTxs: any[] = blockResp.data.result.block.data.txs
       block.txs = []
       for (let i = 0; i < rawTxs.length; i++) {
@@ -177,7 +171,6 @@ export class Blockchain {
     }
   }
 }
-
 
 function getTxType(tx: DelegateCallTx): string {
   switch (tx.txKind) {

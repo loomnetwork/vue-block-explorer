@@ -11,8 +11,7 @@ import TxPreviewField from './TxPreviewField.vue'
   }
 })
 export default class CreateAccountTxPreview extends Vue {
-  @Prop()
-  tx!: ICreateAccountTx
+  @Prop() tx!: ICreateAccountTx // prettier-ignore
 
   get owner(): { chainId: string; app: string; address: string } {
     const { chainId, app, address } = this.tx.owner

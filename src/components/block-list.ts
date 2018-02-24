@@ -79,8 +79,8 @@ export default Vue.extend({
       }
       this.selectedItem = item
 
-      if (this.isBlockInfoVisible && (this.selectedItem.block.numTxs > 0)) {
-        (this.blockchain as Blockchain).fetchTxsInBlock(this.selectedItem.block)
+      if (this.isBlockInfoVisible && this.selectedItem.block.numTxs > 0) {
+        ;(this.blockchain as Blockchain).fetchTxsInBlock(this.selectedItem.block)
       }
     },
     closeBlockInfoOverlay() {

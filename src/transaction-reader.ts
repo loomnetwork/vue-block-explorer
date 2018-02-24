@@ -80,7 +80,12 @@ export interface IVoteTx {
   up: boolean
 }
 
-export type DelegateCallTx = ICreateAccountTx | IPostCommentTx | IUpdateCommentTx | IAcceptAnswerTx | IVoteTx
+export type DelegateCallTx =
+  | ICreateAccountTx
+  | IPostCommentTx
+  | IUpdateCommentTx
+  | IAcceptAnswerTx
+  | IVoteTx
 
 export function extractTxDataFromStr(base64Str: string): DelegateCallTx {
   const buf = new Buffer(base64Str, 'base64')
@@ -130,7 +135,16 @@ function readPostCommentTxPayload(r: Reader): IPostCommentTx {
   for (let i = 0; i < tagCount; i++) {
     tags.push(r.readString())
   }
-  return { txKind: TxKind.PostComment, kind, parent_permalink, permalink, author, title, body, tags }
+  return {
+    txKind: TxKind.PostComment,
+    kind,
+    parent_permalink,
+    permalink,
+    author,
+    title,
+    body,
+    tags
+  }
 }
 
 // TODO: test this, haven't seen any transactions of this kind yet

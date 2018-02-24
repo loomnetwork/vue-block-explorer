@@ -11,8 +11,7 @@ import TxPreviewField from './TxPreviewField.vue'
   }
 })
 export default class PostCommentTxPreview extends Vue {
-  @Prop()
-  tx!: IPostCommentTx
+  @Prop() tx!: IPostCommentTx // prettier-ignore
 
   get parentPermalinkLabel(): string {
     switch (this.tx.kind) {

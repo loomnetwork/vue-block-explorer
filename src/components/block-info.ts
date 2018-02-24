@@ -5,7 +5,7 @@ import TransactionTable from './TransactionTable.vue'
 // @ts-ignore
 import CreateAccountTxPreview from './delegatecall/CreateAccountTxPreview.vue'
 // @ts-ignore
-import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue';
+import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue'
 
 import { Blockchain, IBlockchainBlock, IBlockchainTransaction } from '../blockchain'
 import {
@@ -14,7 +14,7 @@ import {
   TransactionTableColumnKey,
   ITransactionTableItem
 } from './transaction-table'
-import { TxKind } from '../transaction-reader';
+import { TxKind } from '../transaction-reader'
 
 const txTableColumns: ITransactionTableColumn[] = [
   { key: TransactionTableColumnKey.TxHash, sortable: false },
@@ -107,7 +107,7 @@ export default Vue.extend({
       const block = this.block as IBlockchainBlock
       return {
         columns: txTableColumns,
-        transactions: block ? (block.txs || []) : [],
+        transactions: block ? (block.txs || []) : [], // prettier-ignore
         onRowClicked: this.onTxClicked
       }
     }
