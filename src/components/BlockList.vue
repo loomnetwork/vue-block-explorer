@@ -24,6 +24,7 @@
           :hover="true"
           :head-variant="muted"
           @row-clicked="onRowClicked"
+          :per-page="perPage"
           class="table-dark bg-dark">
           <template slot="blockHeight" slot-scope="row">
             <span>#{{ row.value }}</span>
@@ -41,6 +42,12 @@
             </div>
           </template>
         </b-table>
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalNumBlocks"
+          :per-page="perPage"
+          @change="onPageChanged"
+          align="center"/>
       </div>
     </div>
     <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">

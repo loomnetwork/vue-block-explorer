@@ -56,6 +56,7 @@ export class Blockchain {
   isConnected: boolean = false
   blocks: IBlockchainBlock[] = []
   transactions: IBlockchainTransaction[] = []
+  totalNumBlocks: number = 0
 
   constructor(params: { serverUrl: string; isServerUrlEditable?: boolean }) {
     this.serverUrl = params.serverUrl
@@ -67,10 +68,22 @@ export class Blockchain {
     return { latestBlockHeight: statusResp.data.result.latest_block_height }
   }
 
-  async fetchBlocks() {
+  /**
+   * Fetches blocks from the blockchain, when called without any options will fetch up to 20
+   * of the most recent blocks.
+   *
+   * @param opts Options object that can be used to specify which blocks are fetched.
+   */
+  async fetchBlocks(opts?: {
+    minHeight?: number
+    maxHeight?: number
+    limit?: number
+    autoFetch: boolean
+  }) {
     try {
+      // TODO: should only do this if the websocket isn't connected
       const { latestBlockHeight } = await this.fetchStatus()
-
+      this.totalNumBlocks = latestBlockHeight
       /* Iterate backwards through the blockchain and dumps transaction data */
       /*
       for (let i = lastBlockNum; i > 0; ) {
@@ -92,11 +105,21 @@ export class Blockchain {
       }
       */
 
-      const firstBlockNum = Math.max(latestBlockHeight - 10, 0)
+      let maxBlocksToFetch = (opts && opts.limit) || 20
+      let firstBlockNum = Math.max(latestBlockHeight - maxBlocksToFetch, 1)
+      let lastBlockNum = latestBlockHeight
+      // NOTE: the blockchain API endpoint currently only returns max of 20 blocks per request
+      if (opts && opts.minHeight !== undefined) {
+        firstBlockNum = opts.minHeight
+        lastBlockNum = opts.maxHeight || firstBlockNum + maxBlocksToFetch - 1
+      } else if (opts && opts.maxHeight !== undefined) {
+        firstBlockNum = Math.max(opts.maxHeight - maxBlocksToFetch, 0)
+        lastBlockNum = opts.maxHeight
+      }
       const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/blockchain`, {
         params: {
           minHeight: firstBlockNum,
-          maxHeight: latestBlockHeight
+          maxHeight: lastBlockNum
         }
       })
       this.isConnected = true
@@ -124,15 +147,17 @@ export class Blockchain {
       })
       */
       // TODO: Connect to the websocket for updates.
-      setTimeout(() => {
-        this.fetchBlocks()
-      }, 1000)
+      if (opts && opts.autoFetch) {
+        setTimeout(() => {
+          this.fetchBlocks()
+        }, 1000)
+      }
     } catch (e) {
       console.log(e)
       this.isConnected = false
       // Try fetching again a bit later.
       setTimeout(() => {
-        this.fetchBlocks()
+        this.fetchBlocks(opts)
       }, 2000)
     }
   }
