@@ -1,8 +1,18 @@
 <template>
   <div>
     <TxPreviewField label="Kind:" :value="payload.kind"/>
-    <TxPreviewField v-if="payload.parent_permalink" :label="parentPermalinkLabel" :value="payload.parent_permalink"/>
-    <TxPreviewField label="Permalink:" :value="payload.permalink"/>
+    <!-- Resolve the permalink if possible and display as a link -->
+    <TxPreviewField v-if="resolvedParentPermalink" :label="parentPermalinkLabel">
+      <a :href="resolvedParentPermalink" target="_blank">{{payload.parent_permalink}}</a>
+    </TxPreviewField>
+    <!-- If the permalink can't be resolved just display as plain text -->
+    <TxPreviewField v-else :label="parentPermalinkLabel" :value="payload.parent_permalink"/>
+    <!-- Resolve the permalink if possible and display as a link -->
+    <TxPreviewField v-if="resolvedPermalink" label="Permalink:">
+      <a :href="resolvedPermalink" target="_blank">{{payload.permalink}}</a>
+    </TxPreviewField>
+    <!-- If the permalink can't be resolved just display as plain text -->
+    <TxPreviewField v-else label="Permalink:" :value="payload.permalink"/>
     <TxPreviewField label="Author:" :value="payload.author"/>
     <TxPreviewField label="Title:" :value="payload.title"/>
     <b-form-textarea plaintext :value="payload.body" :rows="5" :no-resize="true"></b-form-textarea>

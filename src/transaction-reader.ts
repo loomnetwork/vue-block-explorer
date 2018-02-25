@@ -43,7 +43,11 @@ export interface ICreateAccountTx {
   username: string
 }
 
-export type CommentKind = 'question' | 'answer' | 'comment'
+export enum CommentKind {
+  Question = 'question',
+  Answer = 'answer',
+  Comment = 'comment'
+}
 
 export interface IPostCommentTx {
   txKind: TxKind.PostComment

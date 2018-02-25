@@ -1,7 +1,9 @@
 <template>
   <div>
     <span class="text-white">{{curLabel}}</span>
-    <span class="text-muted">{{curValue}}</span>
+    <slot>
+      <span class="text-muted">{{curValue}}</span>
+    </slot>
   </div>
 </template>
 
