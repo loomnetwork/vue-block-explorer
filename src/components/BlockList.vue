@@ -5,6 +5,7 @@
         <div class="bg-dark col-9">
           <h3 class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></h3>
         </div>
+        <!-- TODO
         <div class="bg-dark ml-auto px-0">
           <div class="d-flex flex-row">
             <h3 class="mx-2 text-white pointer-only">Filter by</h3>
@@ -14,6 +15,7 @@
             </b-dropdown>
           </div>
         </div>
+        -->
       </div>
       <div class="blocks-table">
         <b-table ref="blocksTable"
