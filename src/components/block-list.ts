@@ -40,15 +40,77 @@ export default class BlockList extends Vue {
   isBlockInfoVisible = false
   currentPage = 1
   perPage = 8
+  isBusy = false
+  totalNumBlocks = 0
+  refreshTimer: number | null = null
 
-  get blocks(): IBlockListItem[] {
-    return this.blockchain.blocks.map<IBlockListItem>(block => ({
-      blockHeight: block.height,
-      numTransactions: block.numTxs,
-      age: distanceInWordsToNow(new Date(block.time)),
-      speed: { time: 99, node: 66 },
-      block
-    }))
+  beforeDestroy() {
+    this.clearRefreshTimer()
+  }
+
+  setRefreshTimer() {
+    if (this.refreshTimer === null) {
+      this.refreshTimer = window.setInterval(() => {
+        if (this.totalNumBlocks !== this.blockchain.totalNumBlocks && this.currentPage === 1) {
+          this.totalNumBlocks = this.blockchain.totalNumBlocks
+          if (this.$refs.blocksTable) {
+            ;(this.$refs.blocksTable as any).refresh()
+          }
+        }
+      }, 5000)
+    }
+  }
+
+  clearRefreshTimer() {
+    if (this.refreshTimer !== null) {
+      clearInterval(this.refreshTimer)
+      this.refreshTimer = null
+    }
+  }
+
+  async blocks(): Promise<IBlockListItem[]> {
+    this.clearRefreshTimer()
+
+    let minHeight: number | undefined
+    let maxHeight: number | undefined
+    let autoFetch = false
+    const numPages = Math.ceil(this.totalNumBlocks / this.perPage)
+
+    // NOTE: currently this code only works with the default sort order (most recent to least)
+    if (this.currentPage === 1) {
+      // first page
+      autoFetch = true
+    } else if (this.currentPage === numPages) {
+      // last page
+      minHeight = 1
+    } else {
+      maxHeight = Math.max(numPages - this.currentPage + 1, 1) * this.perPage
+    }
+
+    // Must return empty array on error so that b-table can update busy state
+    let items: IBlockListItem[] = []
+    try {
+      const blocks = await this.blockchain.fetchBlocks({
+        minHeight,
+        maxHeight,
+        limit: this.perPage,
+        autoFetch
+      })
+      items = blocks.map<IBlockListItem>(block => ({
+        blockHeight: block.height,
+        numTransactions: block.numTxs,
+        age: distanceInWordsToNow(new Date(block.time)),
+        speed: { time: 99, node: 66 },
+        block
+      }))
+    } catch (err) {
+      console.log(err)
+    }
+
+    if (autoFetch) {
+      this.setRefreshTimer()
+    }
+    return items
   }
 
   get blockInfoProps(): IBlockInfoProps {
@@ -58,10 +120,6 @@ export default class BlockList extends Vue {
       blockchain: this.blockchain,
       onCloseBtnClicked: this.closeBlockInfoOverlay
     }
-  }
-
-  get totalNumBlocks(): number {
-    return this.blockchain.totalNumBlocks
   }
 
   onRowClicked(item: IBlockListItem /*, index: number, event: Event*/) {
@@ -80,24 +138,5 @@ export default class BlockList extends Vue {
 
   closeBlockInfoOverlay() {
     this.isBlockInfoVisible = false
-  }
-
-  onPageChanged(page: number) {
-    let minHeight: number | undefined
-    let maxHeight: number | undefined
-    let autoFetch = false
-    const numPages = Math.ceil(this.blockchain.totalNumBlocks / this.perPage)
-
-    // NOTE: currently this code only works with the default sort order (most recent to least)
-    if (page === 1) {
-      // first page
-      autoFetch = true
-    } else if (page === numPages) {
-      // last page
-      minHeight = 1
-    } else {
-      maxHeight = page * this.perPage
-    }
-    this.blockchain.fetchBlocks({ minHeight, maxHeight, limit: this.perPage, autoFetch })
   }
 }

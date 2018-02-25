@@ -42,6 +42,7 @@ export interface IBlockchainTransaction {
 
 interface IBlockchainResponse {
   result: {
+    last_height: number
     block_metas: IBlockchainBlockMeta[]
   }
 }
@@ -57,15 +58,38 @@ export class Blockchain {
   blocks: IBlockchainBlock[] = []
   transactions: IBlockchainTransaction[] = []
   totalNumBlocks: number = 0
+  refreshTimer: number | null = null
 
   constructor(params: { serverUrl: string; isServerUrlEditable?: boolean }) {
     this.serverUrl = params.serverUrl
     this.isServerUrlEditable = params.isServerUrlEditable || false
   }
 
+  dispose() {
+    this.clearRefreshTimer()
+  }
+
+  setRefreshTimer() {
+    if (this.refreshTimer === null) {
+      this.refreshTimer = window.setInterval(async () => {
+        const { latestBlockHeight } = await this.fetchStatus()
+        this.totalNumBlocks = latestBlockHeight
+      }, 2000)
+    }
+  }
+
+  clearRefreshTimer() {
+    if (this.refreshTimer !== null) {
+      clearInterval(this.refreshTimer)
+      this.refreshTimer = null
+    }
+  }
+
   async fetchStatus(): Promise<IBlockchainStatus> {
     const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`)
-    return { latestBlockHeight: statusResp.data.result.latest_block_height }
+    const latestBlockHeight = statusResp.data.result.latest_block_height
+    this.totalNumBlocks = latestBlockHeight
+    return { latestBlockHeight }
   }
 
   /**
@@ -79,11 +103,15 @@ export class Blockchain {
     maxHeight?: number
     limit?: number
     autoFetch: boolean
-  }) {
+  }): Promise<IBlockchainBlock[]> {
+    this.clearRefreshTimer()
     try {
-      // TODO: should only do this if the websocket isn't connected
-      const { latestBlockHeight } = await this.fetchStatus()
-      this.totalNumBlocks = latestBlockHeight
+      // When a block range isn't specified we'll fetch the most recent ones, but to do that
+      // we need to find out how many blocks there are.
+      if (!opts || (opts.maxHeight === undefined && opts.minHeight === undefined)) {
+        const { latestBlockHeight } = await this.fetchStatus()
+        this.totalNumBlocks = latestBlockHeight
+      }
       /* Iterate backwards through the blockchain and dumps transaction data */
       /*
       for (let i = lastBlockNum; i > 0; ) {
@@ -106,14 +134,14 @@ export class Blockchain {
       */
 
       let maxBlocksToFetch = (opts && opts.limit) || 20
-      let firstBlockNum = Math.max(latestBlockHeight - maxBlocksToFetch, 1)
-      let lastBlockNum = latestBlockHeight
+      let firstBlockNum = Math.max(this.totalNumBlocks - (maxBlocksToFetch - 1), 1)
+      let lastBlockNum = this.totalNumBlocks
       // NOTE: the blockchain API endpoint currently only returns max of 20 blocks per request
       if (opts && opts.minHeight !== undefined) {
         firstBlockNum = opts.minHeight
         lastBlockNum = opts.maxHeight || firstBlockNum + maxBlocksToFetch - 1
       } else if (opts && opts.maxHeight !== undefined) {
-        firstBlockNum = Math.max(opts.maxHeight - maxBlocksToFetch, 0)
+        firstBlockNum = Math.max(opts.maxHeight - (maxBlocksToFetch - 1), 0)
         lastBlockNum = opts.maxHeight
       }
       const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/blockchain`, {
@@ -122,8 +150,13 @@ export class Blockchain {
           maxHeight: lastBlockNum
         }
       })
+      this.totalNumBlocks = Math.max(chainResp.data.result.last_height, this.totalNumBlocks)
       this.isConnected = true
-      this.blocks = chainResp.data.result.block_metas.map<IBlockchainBlock>(meta => ({
+      // TODO: Connect to the websocket for updates instead of hammering the server.
+      if (opts && opts.autoFetch) {
+        this.setRefreshTimer()
+      }
+      return chainResp.data.result.block_metas.map<IBlockchainBlock>(meta => ({
         hash: meta.block_id.hash,
         height: meta.header.height,
         time: meta.header.time,
@@ -132,33 +165,9 @@ export class Blockchain {
         didFetchTxs: false,
         txs: []
       }))
-      /*
-      this.transactions = this.blocks.map<IBlockchainTransaction>(block => {
-        if (block.numTxs > 0) {
-          // TODO: Pull tx data out of somewhere
-        }
-        return {
-          hash: meta.block_id.hash,
-          blockHeight: meta.header.height,
-          txType: 'question',
-          time: meta.header.time,
-          sender: 'alice'
-        }
-      })
-      */
-      // TODO: Connect to the websocket for updates.
-      if (opts && opts.autoFetch) {
-        setTimeout(() => {
-          this.fetchBlocks()
-        }, 1000)
-      }
     } catch (e) {
-      console.log(e)
       this.isConnected = false
-      // Try fetching again a bit later.
-      setTimeout(() => {
-        this.fetchBlocks(opts)
-      }, 2000)
+      throw e
     }
   }
 

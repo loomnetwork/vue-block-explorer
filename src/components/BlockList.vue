@@ -3,7 +3,7 @@
     <div>
       <div class="section-header d-flex flex-row">
         <div class="bg-dark col-9">
-          <h3 class="text-primary pointer-only">Blocks</h3>
+          <h3 class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></h3>
           <ConnectionStatus :blockchain="blockchain"/>
         </div>
         <div class="bg-dark ml-auto px-0">
@@ -17,14 +17,18 @@
         </div>
       </div>
       <div class="blocks-table">
-        <b-table :sort-by.sync="sortBy"
+        <b-table ref="blocksTable"
+          :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
+          :show-empty="true"
           :items="blocks"
           :fields="fields"
           :hover="true"
           :head-variant="muted"
           @row-clicked="onRowClicked"
+          :current-page="currentPage"
           :per-page="perPage"
+          :busy.sync="isBusy"
           class="table-dark bg-dark">
           <template slot="blockHeight" slot-scope="row">
             <span>#{{ row.value }}</span>
@@ -46,7 +50,6 @@
           v-model="currentPage"
           :total-rows="totalNumBlocks"
           :per-page="perPage"
-          @change="onPageChanged"
           align="center"/>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { VueConstructor } from 'vue/types/vue'
 
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
@@ -13,31 +13,25 @@ export enum BlockExplorerView {
   Transactions = 'transactions'
 }
 
-interface IBlockExplorerData {
-  blockchain: Blockchain
-}
+@Component
+export default class BlockExplorer extends Vue {
+  @Prop() view!: string // prettier-ignore
+  @Prop() defaultUrl!: string // prettier-ignore
+  @Prop({ default: true }) isUrlEditable!: boolean // prettier-ignore
 
-export default Vue.extend({
-  name: 'BlockExplorer',
-  props: {
-    view: { type: String },
-    defaultUrl: { type: String },
-    isUrlEditable: { type: Boolean, default: true }
-  },
-  data(): IBlockExplorerData {
-    return {
-      blockchain: new Blockchain({
-        serverUrl: this.defaultUrl,
-        isServerUrlEditable: this.isUrlEditable
-      })
-    }
-  },
-  mounted() {
-    this.blockchain.fetchBlocks()
-  },
-  computed: {
-    viewComponent(): VueConstructor {
-      return this.view === BlockExplorerView.Transactions ? TransactionList : BlockList
+  blockchain: Blockchain | null = new Blockchain({
+    serverUrl: this.defaultUrl,
+    isServerUrlEditable: this.isUrlEditable
+  })
+
+  beforeDestroy() {
+    if (this.blockchain) {
+      this.blockchain.dispose()
+      this.blockchain = null
     }
   }
-})
+
+  get viewComponent(): VueConstructor {
+    return this.view === BlockExplorerView.Transactions ? TransactionList : BlockList
+  }
+}
