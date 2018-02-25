@@ -7,10 +7,12 @@
     <div v-if="selectedTx">
       <component :is="txInfoComponent" :tx="selectedTx.data"/>
     </div>
+    <fa v-if="isLoading" icon="spinner" spin/>
     <div v-else>
       <div v-if="block" class="text-muted">Created by {{ nodeName }}</div>
       <div v-if="block" class="text-muted">On {{ blockTimestamp }}</div>
       <div v-if="isVerified" class="text-muted">Verified</div>
+      <h5 class="text-white">Transactions</h5>
       <TransactionTable v-bind="txTableProps"/>
     </div>
   </b-card>
@@ -48,6 +50,12 @@
     .breadcrumb-item {
       color: $white;
     }
+  }
+
+  .fa-spinner {
+    width: 10vw;
+    height: 10vh;
+    color: $white;
   }
 </style>
 

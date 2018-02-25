@@ -3,6 +3,7 @@
     <b-table
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
+      :show-empty="true"
       :items="items"
       :fields="fields"
       :hover="true"

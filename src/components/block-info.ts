@@ -1,4 +1,5 @@
-import Vue, { VueConstructor } from 'vue'
+import { VueConstructor } from 'vue'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import TransactionTable from './TransactionTable.vue'
@@ -29,98 +30,96 @@ export interface IBlockInfoProps {
   onCloseBtnClicked: () => void
 }
 
-interface IBlockInfoData {
-  // Currently displayed tx (if any)
-  selectedTx: IBlockchainTransaction | null
-}
-
 const NotUndefinedProp = { validator: (value: any) => value !== undefined }
 
-export default Vue.extend({
-  name: 'BlockInfo',
-  props: {
-    transaction: NotUndefinedProp,
-    block: NotUndefinedProp,
-    blockchain: NotUndefinedProp,
-    onCloseBtnClicked: { type: Function, required: true }
-  },
-  data(): IBlockInfoData {
-    return {
-      selectedTx: this.transaction
-    }
-  },
-  watch: {
-    // Clear the selected tx when the block prop changes
-    block() {
-      this.selectedTx = this.transaction
-    },
-    // Replace the selected tx when the transaction prop changes
-    transaction(newVal: IBlockchainTransaction) {
-      this.selectedTx = newVal
-    }
-  },
-  computed: {
-    blockTitle(): string {
-      const block: IBlockchainBlock | null = this.block
-      return `Block #${block ? block.height.toString() : ''}`
-    },
-    transactionTitle(): string {
-      const tx: IBlockchainTransaction | null = this.selectedTx
-      return `Tx ${tx ? tx.hash : ''}`
-    },
-    breadcrumbs() {
-      const items: Array<{ text: string; link: string }> = []
-      if (this.block) {
-        items.push({ text: this.blockTitle, link: '#' })
-      }
-      if (this.selectedTx) {
-        items.push({ text: this.transactionTitle, link: '#' })
-      }
-      return items
-    },
-    nodeName(): string {
-      return 'Node #33'
-    },
-    blockTimestamp(): string {
-      const block: IBlockchainBlock | null = this.block
-      return block ? block.time : ''
-    },
-    txTimestamp(): string {
-      const tx: IBlockchainTransaction | null = this.selectedTx
-      return tx ? tx.time : ''
-    },
-    isVerified(): boolean {
-      return true
-    },
-    txInfoComponent(): VueConstructor | null {
-      if (this.selectedTx) {
-        switch (this.selectedTx.data.txKind) {
-          case TxKind.CreateAccount:
-            return CreateAccountTxPreview
-          case TxKind.PostComment:
-            return PostCommentTxPreview
-        }
-      }
-      return null
-    },
-    txTableProps(): ITransactionTableProps {
-      const block = this.block as IBlockchainBlock
-      return {
-        columns: txTableColumns,
-        transactions: block ? (block.txs || []) : [], // prettier-ignore
-        onRowClicked: this.onTxClicked
-      }
-    }
-  },
-  methods: {
-    onTitleClicked() {
-      this.selectedTx = null
-    },
-    onTxClicked(txItem: ITransactionTableItem) {
-      this.selectedTx = txItem.tx
-    }
-  },
+@Component({
   components: {
     TransactionTable
   }
 })
+export default class BlockInfo extends Vue {
+  @Prop(NotUndefinedProp) transaction!: IBlockchainTransaction | null // prettier-ignore
+  @Prop(NotUndefinedProp) block!: IBlockchainBlock | null // prettier-ignore
+  @Prop(NotUndefinedProp) blockchain!: Blockchain | null // prettier-ignore
+  @Prop({ required: true }) onCloseBtnClicked!: () => void // prettier-ignore
+
+  // Currently displayed tx (if any)
+  selectedTx: IBlockchainTransaction | null = this.transaction
+
+  // Clear the selected tx when the block prop changes
+  @Watch('block')
+  onBlockChanged() {
+    this.selectedTx = this.transaction
+  }
+  // Replace the selected tx when the transaction prop changes
+  @Watch('transaction')
+  onTxChanged(newVal: IBlockchainTransaction) {
+    this.selectedTx = newVal
+  }
+
+  get blockTitle(): string {
+    return `Block #${this.block ? this.block.height.toString() : ''}`
+  }
+  get transactionTitle(): string {
+    return `Tx ${this.selectedTx ? this.selectedTx.hash : ''}`
+  }
+  get breadcrumbs() {
+    const items: Array<{ text: string; link: string }> = []
+    if (this.block) {
+      items.push({ text: this.blockTitle, link: '#' })
+    }
+    if (this.selectedTx) {
+      items.push({ text: this.transactionTitle, link: '#' })
+    }
+    return items
+  }
+  get nodeName(): string {
+    return 'Node #33'
+  }
+
+  get blockTimestamp(): string {
+    return this.block ? this.block.time : ''
+  }
+
+  get txTimestamp(): string {
+    return this.selectedTx ? this.selectedTx.time : ''
+  }
+
+  get isVerified(): boolean {
+    return true
+  }
+
+  get txInfoComponent(): VueConstructor | null {
+    if (this.selectedTx) {
+      switch (this.selectedTx.data.txKind) {
+        case TxKind.CreateAccount:
+          return CreateAccountTxPreview
+        case TxKind.PostComment:
+          return PostCommentTxPreview
+      }
+    }
+    return null
+  }
+
+  get isLoading(): boolean {
+    if (this.block) {
+      return this.block.isFetchingTxs
+    }
+    return false
+  }
+
+  get txTableProps(): ITransactionTableProps {
+    return {
+      columns: txTableColumns,
+      transactions: this.block ? (this.block.txs || []) : [], // prettier-ignore
+      onRowClicked: this.onTxClicked
+    }
+  }
+
+  onTitleClicked() {
+    this.selectedTx = null
+  }
+  onTxClicked(txItem: ITransactionTableItem) {
+    this.selectedTx = txItem.tx
+  }
+}
