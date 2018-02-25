@@ -1,5 +1,8 @@
 <template>
-  <component :is="viewComponent" :blockchain="blockchain"></component>
+  <component :is="viewComponent"
+    :blockchain="blockchain"
+    :showConnectionDropdown="showConnectionDropdown">
+  </component>
 </template>
 
 <style lang="scss">

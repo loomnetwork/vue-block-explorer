@@ -24,8 +24,8 @@ interface IBlockListItem {
   }
 })
 export default class BlockList extends Vue {
-  @Prop({ required: true })
-  blockchain!: Blockchain // prettier-ignore
+  @Prop({ required: true }) blockchain!: Blockchain // prettier-ignore
+  @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
 
   sortBy = 'blockHeight'
   sortDesc = true
@@ -120,6 +120,10 @@ export default class BlockList extends Vue {
       blockchain: this.blockchain,
       onCloseBtnClicked: this.closeBlockInfoOverlay
     }
+  }
+
+  get paginationAlignment(): string {
+    return this.showConnectionDropdown ? 'right' : 'center'
   }
 
   onRowClicked(item: IBlockListItem /*, index: number, event: Event*/) {

@@ -16,12 +16,13 @@ export enum BlockExplorerView {
 @Component
 export default class BlockExplorer extends Vue {
   @Prop() view!: string // prettier-ignore
-  @Prop() defaultUrl!: string // prettier-ignore
-  @Prop({ default: true }) isUrlEditable!: boolean // prettier-ignore
+  @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
+  @Prop({ required: true }) defaultUrl!: string // prettier-ignore
+  @Prop({ required: true }) allowedUrls!: string[] // prettier-ignore
 
   blockchain: Blockchain | null = new Blockchain({
     serverUrl: this.defaultUrl,
-    isServerUrlEditable: this.isUrlEditable
+    allowedUrls: this.allowedUrls
   })
 
   beforeDestroy() {

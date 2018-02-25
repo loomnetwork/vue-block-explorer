@@ -2,15 +2,19 @@
   <div>
     <b-input-group size="sm">
       <b-input-group-prepend is-text>
-        <fa :icon="['far', 'check-circle']" fixed-width v-show="isConnected" class="pr-1"/>
-        <fa :icon="['far', 'times-circle']" fixed-width v-show="!isConnected" class="pr-1"/>
-        {{ isConnected ? 'Connected' : 'Disconnected' }}
+        <fa :icon="['far', 'check-circle']" fixed-width v-show="isConnected"/>
+        <fa :icon="['far', 'times-circle']" fixed-width v-show="!isConnected"/>
       </b-input-group-prepend>
-      <b-form-input type="text" aria-label="Connection URL" v-model="connectionUrl"
-        :readonly="!isUrlEditable">
+      <b-form-input type="text" aria-label="Connection URL" v-model="connectionUrl" readonly>
       </b-form-input>
-      <b-input-group-append v-if="isUrlEditable">
-        <b-button size="sm"><fa icon="sync" fixed-width @click="changeConnectionUrl"/></b-button>
+      <b-input-group-append>
+        <b-dropdown variant="dark" size="sm">
+          <b-dropdown-item-button v-for="url in allowedUrls"
+            :key="url"
+            @click="onUrlClicked(url)">
+            {{url}}
+          </b-dropdown-item-button>
+        </b-dropdown>
       </b-input-group-append>
     </b-input-group>
   </div>

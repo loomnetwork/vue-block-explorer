@@ -53,20 +53,31 @@ export interface IBlockchainStatus {
 
 export class Blockchain {
   serverUrl: string
-  isServerUrlEditable: boolean
+  allowedUrls: string[]
   isConnected: boolean = false
   blocks: IBlockchainBlock[] = []
   transactions: IBlockchainTransaction[] = []
   totalNumBlocks: number = 0
   refreshTimer: number | null = null
 
-  constructor(params: { serverUrl: string; isServerUrlEditable?: boolean }) {
+  constructor(params: { serverUrl: string; allowedUrls: string[] }) {
     this.serverUrl = params.serverUrl
-    this.isServerUrlEditable = params.isServerUrlEditable || false
+    this.allowedUrls = params.allowedUrls
   }
 
   dispose() {
     this.clearRefreshTimer()
+  }
+
+  setServerUrl(newUrl: string) {
+    if (this.serverUrl !== newUrl) {
+      this.clearRefreshTimer()
+      this.serverUrl = newUrl
+      this.isConnected = false
+      this.blocks = []
+      this.transactions = []
+      this.totalNumBlocks = 0
+    }
   }
 
   setRefreshTimer() {

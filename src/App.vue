@@ -4,8 +4,9 @@
       <b-row>
         <b-col cols="12">
           <BlockExplorer
-            defaultUrl="https://stagewss.delegatecall.com"
-            :isUrlEditable="false"/>
+            :showConnectionDropdown="true"
+            :defaultUrl="allowedUrls[0]"
+            :allowedUrls="allowedUrls"/>
         </b-col>
       </b-row>
     </b-container>
@@ -22,5 +23,10 @@ import BlockExplorer from './components/BlockExplorer.vue'
     BlockExplorer
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  allowedUrls = [
+    'https://prodwss.delegatecall.com',
+    'https://stagewss.delegatecall.com'
+  ]
+}
 </script>

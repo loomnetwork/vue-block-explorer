@@ -4,7 +4,6 @@
       <div class="section-header d-flex flex-row">
         <div class="bg-dark col-9">
           <h3 class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></h3>
-          <ConnectionStatus :blockchain="blockchain"/>
         </div>
         <div class="bg-dark ml-auto px-0">
           <div class="d-flex flex-row">
@@ -46,11 +45,15 @@
             </div>
           </template>
         </b-table>
+        <div class="d-flex flex-row">
+        <ConnectionStatus v-if="showConnectionDropdown" class="connection-status" :blockchain="blockchain"/>
         <b-pagination
           v-model="currentPage"
+          size="sm"
           :total-rows="totalNumBlocks"
           :per-page="perPage"
-          align="center"/>
+          :align="paginationAlignment"/>
+        </div>
       </div>
     </div>
     <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">
@@ -80,6 +83,15 @@
   .block-info-card {
     width: 100%;
     height: 100%;
+  }
+
+  .connection-status {
+    width: 400px;
+    flex: none;
+  }
+
+  .pagination {
+    flex: 1 1 auto;
   }
 </style>
 
