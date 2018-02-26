@@ -21,6 +21,7 @@
         <b-table ref="blocksTable"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
+          :no-provider-sorting="true"
           :show-empty="true"
           :items="blocks"
           :fields="fields"
