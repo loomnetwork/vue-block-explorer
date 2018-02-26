@@ -161,7 +161,7 @@ export class Blockchain {
           maxHeight: lastBlockNum
         }
       })
-      this.totalNumBlocks = Math.max(chainResp.data.result.last_height, this.totalNumBlocks)
+      this.totalNumBlocks = chainResp.data.result.last_height
       this.isConnected = true
       // TODO: Connect to the websocket for updates instead of hammering the server.
       if (opts && opts.autoFetch) {

@@ -110,6 +110,7 @@ export default class BlockList extends Vue {
     if (autoFetch) {
       this.setRefreshTimer()
     }
+    this.totalNumBlocks = this.blockchain.totalNumBlocks
     return items
   }
 
@@ -146,8 +147,9 @@ export default class BlockList extends Vue {
 
   onConnectionUrlChanged(newUrl: string) {
     this.blockchain.setServerUrl(newUrl)
-    // The first page auto-refreshes, so ensuring the current page is the first page is sufficient
-    // to pull in data from the new url.
     this.currentPage = 1
+    if (this.$refs.blocksTable) {
+      ;(this.$refs.blocksTable as any).refresh()
+    }
   }
 }
