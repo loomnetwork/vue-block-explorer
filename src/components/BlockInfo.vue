@@ -4,11 +4,11 @@
       <b-breadcrumb :items="breadcrumbs" @click="onTitleClicked"></b-breadcrumb>
       <b-button-close @click="onCloseBtnClicked"/>
     </div>
-    <div v-if="selectedTx">
+    <fa v-if="isLoading" icon="spinner" spin/>
+    <div v-if="!isLoading && selectedTx">
       <component :is="txInfoComponent" :tx="selectedTx.data"/>
     </div>
-    <fa v-if="isLoading" icon="spinner" spin/>
-    <div v-else>
+    <div v-if="!isLoading && !selectedTx">
       <div v-if="block" class="text-muted">Created by {{ nodeName }}</div>
       <div v-if="block" class="text-muted">On {{ blockTimestamp }}</div>
       <div v-if="isVerified" class="text-muted">Verified</div>
