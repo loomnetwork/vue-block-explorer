@@ -143,4 +143,11 @@ export default class BlockList extends Vue {
   closeBlockInfoOverlay() {
     this.isBlockInfoVisible = false
   }
+
+  onConnectionUrlChanged(newUrl: string) {
+    this.blockchain.setServerUrl(newUrl)
+    // The first page auto-refreshes, so ensuring the current page is the first page is sufficient
+    // to pull in data from the new url.
+    this.currentPage = 1
+  }
 }

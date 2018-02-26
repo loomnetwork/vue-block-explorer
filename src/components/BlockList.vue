@@ -48,7 +48,9 @@
           </template>
         </b-table>
         <div class="d-flex flex-row">
-        <ConnectionStatus v-if="showConnectionDropdown" class="connection-status" :blockchain="blockchain"/>
+        <ConnectionStatus v-if="showConnectionDropdown" class="connection-status"
+          :blockchain="blockchain"
+          @urlClicked="onConnectionUrlChanged"/>
         <b-pagination
           v-model="currentPage"
           size="sm"
