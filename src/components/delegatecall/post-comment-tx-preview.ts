@@ -28,7 +28,16 @@ export default class PostCommentTxPreview extends Vue {
   }
 
   get resolvedParentPermalink(): string {
-    const route = getPermalinkRoute(this.tx.kind)
+    let parentKind: CommentKind
+    switch (this.tx.kind) {
+      case CommentKind.Answer:
+      case CommentKind.Comment:
+        parentKind = CommentKind.Question
+        break
+      default:
+        return ''
+    }
+    const route = getPermalinkRoute(parentKind)
     if (route) {
       return this.payload.parent_permalink
         ? `${getBaseUrl()}/${route}/${this.payload.parent_permalink}`

@@ -16,7 +16,7 @@
     <TxPreviewField label="Author:" :value="payload.author"/>
     <TxPreviewField label="Title:" :value="payload.title"/>
     <b-form-textarea plaintext :value="payload.body" :rows="5" :no-resize="true"></b-form-textarea>
-    <div>
+    <div v-if="payload.tags.length > 0">
       <span class="text-white">Tags: </span>
       <b-badge v-for="tag in payload.tags" :key="tag">{{ tag }}</b-badge>
     </div>
