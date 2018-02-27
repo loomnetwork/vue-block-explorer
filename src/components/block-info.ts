@@ -7,8 +7,15 @@ import TransactionTable from './TransactionTable.vue'
 import CreateAccountTxPreview from './delegatecall/CreateAccountTxPreview.vue'
 // @ts-ignore
 import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue'
+// @ts-ignore
+import VoteTxPreview from './delegatecall/VoteTxPreview.vue'
 
-import { Blockchain, IBlockchainBlock, IBlockchainTransaction, getShortTxHash } from '../blockchain'
+import {
+  Blockchain,
+  IBlockchainBlock,
+  IBlockchainTransaction,
+  getShortTxHash
+} from '../blockchain'
 import {
   ITransactionTableProps,
   ITransactionTableColumn,
@@ -96,6 +103,8 @@ export default class BlockInfo extends Vue {
           return CreateAccountTxPreview
         case TxKind.PostComment:
           return PostCommentTxPreview
+        case TxKind.Vote:
+          return VoteTxPreview
       }
     }
     return null
