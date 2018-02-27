@@ -41,11 +41,8 @@
           <template slot="age" slot-scope="row">
             <span>{{ row.value }}</span>
           </template>
-          <template slot="speed" slot-scope="row">
-            <div class="d-flex flex-column">
-              <span class="p-0">{{ row.value.time }} ms</span>
-              <span class="p-0 text-muted">Via node # {{ row.value.node }}</span>
-            </div>
+          <template slot="time" slot-scope="row">
+            <span>{{ row.value }}</span>
           </template>
         </b-table>
         <div class="d-flex flex-row">

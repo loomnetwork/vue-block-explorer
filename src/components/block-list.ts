@@ -1,5 +1,6 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import formatDate from 'date-fns/format'
 
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import BlockInfo from './BlockInfo.vue'
@@ -13,7 +14,7 @@ interface IBlockListItem {
   blockHeight: number
   numTransactions: number
   age: string
-  speed: any
+  time: string
   block: IBlockchainBlock
 }
 
@@ -33,7 +34,7 @@ export default class BlockList extends Vue {
     { key: 'blockHeight', label: 'Block', sortable: true },
     { key: 'numTransactions', label: 'Txs Processed', sortable: true },
     { key: 'age', sortable: true },
-    { key: 'speed', sortable: true }
+    { key: 'time', sortable: true }
   ]
   muted = 'gray'
   selectedItem: IBlockListItem | null = null
@@ -100,7 +101,7 @@ export default class BlockList extends Vue {
         blockHeight: block.height,
         numTransactions: block.numTxs,
         age: distanceInWordsToNow(new Date(block.time)),
-        speed: { time: 99, node: 66 },
+        time: formatDate(new Date(block.time), 'YYYY-MM-DD HH:mm:ss.SSS (Z)'),
         block
       }))
     } catch (err) {
