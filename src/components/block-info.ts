@@ -1,5 +1,6 @@
 import { VueConstructor } from 'vue'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import formatDate from 'date-fns/format'
 
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import TransactionTable from './TransactionTable.vue'
@@ -85,7 +86,7 @@ export default class BlockInfo extends Vue {
   }
 
   get blockTimestamp(): string {
-    return this.block ? this.block.time : ''
+    return this.block ? formatDate(new Date(this.block.time), 'YYYY-MM-DD HH:mm:ss.SSS (Z)') : ''
   }
 
   get txTimestamp(): string {
