@@ -27,6 +27,7 @@ interface IBlockListItem {
 export default class BlockList extends Vue {
   @Prop({ required: true }) blockchain!: Blockchain // prettier-ignore
   @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
+  @Prop({ default: 10 }) blocksPerPage!: number // prettier-ignore
 
   sortBy = 'blockHeight'
   sortDesc = true
@@ -40,7 +41,7 @@ export default class BlockList extends Vue {
   selectedItem: IBlockListItem | null = null
   isBlockInfoVisible = false
   currentPage = 1
-  perPage = 8
+  perPage = this.blocksPerPage
   isBusy = false
   totalNumBlocks = 0
   refreshTimer: number | null = null
