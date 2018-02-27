@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-import { extractTxDataFromStr, DelegateCallTx, TxKind } from './transaction-reader'
+import { extractTxDataFromStr, DelegateCallTx, TxKind, IOneSigTx } from './transaction-reader'
 
 interface IBlockchainStatusResponse {
   result: {
@@ -197,12 +197,12 @@ export class Blockchain {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
           block.txs.push({
-            hash: block.hash, // TODO: figure out where the tx hash is
+            hash: new Buffer(data.signed.sig).toString('hex'),
             blockHeight: block.height,
-            txType: getTxType(data),
+            txType: getTxType(data.tx),
             time: block.time,
-            sender: getTxSender(data),
-            data
+            sender: getTxSender(data.tx),
+            data: data.tx
           })
         } catch (e) {
           console.log(e)
@@ -215,6 +215,10 @@ export class Blockchain {
       block.isFetchingTxs = false
     }
   }
+}
+
+export function getShortTxHash(longHash: string): string {
+  return '0x' + longHash.slice(0, 8)
 }
 
 function getTxType(tx: DelegateCallTx): string {

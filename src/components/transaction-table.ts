@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
-import { IBlockchainTransaction } from '../blockchain'
+import { IBlockchainTransaction, getShortTxHash } from '../blockchain'
 
 export interface ITransactionTableItem {
   hash: string
@@ -69,7 +69,7 @@ export default Vue.extend({
     },
     items(): ITransactionTableItem[] {
       return (this.transactions as IBlockchainTransaction[]).map<ITransactionTableItem>(tx => ({
-        hash: tx.hash,
+        hash: getShortTxHash(tx.hash),
         blockHeight: tx.blockHeight,
         txType: tx.txType,
         age: distanceInWordsToNow(new Date(tx.time)),

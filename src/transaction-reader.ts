@@ -10,8 +10,8 @@ registerType(Actor, ['chainId', 'app', 'address'], 0x00);
 registerType(CreateAccountTx, ['inner', 'owner', 'username'], 0x40);
 registerType(PostCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', 'author', 'title', 'body', 'tags'], 0x41);
 registerType(UpdateCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', 'author', 'title', 'body', 'tags'], 0x44);
-registerType(AcceptAnswerTx, ['answer_permalink', 'acceptor'], 0x42);
-registerType(VoteTx, ['comment_permalink', 'voter', 'up'], 0x43);
+registerType(AcceptAnswerTx, ['inner', 'answer_permalink', 'acceptor'], 0x42);
+registerType(VoteTx, ['inner', 'comment_permalink', 'voter', 'up'], 0x43);
 */
 
 export enum TxKind {
@@ -22,8 +22,8 @@ export enum TxKind {
 }
 
 export interface ISigned {
-  sig: string
-  pubkey: string
+  sig: Uint8Array
+  pubkey: Uint8Array
 }
 
 export interface IOneSigTx {
@@ -91,14 +91,16 @@ export type DelegateCallTx =
   | IAcceptAnswerTx
   | IVoteTx
 
-export function extractTxDataFromStr(base64Str: string): DelegateCallTx {
+export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const buf = new Buffer(base64Str, 'base64')
   const r = new Reader(buf)
   const txType = r.readUint8()
   if (txType !== 0x16) {
     throw new Error('Invalid OneSigTx')
   }
-  return readTxPayload(r)
+  const payload = readTxPayload(r)
+  const sig = readTxSignature(r)
+  return { tx: payload, signed: sig }
 }
 
 function readTxPayload(r: Reader): DelegateCallTx {
@@ -153,18 +155,19 @@ function readPostCommentTxPayload(r: Reader): IPostCommentTx {
 
 // TODO: test this, haven't seen any transactions of this kind yet
 function readAcceptAnswerTxPayload(r: Reader): IAcceptAnswerTx {
+  const inner = r.readUint8()
   // tslint:disable-next-line:variable-name
   const answer_permalink = r.readString()
   const acceptor = r.readString()
   return { txKind: TxKind.AcceptAnswer, answer_permalink, acceptor }
 }
 
-// TODO: test this, haven't seen any transactions of this kind yet
 function readVoteTxPayload(r: Reader): IVoteTx {
+  const inner = r.readUint8()
   // tslint:disable-next-line:variable-name
   const comment_permalink = r.readString()
   const voter = r.readString()
-  const up = r.readByte() !== 0
+  const up = r.readUint8() !== 0
   return { txKind: TxKind.Vote, comment_permalink, voter, up }
 }
 
@@ -186,4 +189,22 @@ function readBuffer(r: Reader): Buffer {
     buf[i] = r.readByte()
   }
   return buf
+}
+
+function readUint8Array(r: Reader, byteCount: number): Uint8Array {
+  const buf = new Uint8Array(byteCount)
+  for (let i = 0; i < byteCount; i++) {
+    buf[i] = r.readByte()
+  }
+  return buf
+}
+
+function readTxSignature(r: Reader): ISigned {
+  const typeByte = r.readUint8()
+  if (typeByte !== 0x01) {
+    throw new Error('Invalid ed25519 signature')
+  }
+  const sig = readUint8Array(r, 64)
+  const pubkey = readUint8Array(r, 32)
+  return { sig, pubkey }
 }

@@ -8,7 +8,7 @@ import CreateAccountTxPreview from './delegatecall/CreateAccountTxPreview.vue'
 // @ts-ignore
 import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue'
 
-import { Blockchain, IBlockchainBlock, IBlockchainTransaction } from '../blockchain'
+import { Blockchain, IBlockchainBlock, IBlockchainTransaction, getShortTxHash } from '../blockchain'
 import {
   ITransactionTableProps,
   ITransactionTableColumn,
@@ -61,7 +61,7 @@ export default class BlockInfo extends Vue {
     return `Block #${this.block ? this.block.height.toString() : ''}`
   }
   get transactionTitle(): string {
-    return `Tx ${this.selectedTx ? this.selectedTx.hash : ''}`
+    return `Tx ${this.selectedTx ? getShortTxHash(this.selectedTx.hash) : ''}`
   }
   get breadcrumbs() {
     const items: Array<{ text: string; link: string }> = []
