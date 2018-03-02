@@ -28,10 +28,9 @@
 
 .tx-title {
   letter-spacing: 0.6px;
-  text-align: left;
   color: #eeeeee;
+  margin-top: 20px;
   text-align: center;
-  font-size: 24px !important;
 }
 
 .form-control-plaintext {
@@ -42,6 +41,24 @@
   font-size: 18px;
   width: calc(100% + #{$blcok_side_padding} * 2) !important;
   margin-left: -#{$blcok_side_padding};
+}
+
+.badge-secondary {
+  border-radius: 5px;
+  border: solid 1.2px #6eb1ff;
+  background: none;
+  font-size: 13px;
+  font-weight: normal;
+  text-align: left;
+  color: #6eb1ff;
+  height: 24px;
+  position: relative;
+
+  &::before{
+    content: '●';
+    margin-right: 3px;
+    
+  }
 }
 </style>
 

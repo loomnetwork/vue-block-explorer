@@ -207,6 +207,9 @@ $blcok_side_padding: 52px;
       a {
         color: #6eb1ff;
       }
+      &:last-child{
+        margin-top: 9px;
+      }
     }
   }
   .block-explorer-tx-table {
@@ -233,7 +236,6 @@ $blcok_side_padding: 52px;
     }
   }
   .tx-title {
-    margin-top: 20px;
     .text-muted {
       font-size: 24px;
     }
