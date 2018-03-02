@@ -1,7 +1,7 @@
+@import url("https://use.typekit.net/nbq4wog.css");
 @import './bootstrap-override.scss';
-
+@import 'mixin';
 // Additional global styles go below...
-
 body {
   width: 100vw;
   height: 100vh;
@@ -12,3 +12,149 @@ body {
 .table .thead-gray th {
   background-color: theme-color('muted');
 }
+
+#app {
+  background-color: theme-color("dark");
+  font-family: "proxima-nova" sans-serif;
+}
+
+// header bar
+.section-header {
+  .bg-dark {
+    width: 100%;
+    height: 26px;
+    padding: 0;
+    line-height: 25px;
+    div {
+      display: inline-block;
+      padding: 0;
+    }
+  }
+  padding: 26px 0;
+  @include normal-font();
+  .header-logo {
+    width: 20%;
+    a {
+      color: theme-color("blue2");
+      font-size: 25px;
+      font-weight: 300;
+      text-align: left;
+      &:hover {
+        text-decoration: none;
+      }
+      img {
+        height: 25px;
+        width: auto;
+        vertical-align: top;
+        margin-right: 4px;
+      }
+    }
+  }
+  .header-table-name {
+    width: 60%;
+    text-align: center;
+    .text-primary {
+      font-size: 28px;
+      font-weight: 300;
+      line-height: 0.88;
+      letter-spacing: 0.7px;
+      text-align: left;
+      color: #ff4b80;
+      display: inline-block;
+      margin: 0 auto;
+      width: 180px
+    }
+  }
+  .header-profile {
+    text-align: right;
+    float: right;
+    padding-right: 20px !important;
+    .user-head {
+      height: 38px;
+      width: auto;
+      margin-right: 10px;
+    }
+  }
+}
+
+//table
+.blocks-table {
+  @include normal-font();
+  color: #ffffff;
+  .thead-gray th {
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-align: left;
+    font-weight: normal !important;
+    position: relative;
+    &::before,
+    &::after {
+      position: absolute;
+      margin-left: 5px;
+      right: 0;
+    }
+    &::after {
+      right: 0;
+    }
+  }
+  tr {
+    font-size: 18px;
+    letter-spacing: 1.8px;
+    text-align: left;
+    line-height: 33px;
+    height: 67px;
+  }
+  th:not(:first-child),
+  td:not(:first-child) {
+    text-align: center !important;
+  }
+  th:first-child,
+  td:first-child {
+    width: 114px;
+    padding-left: 40px;
+    // &::after {
+    //   left: 90px !important;
+    // }
+    // &::before {
+    //   left: 80px !important;
+    // }
+  }
+  th:last-child,
+  td:last-child {
+    text-align: right !important;
+    padding-right: 40px;
+  }
+
+  th:last-child {
+    padding-right: 9.8em !important;
+  }
+
+
+  //pagination
+.pagination {
+  .page-link {
+    background-color: theme-color("dark");
+    border: none;
+    font-size: 16px;
+    text-align: center;
+    color: #ffffff;
+  }
+  li {
+    a {
+      margin-left: 0;
+      margin: 6px;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+  .active a {
+    background-color: theme-color("red2");
+  }
+}
+
+}
+

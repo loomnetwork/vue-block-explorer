@@ -2,8 +2,20 @@
   <div class="position-relative">
     <div>
       <div class="section-header d-flex flex-row">
-        <div class="bg-dark col-9">
-          <h3 class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></h3>
+        <div class="bg-dark">
+            <div class="header-logo">
+              <a href="/" class="">
+                <img src="../images/loom_logo.svg"> <span class="site-name">Blockchain</span>
+              </a>
+            </div>
+            <div class="header-table-name">
+              <div class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></div>
+            </div>
+            <div class="header-profile">
+              <img src="../images/user_image.png" class="user-head">
+              <img src="../images/down_gray_arrow.svg" class="down-arrow">
+
+            </div>
         </div>
         <!-- TODO
         <div class="bg-dark ml-auto px-0">
@@ -54,7 +66,8 @@
           size="sm"
           :total-rows="totalNumBlocks"
           :per-page="perPage"
-          :align="paginationAlignment"/>
+          :align="paginationAlignment"
+          />
         </div>
       </div>
     </div>
@@ -65,36 +78,36 @@
 </template>
 
 <style lang="scss" scoped>
-  .block-info-overlay {
-    position: absolute;
-    z-index: 100;
-    top: 0;
-    right: calc(-50%);
-    width: 0;
-    height: 100%;
-    // slide-in/out the overlay from the right
-    transition-property: right, width;
-    transition-duration: 0.3s;
+.block-info-overlay {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  right: calc(-50%);
+  width: 0;
+  height: 100%;
+  // slide-in/out the overlay from the right
+  transition-property: right, width;
+  transition-duration: 0.3s;
 
-    &.show {
-      right: 0;
-      width: 50%;
-    }
+  &.show {
+    right: 0;
+    width: 50%;
   }
+}
 
-  .block-info-card {
-    width: 100%;
-    height: 100%;
-  }
+.block-info-card {
+  width: 100%;
+  height: 100%;
+}
 
-  .connection-status {
-    width: 400px;
-    flex: none;
-  }
+.connection-status {
+  width: 400px;
+  flex: none;
+}
 
-  .pagination {
-    flex: 1 1 auto;
-  }
+.pagination {
+  flex: 1 1 auto;
+}
 </style>
 
 <script lang="ts" src="./block-list.ts"></script>
