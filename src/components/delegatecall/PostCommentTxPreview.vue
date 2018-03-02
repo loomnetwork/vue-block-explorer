@@ -12,7 +12,7 @@
       <a :href="resolvedPermalink" target="_blank">{{payload.permalink}}</a>
     </TxPreviewField>
     <!-- If the permalink can't be resolved just display as plain text -->
-    <TxPreviewField v-else label="Permalink:" :value="payload.permalink"/>
+    <TxPreviewField v-else-if="!resolvedParentPermalink" label="Permalink:" :value="payload.permalink"/>
     <TxPreviewField label="Author:" :value="payload.author"/>
     <TxPreviewField label="" class="tx-title" :value="payload.title"/>
     <b-form-textarea plaintext :value="payload.body" :rows="5" :no-resize="true"></b-form-textarea>
