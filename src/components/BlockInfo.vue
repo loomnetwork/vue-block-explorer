@@ -22,12 +22,8 @@
 @import '~@/styles/app.scss';
 
 .card {
-  background-color: lighten($body-bg, 5%);
+  background-color: #1a1a1a;
   border-color: lighten($body-bg, 10%);
-
-  .text-muted {
-    color: lighten($text-muted, 40%) !important;
-  }
 }
 
 div.close-btn {
@@ -56,6 +52,11 @@ div.close-btn {
 
   .breadcrumb-item {
     color: $white;
+
+    &::before {
+      font-size: 20px;
+      color: #ffffff;
+    }
   }
 }
 
@@ -64,6 +65,14 @@ div.close-btn {
   height: 10vh;
   color: $white;
 }
+
+li.active {
+  span {
+    font-size: 20px;
+    text-align: left;
+  }
+}
+
 </style>
 
 <script lang="ts" src="./block-info.ts"></script>

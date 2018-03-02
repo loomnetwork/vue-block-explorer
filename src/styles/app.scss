@@ -104,9 +104,9 @@ body {
     text-align: left;
     line-height: 33px;
     height: 67px;
-
-    td:{
+    td {
       background-color: theme-color("secondary");
+      padding-top: 16px;
     }
   }
   th:not(:first-child),
@@ -158,9 +158,10 @@ body {
 }
 
 //block info
+$blcok_side_padding: 52px;
 .block-info-card {
   background-color: theme-color("black2") !important;
-  padding: 45px 52px;
+  padding: 45px $blcok_side_padding;
   border-radius: 3px;
   box-shadow: 12px 1px 15px 5px #101010;
   border: none;
@@ -200,6 +201,12 @@ body {
       color: #ffffff;
       text-transform: uppercase;
       margin: 13px 0 16px 0;
+    } // block info
+    div>div>div {
+      margin-bottom: 3px;
+      a {
+        color: #6eb1ff;
+      }
     }
   }
   .block-explorer-tx-table {
@@ -223,6 +230,12 @@ body {
     td {
       font-size: 16px;
       padding: 11px 12px;
+    }
+  }
+  .tx-title {
+    margin-top: 20px;
+    .text-muted {
+      font-size: 24px;
     }
   }
 }

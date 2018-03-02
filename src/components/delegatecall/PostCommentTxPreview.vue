@@ -14,7 +14,7 @@
     <!-- If the permalink can't be resolved just display as plain text -->
     <TxPreviewField v-else label="Permalink:" :value="payload.permalink"/>
     <TxPreviewField label="Author:" :value="payload.author"/>
-    <TxPreviewField label="Title:" :value="payload.title"/>
+    <TxPreviewField label="" class="tx-title" :value="payload.title"/>
     <b-form-textarea plaintext :value="payload.body" :rows="5" :no-resize="true"></b-form-textarea>
     <div v-if="payload.tags.length > 0">
       <span class="text-white">Tags: </span>
@@ -24,12 +24,25 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '~@/styles/app.scss';
+@import '~@/styles/app.scss';
 
-  .form-control-plaintext {
-    color: $white;
-    background-color: darken($body-bg, 5%);
-  }
+.tx-title {
+  letter-spacing: 0.6px;
+  text-align: left;
+  color: #eeeeee;
+  text-align: center;
+  font-size: 24px !important;
+}
+
+.form-control-plaintext {
+  color: $white;
+  padding: 23px 58px;
+  margin-top: 9px;
+  background-color: #111111;
+  font-size: 18px;
+  width: calc(100% + #{$blcok_side_padding} * 2) !important;
+  margin-left: -#{$blcok_side_padding};
+}
 </style>
 
 <script lang="ts" src="./post-comment-tx-preview.ts"></script>
