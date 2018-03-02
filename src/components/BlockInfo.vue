@@ -2,7 +2,7 @@
   <b-card>
     <div slot="header" class="d-flex flex-row">
       <b-breadcrumb :items="breadcrumbs" @click="onTitleClicked"></b-breadcrumb>
-      <b-button-close @click="onCloseBtnClicked"/>
+      <div class="close-btn" @click="onCloseBtnClicked"></div>
     </div>
     <fa v-if="isLoading" icon="spinner" spin/>
     <div v-if="!isLoading && selectedTx">
@@ -30,13 +30,20 @@
   }
 }
 
-button.close {
+div.close-btn {
+  width: 23.8px;
+  height: 23.8px;
   color: $white;
   outline: none;
+  cursor: pointer;
 
   @include hover-focus {
-    color: $white;
+    background-image: url(../images/close_icon_hover.svg);
   }
+  position: absolute;
+  top: 14px;
+  right: 10px;
+  background-image: url(../images/close_icon.svg);
 }
 
 .breadcrumb {
