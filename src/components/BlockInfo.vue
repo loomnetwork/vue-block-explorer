@@ -9,9 +9,9 @@
       <component :is="txInfoComponent" :tx="selectedTx.data"/>
     </div>
     <div v-if="!isLoading && !selectedTx">
-      <div v-if="block" class="text-muted">Created by {{ nodeName }}</div>
+      <div v-if="block" class="text-muted">Created by <span class="node-name">{{ nodeName }}</span></div>
       <div v-if="block" class="text-muted">On {{ blockTimestamp }}</div>
-      <div v-if="isVerified" class="text-muted">Verified</div>
+      <div v-if="isVerified" class="text-muted"><img class="verified_icon" src="../images/verified.svg">Verified</div>
       <h5 class="text-white">Transactions</h5>
       <TransactionTable v-bind="txTableProps"/>
     </div>
@@ -19,44 +19,44 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '~@/styles/app.scss';
+@import '~@/styles/app.scss';
 
-  .card {
-    background-color: lighten($body-bg, 5%);
-    border-color: lighten($body-bg, 10%);
+.card {
+  background-color: lighten($body-bg, 5%);
+  border-color: lighten($body-bg, 10%);
 
-    .text-muted {
-      color: lighten($text-muted, 40%) !important;
-    }
+  .text-muted {
+    color: lighten($text-muted, 40%) !important;
   }
+}
 
-  button.close {
-    color: $white;
-    outline: none;
+button.close {
+  color: $white;
+  outline: none;
 
-    @include hover-focus {
-      color: $white;
-    }
-  }
-
-  .breadcrumb {
-    flex: 1 1 auto;
-    flex-wrap: nowrap;
-    margin-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
-    background-color: transparent;
-
-    .breadcrumb-item {
-      color: $white;
-    }
-  }
-
-  .fa-spinner {
-    width: 10vw;
-    height: 10vh;
+  @include hover-focus {
     color: $white;
   }
+}
+
+.breadcrumb {
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  background-color: transparent;
+
+  .breadcrumb-item {
+    color: $white;
+  }
+}
+
+.fa-spinner {
+  width: 10vw;
+  height: 10vh;
+  color: $white;
+}
 </style>
 
 <script lang="ts" src="./block-info.ts"></script>

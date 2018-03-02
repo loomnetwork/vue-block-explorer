@@ -90,7 +90,7 @@
   transition-duration: 0.3s;
 
   &.show {
-    right: 0;
+    right: -17px; // fix the right margin
     width: 50%;
   }
 }
