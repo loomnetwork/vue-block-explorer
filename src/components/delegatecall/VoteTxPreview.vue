@@ -18,11 +18,11 @@
   background-position: bottom;
 }
 .arrow-up {
-  background: url(../../images/arrow_up.svg) no-repeat;
+  background: url(../../images/vote_up.svg) no-repeat;
 }
 
 .arrow-down {
-  background: url(../../images/arrow_down.svg) no-repeat;
+  background: url(../../images/vote_down.svg) no-repeat;
 }
 </style>
 
