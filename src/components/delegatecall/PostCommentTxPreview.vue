@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TxPreviewField label="Kind:" :value="payload.kind"/>
+    <TxPreviewField class="kind" label="Kind:" :value="payload.kind"/>
     <!-- Resolve the permalink if possible and display as a link -->
     <TxPreviewField v-if="resolvedParentPermalink" :label="parentPermalinkLabel">
       <a :href="resolvedParentPermalink" target="_blank">{{payload.parent_permalink}}</a>
@@ -13,7 +13,7 @@
     </TxPreviewField>
     <!-- If the permalink can't be resolved just display as plain text -->
     <TxPreviewField v-else-if="isQuestion" label="Permalink:" :value="payload.permalink"/>
-    <TxPreviewField label="Author:" :value="payload.author"/>
+    <TxPreviewField class="author" label="Author:" :value="payload.author"/>
     <TxPreviewField label="" v-if="isQuestion" class="tx-title" :value="payload.title"/>
     <b-form-textarea plaintext :value="payload.body" :rows="5" :no-resize="true"></b-form-textarea>
     <div v-if="payload.tags.length > 0">
@@ -53,10 +53,11 @@
   color: #6eb1ff;
   height: 24px;
   position: relative;
+  margin-right: 12px;
 
   &::before{
     content: '●';
-    margin-right: 3px;    
+    margin-right: 4px;    
   }
 }
 </style>

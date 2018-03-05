@@ -13,6 +13,10 @@ import TxPreviewField from './TxPreviewField.vue'
 export default class CreateAccountTxPreview extends Vue {
   @Prop() tx!: ICreateAccountTx // prettier-ignore
 
+  get kind(): string{
+    return this.tx.txKind
+  }
+
   get owner(): { chainId: string; app: string; address: string } {
     const { chainId, app, address } = this.tx.owner
     return { chainId, app, address: address.toString('hex') }

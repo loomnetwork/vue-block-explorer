@@ -2,6 +2,12 @@
 @import './bootstrap-override.scss';
 @import 'mixin';
 // Additional global styles go below...
+
+//the 600 fonts
+%important-font {
+  font-weight: 600;
+}
+
 body {
   width: 100vw;
   height: 100vh;
@@ -59,7 +65,7 @@ body {
       line-height: 0.88;
       letter-spacing: 0.7px;
       text-align: left;
-      color: #ff4b80;
+      color: theme-color("primary");
       display: inline-block;
       margin: 0 auto;
       width: 180px
@@ -116,12 +122,7 @@ body {
   th:first-child,
   td:first-child {
     width: 114px;
-    padding-left: 40px; // &::after {
-    //   left: 90px !important;
-    // }
-    // &::before {
-    //   left: 80px !important;
-    // }
+    padding-left: 40px; 
   }
   th:last-child,
   td:last-child {
@@ -179,16 +180,16 @@ $blcok_side_padding: 52px;
   .card-body {
     padding: 0;
     text-align: left;
-    color: #eeeeee;
+    color: theme-color("light_white");
     .node-name {
       font-weight: 600;
-      color: #6eb1ff;
+      color: theme-color("info");
     }
     .text-muted {
+      @extend %important-font;
       margin-bottom: 7px;
       font-size: 18px;
       letter-spacing: 0.4px;
-      color: #ffffff !important;
     }
     .verified_icon {
       margin-right: 8px;
@@ -205,11 +206,14 @@ $blcok_side_padding: 52px;
     div>div>div {
       margin-bottom: 3px;
       a {
-        color: #6eb1ff;
+        color: theme-color("info");
       }
-      &:last-child{
+      &:last-child {
         margin-top: 9px;
       }
+    }
+    .text-white {
+      color: theme-color("light_white") !important;
     }
   }
   .block-explorer-tx-table {
@@ -239,5 +243,40 @@ $blcok_side_padding: 52px;
     .text-muted {
       font-size: 24px;
     }
+  }
+}
+
+.text-title{
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-align: left;
+  color: #eeeeee;
+  text-transform: uppercase;
+}
+
+/*
+colorful texts
+*/
+
+.kind {
+  .text-muted {
+    @extend %important-font;
+    text-transform: capitalize;
+    color: theme-color("primary") !important;
+  }
+}
+
+.author {
+  .text-muted {
+    @extend %important-font;
+    color: theme-color("info-green") !important;
+  }
+}
+
+.address{
+  .text-muted{
+    color:theme-color("light_green") !important;
+    font-weight: normal !important;
   }
 }

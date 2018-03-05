@@ -73,6 +73,10 @@ li.active {
   }
 }
 
+.text-muted, .text-white{
+  color:#eeeeee !important;
+}
+
 </style>
 
 <script lang="ts" src="./block-info.ts"></script>

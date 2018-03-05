@@ -1,19 +1,29 @@
 <template>
   <div>
-    <TxPreviewField label="Kind:" :value="kind"/>
+    <TxPreviewField label="Kind:" class="kind" :value="kind"/>
     <TxPreviewField label="Permalink:" :value="permalink"/>
     <TxPreviewField label="Vote:">
-      <fa v-if="isUpvote" icon="arrow-up" fixed-width/>
-      <fa v-else icon="arrow-down" fixed-width/>
+      <span  v-if="isUpvote" class="arrow arrow-up" fixed-width> </span>
+      <span v-else class="arrow arrow-down" fixed-width> </span>
     </TxPreviewField>
-    <TxPreviewField label="Voter:" :value="voter"/>
+    <TxPreviewField label="Voter:" class="author" :value="voter"/>
   </div>
 </template>
 
 <style lang="css" scoped>
-  .fa-arrow-up, .fa-arrow-down {
-    color: white;
-  }
+.arrow {
+  width: 16px;
+  height: 18px;
+  display: inline-block;
+  background-position: bottom;
+}
+.arrow-up {
+  background: url(../../images/arrow_up.svg) no-repeat;
+}
+
+.arrow-down {
+  background: url(../../images/arrow_down.svg) no-repeat;
+}
 </style>
 
 <script lang="ts" src="./vote-tx-preview.ts"></script>

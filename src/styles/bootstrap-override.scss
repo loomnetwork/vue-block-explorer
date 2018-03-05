@@ -16,20 +16,24 @@ $theme-colors: (
   dark: #2D2C2C,
   info: #6eb1ff,
   warning: #f1496a,
-  gray: #353535,
+  dark-gray: #353535,
   bg_gray: #888888,
   bar_start: #222222,
   red2: #D33060,
   red3: #BA1B4A,
   red_shadow: #450014,
-  blue: #6EB1FF,
   blue2: #3894FF,
   black2:#1a1a1a,
+  light_white: #eeeeee,
+  info-green: #43c59e,
+  light_green:#aaf683,
 );
 
 .container-fluid{
   padding: 0 20px !important;
 }
+
+
 
 
 // @import '~open-iconic/font/css/open-iconic-bootstrap.scss';
