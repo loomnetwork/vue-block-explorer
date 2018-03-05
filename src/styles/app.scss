@@ -131,30 +131,6 @@ body {
   }
   th:last-child {
     padding-right: 9.8em !important;
-  } //pagination
-  .pagination {
-    .page-link {
-      background-color: theme-color("dark");
-      border: none;
-      font-size: 16px;
-      text-align: center;
-      color: #ffffff;
-    }
-    li {
-      a {
-        margin-left: 0;
-        margin: 6px;
-        width: 24px;
-        height: 24px;
-        padding: 0;
-        &:focus {
-          box-shadow: none;
-        }
-      }
-    }
-    .active a {
-      background-color: theme-color("red2");
-    }
   }
 }
 
