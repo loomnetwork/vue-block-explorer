@@ -12,9 +12,9 @@
       <a :href="resolvedPermalink" target="_blank">{{payload.permalink}}</a>
     </TxPreviewField>
     <!-- If the permalink can't be resolved just display as plain text -->
-    <TxPreviewField v-else-if="!resolvedParentPermalink" label="Permalink:" :value="payload.permalink"/>
+    <TxPreviewField v-else-if="isQuestion" label="Permalink:" :value="payload.permalink"/>
     <TxPreviewField label="Author:" :value="payload.author"/>
-    <TxPreviewField label="" class="tx-title" :value="payload.title"/>
+    <TxPreviewField label="" v-if="isQuestion" class="tx-title" :value="payload.title"/>
     <b-form-textarea plaintext :value="payload.body" :rows="5" :no-resize="true"></b-form-textarea>
     <div v-if="payload.tags.length > 0">
       <span class="text-white">Tags: </span>
@@ -56,8 +56,7 @@
 
   &::before{
     content: '●';
-    margin-right: 3px;
-    
+    margin-right: 3px;    
   }
 }
 </style>

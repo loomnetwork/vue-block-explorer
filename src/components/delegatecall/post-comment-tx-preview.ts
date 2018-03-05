@@ -53,6 +53,10 @@ export default class PostCommentTxPreview extends Vue {
     }
     return ''
   }
+
+  get isQuestion():boolean{
+    return this.tx.kind === CommentKind.Question;
+  }
 }
 
 function getPermalinkRoute(kind: CommentKind) {
