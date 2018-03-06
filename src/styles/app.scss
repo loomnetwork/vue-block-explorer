@@ -134,6 +134,9 @@ body {
   th:last-child {
     padding-right: 9.8em !important;
   }
+  th:nth-child(2){
+    min-width: 220px;
+  }
 }
 
 //block info
