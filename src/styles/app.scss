@@ -2,7 +2,6 @@
 @import './bootstrap-override.scss';
 @import 'mixin';
 // Additional global styles go below...
-
 //the 600 fonts
 %important-font {
   font-weight: 600;
@@ -87,21 +86,23 @@ body {
 .blocks-table {
   @include normal-font();
   color: #ffffff;
-  .thead-gray th {
-    font-size: 20px;
-    letter-spacing: 2px;
-    text-align: left;
-    font-weight: normal !important;
-    position: relative;
-    background-color: #444444 !important;
-    &::before,
-    &::after {
-      position: absolute;
-      margin-left: 5px;
-      right: 0;
+   thead {
+    tr {
+      height: 52px;
+      line-height: 52px;
     }
-    &::after {
-      right: 0;
+    th {
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-align: left;
+      font-weight: normal !important;
+      position: relative;
+      background-color: #444444 !important;
+      padding: 0;
+      &::before,
+      &::after {
+        bottom: 8px !important;
+      }
     }
   }
   tr {
@@ -110,6 +111,7 @@ body {
     text-align: left;
     line-height: 33px;
     height: 67px;
+    border-bottom: solid px #575757;
     td {
       background-color: theme-color("secondary");
       padding-top: 16px;
@@ -122,7 +124,7 @@ body {
   th:first-child,
   td:first-child {
     width: 114px;
-    padding-left: 40px; 
+    padding-left: 40px;
   }
   th:last-child,
   td:last-child {
@@ -222,7 +224,7 @@ $blcok_side_padding: 52px;
   }
 }
 
-.text-title{
+.text-title {
   font-size: 20px;
   font-weight: 600;
   letter-spacing: 2px;
@@ -250,9 +252,9 @@ colorful texts
   }
 }
 
-.address{
-  .text-muted{
-    color:theme-color("light_green") !important;
+.address {
+  .text-muted {
+    color: theme-color("light_green") !important;
     font-weight: normal !important;
   }
 }
