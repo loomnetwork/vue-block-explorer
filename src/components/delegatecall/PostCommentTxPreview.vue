@@ -36,11 +36,30 @@
 .form-control-plaintext {
   color: $white;
   padding: 23px 58px;
-  margin-top: 9px;
+  margin-top: 31px;
   background-color: #111111;
   font-size: 18px;
   width: calc(100% + #{$blcok_side_padding} * 2) !important;
   margin-left: -#{$blcok_side_padding};
+}
+
+textarea {
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+  &::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #888888;
+    margin-top: 47px;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #111111;
+  }
+
+  &:hover, &:active, &:focus{
+    outline: none;
+  }
 }
 
 .badge-secondary {

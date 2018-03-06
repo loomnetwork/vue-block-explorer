@@ -147,10 +147,12 @@ $blcok_side_padding: 52px;
   box-shadow: 12px 1px 15px 5px #101010;
   border: none;
   .breadcrumb-item {
-    font-size: 26px;
-    font-weight: 300;
-    text-align: center;
-    color: #ffffff;
+    span {
+      font-size: 26px;
+      font-weight: 300;
+      text-align: center;
+      color: #ffffff;
+    }
   }
   .card-header {
     border: none;
@@ -161,10 +163,6 @@ $blcok_side_padding: 52px;
     padding: 0;
     text-align: left;
     color: theme-color("light_white");
-    .node-name {
-      font-weight: 600;
-      color: theme-color("info");
-    }
     .text-muted {
       @extend %important-font;
       margin-bottom: 7px;
@@ -195,12 +193,6 @@ $blcok_side_padding: 52px;
         margin-top: 9px;
       }
     }
-    .text-bold {
-      .text-muted {
-        color: #ffffff !important;
-        font-weight: 600;
-      }
-    }
   }
   .block-explorer-tx-table {
     th,
@@ -223,11 +215,6 @@ $blcok_side_padding: 52px;
     td {
       font-size: 16px;
       padding: 11px 12px;
-    }
-  }
-  .tx-title {
-    .text-muted {
-      font-size: 24px;
     }
   }
 }
@@ -264,5 +251,18 @@ colorful texts
   .text-muted {
     color: theme-color("light_green") !important;
     font-weight: normal !important;
+  }
+}
+
+.text-normal {
+  .text-muted {
+    font-weight: normal !important;
+    color: #ffffff !important;
+  }
+}
+
+.tx-title {
+  .text-muted {
+    font-size: 24px;
   }
 }

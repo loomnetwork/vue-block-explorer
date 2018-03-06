@@ -10,7 +10,7 @@
     </div>
     <div v-if="!isLoading && !selectedTx">
       <div v-if="block" class="text-muted">Created by <span class="node-name">{{ nodeName }}</span></div>
-      <div v-if="block" class="text-muted">On {{ blockTimestamp }}</div>
+      <div v-if="block" class="text-muted">On <span class="time-tamp"> {{blockTimestamp }}</span></div>
       <div v-if="isVerified" class="text-muted"><img class="verified_icon" src="../images/verified.svg">Verified</div>
       <h5 class="text-white">Transactions</h5>
       <TransactionTable v-bind="txTableProps"/>
@@ -49,10 +49,10 @@ div.close-btn {
   padding-left: 0;
   padding-right: 0;
   background-color: transparent;
+  font-size: 26px;
 
   .breadcrumb-item {
     color: $white;
-
     &::before {
       font-size: 20px;
       color: #ffffff;
@@ -73,8 +73,20 @@ li.active {
   }
 }
 
-.text-muted, .text-white{
-  color:#eeeeee !important;
+.time-tamp {
+  color: #ff4b80;
+  font-weight: 600;
+}
+
+.node-name {
+  font-weight: 600;
+  color: theme-color('info');
+}
+
+.text-muted,
+.text-white {
+  color: #eeeeee !important;
+  font-weight: normal !important;
 }
 
 </style>

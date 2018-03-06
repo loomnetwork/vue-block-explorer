@@ -4,7 +4,7 @@
     <div class="text-white text-title">Owner</div>
     <div class="ml-3">
       <TxPreviewField class="text-bold" label="Chain ID:" :value="owner.chainId"/>
-      <TxPreviewField class="text-bold" label="App:" :value="owner.app"/>
+      <TxPreviewField class="text-normal" label="App:" :value="owner.app"/>
       <TxPreviewField class="address" label="Address:" :value="owner.address"/>
     </div>
     <TxPreviewField class="author" label="Username:" :value="username"/>

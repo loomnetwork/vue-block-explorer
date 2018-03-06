@@ -22,11 +22,15 @@
       <template slot="age" slot-scope="row">
         {{ row.value }}
       </template>
-      <template slot="sender" slot-scope="row">
-        {{ row.value }}
+      <template slot="sender"  slot-scope="row">
+        <span class="author">{{row.value}}</span>
       </template>
     </b-table>
   </div>
 </template>
-
+<style lang="scss" scoped>
+.author {
+  color: #43c59e;
+}
+</style>
 <script lang="ts" src="./transaction-table.ts"></script>
