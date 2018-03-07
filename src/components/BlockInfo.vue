@@ -22,7 +22,7 @@
 @import '~@/styles/app.scss';
 
 .card {
-  background-color: #1a1a1a;
+  background-color: $black2;
   border-color: lighten($body-bg, 10%);
 }
 
@@ -74,7 +74,7 @@ li.active {
 }
 
 .time-tamp {
-  color: #ff4b80;
+  color: theme-color("primary");
   font-weight: 600;
 }
 

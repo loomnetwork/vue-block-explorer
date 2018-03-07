@@ -29,8 +29,9 @@
   </div>
 </template>
 <style lang="scss" scoped>
+@import '~@/styles/_variables.scss';
 .author {
-  color: #43c59e;
+  color: $info-green;
 }
 </style>
 <script lang="ts" src="./transaction-table.ts"></script>

@@ -28,7 +28,7 @@
 
 .tx-title {
   letter-spacing: 0.6px;
-  color: #eeeeee;
+  color: $light_white;
   margin-top: 20px;
   text-align: center;
 }
@@ -37,7 +37,7 @@
   color: $white;
   padding: 23px 58px;
   margin-top: 31px;
-  background-color: #111111;
+  background-color:$dark-text-bg;
   font-size: 18px;
   width: calc(100% + #{$blcok_side_padding} * 2) !important;
   margin-left: -#{$blcok_side_padding};
@@ -49,12 +49,12 @@ textarea {
   }
   &::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background: #888888;
+    background: $bg_gray;
     margin-top: 47px;
   }
   &::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background: #111111;
+    background:$dark-text-bg;
   }
 
   &:hover, &:active, &:focus{
@@ -64,12 +64,12 @@ textarea {
 
 .badge-secondary {
   border-radius: 5px;
-  border: solid 1.2px #6eb1ff;
+  border: solid 1.2px theme-color("info");
   background: none;
   font-size: 13px;
   font-weight: normal;
   text-align: left;
-  color: #6eb1ff;
+  color: theme-color("info");
   height: 24px;
   position: relative;
   margin-right: 12px;

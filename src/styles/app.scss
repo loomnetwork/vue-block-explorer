@@ -1,6 +1,7 @@
 @import url("https://use.typekit.net/nbq4wog.css");
 @import './bootstrap-override.scss';
 @import 'mixin';
+@import 'variables';
 // Additional global styles go below...
 //the 600 fonts
 %important-font {
@@ -40,7 +41,7 @@ body {
   .header-logo {
     width: 20%;
     a {
-      color: theme-color("blue2");
+      color: $blue2;
       font-size: 25px;
       font-weight: 300;
       text-align: left;
@@ -97,7 +98,7 @@ body {
       text-align: left;
       font-weight: normal !important;
       position: relative;
-      background-color: #444444 !important;
+      background-color: theme-color("muted") !important;
       padding: 0;
       &::before,
       &::after {
@@ -112,7 +113,7 @@ body {
     line-height: 33px;
     height: 67px;
     td {
-      border-bottom: solid 1px #575757;
+      border-bottom: solid $dark-border;
       padding-top: 16px;
     }
   }
@@ -141,7 +142,7 @@ body {
 //block info
 $blcok_side_padding: 52px;
 .block-info-card {
-  background-color: theme-color("black2") !important;
+  background-color: $black2 !important;
   padding: 45px $blcok_side_padding;
   border-radius: 3px;
   box-shadow: 12px 1px 15px 5px #101010;
@@ -162,7 +163,7 @@ $blcok_side_padding: 52px;
   .card-body {
     padding: 0;
     text-align: left;
-    color: theme-color("light_white");
+    color: $light_white;
     .text-muted {
       @extend %important-font;
       margin-bottom: 7px;
@@ -224,7 +225,7 @@ $blcok_side_padding: 52px;
   font-weight: 600;
   letter-spacing: 2px;
   text-align: left;
-  color: #eeeeee;
+  color:$light_white;
   text-transform: uppercase;
 }
 
@@ -243,13 +244,13 @@ colorful texts
 .author {
   .text-muted {
     @extend %important-font;
-    color: theme-color("info-green") !important;
+    color: $info_green !important;
   }
 }
 
 .address {
   .text-muted {
-    color: theme-color("light_green") !important;
+    color: $light_green !important;
     font-weight: normal !important;
   }
 }

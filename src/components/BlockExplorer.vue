@@ -6,6 +6,7 @@
 </template>
 
 <style lang="scss">
+@import '~@/styles/_variables.scss';
 .pointer-only {
   user-select: none;
   cursor: default;
@@ -39,7 +40,7 @@
     }
   }
   .active a {
-    background-color: #d33060 !important;
+    background-color: $red2 !important;
   }
 
   .page-item {
