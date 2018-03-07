@@ -120,7 +120,7 @@ li.active {
     text-align: left;
     color: $light_white;
     .text-colored {
-      @extend %important-font;
+      @include important-font();
       margin-bottom: 7px;
       font-size: 18px;
       letter-spacing: 0.4px;
@@ -148,7 +148,6 @@ li.active {
     }
   }
 }
-
 </style>
 
 <script lang="ts" src="./block-info.ts"></script>

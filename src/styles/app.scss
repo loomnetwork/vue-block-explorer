@@ -3,10 +3,7 @@
 @import 'mixin';
 @import 'variables';
 // Additional global styles go below...
-//the 600 fonts
-%important-font {
-  font-weight: 600;
-}
+
 
 body {
   width: 100vw;
@@ -24,62 +21,4 @@ body {
   font-family: "proxima-nova" sans-serif;
 }
 
-// header bar
-.section-header {
-  .bg-dark {
-    width: 100%;
-    height: 26px;
-    padding: 0;
-    line-height: 25px;
-    div {
-      display: inline-block;
-      padding: 0;
-    }
-  }
-  padding: 26px 0;
-  @include normal-font();
-  .header-logo {
-    width: 20%;
-    a {
-      color: $blue2;
-      font-size: 25px;
-      font-weight: 300;
-      text-align: left;
-      &:hover {
-        text-decoration: none;
-      }
-      img {
-        height: 25px;
-        width: auto;
-        vertical-align: top;
-        margin-right: 4px;
-      }
-    }
-  }
-  .header-table-name {
-    width: 60%;
-    text-align: center;
-    .text-primary {
-      font-size: 28px;
-      font-weight: 300;
-      line-height: 0.88;
-      letter-spacing: 0.7px;
-      text-align: left;
-      color: theme-color("primary");
-      display: inline-block;
-      margin: 0 auto;
-      width: 180px
-    }
-  }
-  .header-profile {
-    text-align: right;
-    float: right;
-    padding-right: 20px !important;
-    .user-head {
-      height: 38px;
-      width: auto;
-      margin-right: 10px;
-    }
-  }
-}
 

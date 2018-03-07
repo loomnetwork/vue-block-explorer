@@ -5,3 +5,7 @@
     line-height: normal;
     letter-spacing: normal;
   }
+//the 600 fonts
+@mixin important-font {
+  font-weight: 600;
+}
