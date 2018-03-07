@@ -1,7 +1,7 @@
 <template>
   <div>
     <TxPreviewField label="Kind:" class="kind" :value="kind"/>
-    <TxPreviewField label="Permalink:" :value="permalink"/>
+    <TxPreviewField label="Permalink:" class="permalink" :value="permalink"/>
     <TxPreviewField label="Vote:">
       <span  v-if="isUpvote" class="arrow arrow-up" fixed-width> </span>
       <span v-else class="arrow arrow-down" fixed-width> </span>
@@ -15,7 +15,7 @@
   width: 16px;
   height: 18px;
   display: inline-block;
-  background-position: bottom;
+  background-position: bottom !important;
 }
 .arrow-up {
   background: url(../../images/vote_up.svg) no-repeat;

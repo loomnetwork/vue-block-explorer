@@ -12,9 +12,33 @@
 </template>
 
 <style lang="scss" scoped>
-.ml-3{
-  margin-left:0 !important;
+@import '~@/styles/_variables.scss';
+.ml-3 {
+  margin-left: 0 !important;
+
+  div{
+    margin-bottom: 7px;
+  }
 }
+
+.text-title {
+  margin-top: 26px;
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-align: left;
+  color: $light_white;
+  text-transform: uppercase;
+}
+
+.text-bold{
+  .text-colored{
+    font-weight:600px;
+    font-color:#ffffff; 
+  }
+}
+
 </style>
 
 <script lang="ts" src="./create-account-tx-preview.ts"></script>

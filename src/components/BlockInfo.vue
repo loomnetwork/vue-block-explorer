@@ -57,6 +57,19 @@ div.close-btn {
       font-size: 20px;
       color: #ffffff;
     }
+    a {
+      font-size: 26px;
+      font-weight: 300;
+      text-align: center;
+      color: $blue2;
+    }
+    span {
+      font-size: 26px;
+      letter-spacing: 0.5px;
+      text-align: left;
+      color: #ffffff;
+      font-weight: 300;
+    }
   }
 }
 
@@ -74,7 +87,7 @@ li.active {
 }
 
 .time-tamp {
-  color: theme-color("primary");
+  color: theme-color('primary');
   font-weight: 600;
 }
 
@@ -85,8 +98,55 @@ li.active {
 
 .text-muted,
 .text-white {
+  font-size: 18px;
   color: #eeeeee !important;
   font-weight: normal !important;
+}
+
+//block info
+.block-info-card {
+  background-color: $black2;
+  padding: 45px $block_side_padding;
+  border-radius: 3px;
+  box-shadow: 12px 1px 15px 5px #101010;
+  border: none;
+  .card-header {
+    border: none;
+    padding: 0;
+    margin-bottom: 11px;
+  }
+  .card-body {
+    padding: 0;
+    text-align: left;
+    color: $light_white;
+    .text-colored {
+      @extend %important-font;
+      margin-bottom: 7px;
+      font-size: 18px;
+      letter-spacing: 0.4px;
+    }
+    .verified_icon {
+      margin-right: 8px;
+    }
+    h5 {
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      text-align: center;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin: 13px 0 16px 0;
+    }
+    div > div > div {
+      margin-bottom: 7px;
+      a {
+        color: theme-color('info');
+      }
+      &:last-child {
+        margin-top: 9px;
+      }
+    }
+  }
 }
 
 </style>

@@ -6,6 +6,7 @@
 </template>
 
 <style lang="scss">
+@import '~@/styles/_mixin.scss';
 @import '~@/styles/_variables.scss';
 .pointer-only {
   user-select: none;
@@ -13,6 +14,87 @@
 }
 .header-table-name{
   text-transform: uppercase;
+}
+
+//table
+.blocks-table {
+  @include normal-font();
+  color: #ffffff;
+  thead {
+    tr {
+      height: 52px;
+      line-height: 52px;
+    }
+    th {
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-align: left;
+      font-weight: normal !important;
+      position: relative;
+      background-color: theme-color("muted") !important;
+      padding: 0;
+      &::before,
+      &::after {
+        bottom: 8px !important;
+      }
+    }
+  }
+  tr {
+    font-size: 18px;
+    letter-spacing: 1.8px;
+    text-align: left;
+    line-height: 33px;
+    height: 67px;
+    td {
+      border-bottom: solid $dark-border;
+      padding-top: 16px;
+    }
+  }
+  th:not(:first-child),
+  td:not(:first-child) {
+    text-align: center !important;
+  }
+  th:first-child,
+  td:first-child {
+    width: 144px;
+    padding-left: 40px;
+  }
+  th:last-child,
+  td:last-child {
+    text-align: right !important;
+    padding-right: 40px;
+  }
+  th:last-child {
+    padding-right: 9.8em !important;
+  }
+  th:nth-child(2) {
+    min-width: 220px;
+  }
+}
+
+//block info table
+.block-explorer-tx-table {
+  th,
+  td {
+    font-size: 18px;
+    border-color: #2d2c2c;
+    letter-spacing: 0.4px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: normal !important;
+    &:first-child {
+      text-align: left;
+      padding-left: 20px;
+    }
+    &:last-child {
+      text-align: right;
+      padding-right: 20px;
+    }
+  }
+  td {
+    font-size: 16px;
+    padding: 11px 12px;
+  }
 }
 
 //pagination
