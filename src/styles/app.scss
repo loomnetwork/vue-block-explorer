@@ -140,10 +140,9 @@ body {
 }
 
 //block info
-$blcok_side_padding: 52px;
 .block-info-card {
   background-color: $black2 !important;
-  padding: 45px $blcok_side_padding;
+  padding: 45px $block_side_padding;
   border-radius: 3px;
   box-shadow: 12px 1px 15px 5px #101010;
   border: none;

@@ -39,8 +39,8 @@
   margin-top: 31px;
   background-color:$dark-text-bg;
   font-size: 18px;
-  width: calc(100% + #{$blcok_side_padding} * 2) !important;
-  margin-left: -#{$blcok_side_padding};
+  width: calc(100% + #{$block_side_padding} * 2) !important;
+  margin-left: -#{$block_side_padding};
 }
 
 textarea {
