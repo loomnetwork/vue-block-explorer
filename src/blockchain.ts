@@ -240,5 +240,7 @@ function getTxSender(tx: DelegateCallTx): string {
       return tx.acceptor
     case TxKind.Vote:
       return tx.voter
+    case TxKind.Nonce:
+      return tx.txKind
   }
 }

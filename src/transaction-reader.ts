@@ -12,13 +12,18 @@ registerType(PostCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', '
 registerType(UpdateCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', 'author', 'title', 'body', 'tags'], 0x44);
 registerType(AcceptAnswerTx, ['inner', 'answer_permalink', 'acceptor'], 0x42);
 registerType(VoteTx, ['inner', 'comment_permalink', 'voter', 'up'], 0x43);
+
+//delegatecall.com/app/javascript/client/nonce.js
+registerType(NonceTx, ['sequence', 'signers', 'tx'], 0x69);
+
 */
 
 export enum TxKind {
   CreateAccount = 'createAccount',
   PostComment = 'post',
   AcceptAnswer = 'acceptAnswer',
-  Vote = 'vote'
+  Vote = 'vote',
+  Nonce = "nonce",
 }
 
 export interface ISigned {
@@ -84,12 +89,20 @@ export interface IVoteTx {
   up: boolean
 }
 
+export interface INnoceTx {
+  txKind: TxKind.Nonce,
+  sequence: number,
+  signers: Array<IActor>,
+  tx: DelegateCallTx,
+}
+
 export type DelegateCallTx =
   | ICreateAccountTx
   | IPostCommentTx
   | IUpdateCommentTx
   | IAcceptAnswerTx
   | IVoteTx
+  | INnoceTx
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const buf = new Buffer(base64Str, 'base64')
@@ -115,6 +128,8 @@ function readTxPayload(r: Reader): DelegateCallTx {
       return readAcceptAnswerTxPayload(r)
     case 0x43:
       return readVoteTxPayload(r)
+    case 0x69:
+      return readNonceTxPayload(r)
   }
   throw new Error('Unknown Tx Type: ' + txType.toString(16))
 }
@@ -169,6 +184,12 @@ function readVoteTxPayload(r: Reader): IVoteTx {
   const voter = r.readString()
   const up = r.readUint8() !== 0
   return { txKind: TxKind.Vote, comment_permalink, voter, up }
+}
+
+function readNonceTxPayload(r: Reader) {
+  let sequence = r.readUint8() // read nonce aka sequence
+  // TODO read signers => Array<Actor>
+  return readTxPayload(r);
 }
 
 function readActor(r: Reader): IActor {
