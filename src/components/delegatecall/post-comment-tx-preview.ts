@@ -54,8 +54,8 @@ export default class PostCommentTxPreview extends Vue {
     return ''
   }
 
-  get isQuestion():boolean{
-    return this.tx.kind === CommentKind.Question;
+  get isQuestion(): boolean {
+    return this.tx.kind === CommentKind.Question
   }
 }
 
