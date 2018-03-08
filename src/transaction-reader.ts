@@ -187,9 +187,12 @@ function readVoteTxPayload(r: Reader): IVoteTx {
 }
 
 function readNonceTxPayload(r: Reader) {
-  let sequence = r.readUint8() // read nonce aka sequence
+  let sequence = r.readUint32() // read nonce aka sequence
   // TODO read signers => Array<Actor>
-  return readTxPayload(r);
+  let actorsLen = r.readUvarint()
+  // should do it with a iterator, but it has only one now
+  let actor = readActor(r)
+  return readTxPayload(r)
 }
 
 function readActor(r: Reader): IActor {
