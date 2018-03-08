@@ -13,11 +13,16 @@ $theme-colors: (
   primary: #ff4b80,
   secondary: #2d2c2c,
   muted: #444444,
-  dark: #252525,
+  dark: #2D2C2C,
   info: #6eb1ff,
   warning: #f1496a,
-  gray: #353535
+  dark-gray: #353535,
 );
+
+.container-fluid{
+  padding: 0 20px !important;
+}
+
 
 // @import '~open-iconic/font/css/open-iconic-bootstrap.scss';
 

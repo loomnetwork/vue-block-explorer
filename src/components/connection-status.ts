@@ -18,5 +18,7 @@ export default class ConnectionStatus extends Vue {
   }
 
   @Emit('urlClicked')
-  onUrlClicked(url: string) {}
+  onUrlClicked(url: string) {
+    // this comment is just for avoiding empry warn
+  }
 }

@@ -1,6 +1,9 @@
+@import url("https://use.typekit.net/nbq4wog.css");
 @import './bootstrap-override.scss';
-
+@import 'mixin';
+@import 'variables';
 // Additional global styles go below...
+
 
 body {
   width: 100vw;
@@ -12,3 +15,10 @@ body {
 .table .thead-gray th {
   background-color: theme-color('muted');
 }
+
+#app {
+  background-color: theme-color("dark");
+  font-family: "proxima-nova" sans-serif;
+}
+
+

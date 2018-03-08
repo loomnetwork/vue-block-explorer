@@ -1,0 +1,11 @@
+@mixin normal-font{
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+  }
+//the 600 fonts
+@mixin important-font {
+  font-weight: 600;
+}
