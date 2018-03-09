@@ -191,14 +191,16 @@ function readNonceTxPayload(r: Reader) {
   // TODO read signers => Array<Actor>
   let actorsLen = r.readUvarint()
   // should do it with a iterator, but it has only one now
-  let actor = readActor(r)
+  let actor = readActor(r, true);
   return readTxPayload(r)
 }
 
-function readActor(r: Reader): IActor {
-  const txType = r.readUint8()
-  if (txType !== 0x00) {
-    throw new Error('Invalid Actor')
+function readActor(r: Reader, noType?: boolean): IActor {
+  if (!noType) {
+    const txType = r.readUint8()
+    if (txType !== 0x00) {
+      throw new Error('Invalid Actor')
+    }
   }
   const chainId = r.readString()
   const app = r.readString()
