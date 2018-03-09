@@ -7,7 +7,7 @@ registerType(OneSigTx, ['tx', 'signed'], 0x16);
 // loom-js/actor.js
 registerType(Actor, ['chainId', 'app', 'address'], 0x00);
 // delegatecall.com/app/javascript/client/tx.js
-registerType(CreateAccountTx, ['inner', 'owner', 'username'], 0x40);
+registerType(CreateAccountTx, ['inner', 'owner', 'username', 'email', 'name', 'image'], 0x40);
 registerType(PostCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', 'author', 'title', 'body', 'tags'], 0x41);
 registerType(UpdateCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', 'author', 'title', 'body', 'tags'], 0x44);
 registerType(AcceptAnswerTx, ['inner', 'answer_permalink', 'acceptor'], 0x42);
@@ -137,6 +137,9 @@ function readTxPayload(r: Reader): DelegateCallTx {
 function readCreateAccountTxPayload(r: Reader): ICreateAccountTx {
   const owner = readActor(r)
   const username = r.readString()
+  const email = r.readString()
+  const name = r.readString()
+  const image = r.readString()
   return { txKind: TxKind.CreateAccount, owner, username }
 }
 
@@ -189,7 +192,9 @@ function readVoteTxPayload(r: Reader): IVoteTx {
 function readNonceTxPayload(r: Reader) {
   let sequence = r.readUint32() // read nonce aka sequence
   // TODO read signers => Array<Actor>
+  //let actorsLen = r.readUvarint()
   let actorsLen = r.readUvarint()
+  debugger;
   // should do it with a iterator, but it has only one now
   let actor = readActor(r)
   return readTxPayload(r)
