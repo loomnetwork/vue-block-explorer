@@ -13,7 +13,7 @@ import TxPreviewField from './TxPreviewField.vue'
 export default class CreateAccountTxPreview extends Vue {
   @Prop() tx!: ICreateAccountTx // prettier-ignore
 
-  get kind(): string{
+  get kind(): string {
     return this.tx.txKind
   }
 
