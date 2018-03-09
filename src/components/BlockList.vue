@@ -124,10 +124,10 @@
       line-height: 0.88;
       letter-spacing: 0.7px;
       text-align: left;
-      color: theme-color("primary");
+      color: theme-color('primary');
       display: inline-block;
       margin: 0 auto;
-      width: 180px
+      width: 180px;
     }
   }
   .header-profile {
