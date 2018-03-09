@@ -7,15 +7,13 @@ registerType(OneSigTx, ['tx', 'signed'], 0x16);
 // loom-js/actor.js
 registerType(Actor, ['chainId', 'app', 'address'], 0x00);
 // delegatecall.com/app/javascript/client/tx.js
-registerType(CreateAccountTx, ['inner', 'owner', 'username'], 0x40);
+registerType(CreateAccountTx, ['inner', 'owner', 'username', 'email', 'name', 'image'], 0x40);
 registerType(PostCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', 'author', 'title', 'body', 'tags'], 0x41);
 registerType(UpdateCommentTx, ['inner', 'kind', 'parent_permalink', 'permalink', 'author', 'title', 'body', 'tags'], 0x44);
 registerType(AcceptAnswerTx, ['inner', 'answer_permalink', 'acceptor'], 0x42);
 registerType(VoteTx, ['inner', 'comment_permalink', 'voter', 'up'], 0x43);
-
 //delegatecall.com/app/javascript/client/nonce.js
 registerType(NonceTx, ['sequence', 'signers', 'tx'], 0x69);
-
 */
 
 export enum TxKind {
@@ -23,7 +21,7 @@ export enum TxKind {
   PostComment = 'post',
   AcceptAnswer = 'acceptAnswer',
   Vote = 'vote',
-  Nonce = "nonce",
+  Nonce = 'nonce'
 }
 
 export interface ISigned {
@@ -32,7 +30,7 @@ export interface ISigned {
 }
 
 export interface IOneSigTx {
-  tx: DelegateCallTx
+  tx: DelegateCallTx | INonceTx
   signed: ISigned
 }
 
@@ -89,11 +87,11 @@ export interface IVoteTx {
   up: boolean
 }
 
-export interface INnoceTx {
-  txKind: TxKind.Nonce,
-  sequence: number,
-  signers: Array<IActor>,
-  tx: DelegateCallTx,
+export interface INonceTx {
+  txKind: TxKind.Nonce
+  sequence: number
+  signers: Array<IActor>
+  tx: DelegateCallTx
 }
 
 export type DelegateCallTx =
@@ -102,7 +100,6 @@ export type DelegateCallTx =
   | IUpdateCommentTx
   | IAcceptAnswerTx
   | IVoteTx
-  | INnoceTx
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const buf = new Buffer(base64Str, 'base64')
@@ -116,7 +113,7 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   return { tx: payload, signed: sig }
 }
 
-function readTxPayload(r: Reader): DelegateCallTx {
+function readTxPayload(r: Reader): DelegateCallTx | INonceTx {
   const txType = r.readUint8()
   switch (txType) {
     case 0x40:
@@ -135,8 +132,12 @@ function readTxPayload(r: Reader): DelegateCallTx {
 }
 
 function readCreateAccountTxPayload(r: Reader): ICreateAccountTx {
+  const inner = r.readUint8()
   const owner = readActor(r)
   const username = r.readString()
+  const email = r.readString()
+  const name = r.readString()
+  const image = r.readString()
   return { txKind: TxKind.CreateAccount, owner, username }
 }
 
@@ -186,42 +187,23 @@ function readVoteTxPayload(r: Reader): IVoteTx {
   return { txKind: TxKind.Vote, comment_permalink, voter, up }
 }
 
-function readNonceTxPayload(r: Reader) {
+function readNonceTxPayload(r: Reader): INonceTx {
   const txKind = TxKind.Nonce
   const sequence = r.readUint32()
-  const signers = readActors(r)
-  return readTxPayload(r)
+  const numSigners = r.readUvarint()
+  const signers: IActor[] = []
+  for (let i = 0; i < numSigners; i++) {
+    signers.push(readActor(r))
+  }
+  return { txKind, sequence, signers, tx: readTxPayload(r) as DelegateCallTx }
 }
 
-
-function readActors(r: Reader): Array<IActor> {
-  let actorArr = []
-  let actorsLen = r.readUvarint()
-  while (actorsLen > 0) {
-    let actor = readActor(r, true)
-    actorArr.push(actor)
-    actorsLen--
-  }
-  return actorArr
-}
-
-/*
-@param  notTx: not a tx, just an `Actor` object
-*/
-
-function readActor(r: Reader, notTx?: boolean): IActor {
-  if (!notTx) {
-    const txType = r.readUint8()
-    if (txType !== 0x00) {
-      throw new Error('Invalid Actor')
-    }
-  }
+function readActor(r: Reader): IActor {
   const chainId = r.readString()
   const app = r.readString()
   const address = readBuffer(r)
   return { chainId, app, address }
 }
-
 
 function readBuffer(r: Reader): Buffer {
   const byteCount = r.readUvarint()

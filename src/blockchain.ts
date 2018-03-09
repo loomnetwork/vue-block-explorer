@@ -196,14 +196,25 @@ export class Blockchain {
       for (let i = 0; i < rawTxs.length; i++) {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
-          block.txs.push({
-            hash: new Buffer(data.signed.sig).toString('hex'),
-            blockHeight: block.height,
-            txType: getTxType(data.tx),
-            time: block.time,
-            sender: getTxSender(data.tx),
-            data: data.tx
-          })
+          if (data.tx.txKind === TxKind.Nonce) {
+            block.txs.push({
+              hash: new Buffer(data.signed.sig).toString('hex'),
+              blockHeight: block.height,
+              txType: getTxType(data.tx.tx),
+              time: block.time,
+              sender: getTxSender(data.tx.tx),
+              data: data.tx.tx
+            })
+          } else {
+            block.txs.push({
+              hash: new Buffer(data.signed.sig).toString('hex'),
+              blockHeight: block.height,
+              txType: getTxType(data.tx),
+              time: block.time,
+              sender: getTxSender(data.tx),
+              data: data.tx
+            })
+          }
         } catch (e) {
           console.log(e)
         }
@@ -240,7 +251,5 @@ function getTxSender(tx: DelegateCallTx): string {
       return tx.acceptor
     case TxKind.Vote:
       return tx.voter
-    case TxKind.Nonce:
-      return tx.txKind
   }
 }
