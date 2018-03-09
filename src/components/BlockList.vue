@@ -5,7 +5,7 @@
         <div class="bg-dark">
             <div class="header-logo">
               <a href="/" class="">
-                <img src="../images/loom_logo.svg"> <span class="site-name">Blockchain</span>
+                <img src="../images/loom_logo.svg"> <span class="site-name">DAppChain</span>
               </a>
             </div>
             <div class="header-table-name">
