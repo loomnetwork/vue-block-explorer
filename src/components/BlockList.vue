@@ -5,15 +5,15 @@
         <div class="bg-dark">
             <div class="header-logo">
               <a href="/" class="">
-                <img src="../images/loom_logo.svg"> <span class="site-name">Blockchain</span>
+                <img src="~@/images/loom_logo.svg"> <span class="site-name">Blockchain</span>
               </a>
             </div>
             <div class="header-table-name">
               <div class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></div>
             </div>
             <div class="header-profile">
-              <img src="../images/user_image.png" class="user-head">
-              <img src="../images/down_gray_arrow.svg" class="down-arrow">
+              <img src="~@/images/user_image.png" class="user-head">
+              <img src="~@/images/down_gray_arrow.svg" class="down-arrow">
 
             </div>
         </div>
