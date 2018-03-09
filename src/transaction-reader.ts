@@ -187,16 +187,30 @@ function readVoteTxPayload(r: Reader): IVoteTx {
 }
 
 function readNonceTxPayload(r: Reader) {
-  let sequence = r.readUint32() // read nonce aka sequence
-  // TODO read signers => Array<Actor>
-  let actorsLen = r.readUvarint()
-  // should do it with a iterator, but it has only one now
-  let actor = readActor(r, true);
+  const txKind = TxKind.Nonce
+  const sequence = r.readUint32()
+  const signers = readActors(r)
   return readTxPayload(r)
 }
 
-function readActor(r: Reader, noType?: boolean): IActor {
-  if (!noType) {
+
+function readActors(r: Reader): Array<IActor> {
+  let actorArr = []
+  let actorsLen = r.readUvarint()
+  while (actorsLen > 0) {
+    let actor = readActor(r, true)
+    actorArr.push(actor)
+    actorsLen--
+  }
+  return actorArr
+}
+
+/*
+@param  notTx: not a tx, just an `Actor` object
+*/
+
+function readActor(r: Reader, notTx?: boolean): IActor {
+  if (!notTx) {
     const txType = r.readUint8()
     if (txType !== 0x00) {
       throw new Error('Invalid Actor')
@@ -207,6 +221,7 @@ function readActor(r: Reader, noType?: boolean): IActor {
   const address = readBuffer(r)
   return { chainId, app, address }
 }
+
 
 function readBuffer(r: Reader): Buffer {
   const byteCount = r.readUvarint()
