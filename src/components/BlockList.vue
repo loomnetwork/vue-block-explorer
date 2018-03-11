@@ -4,18 +4,19 @@
       <div class="section-header d-flex flex-row">
         <div class="bg-dark">
             <div class="header-logo">
-              <a href="/" class="">
-                <img src="~@/images/loom_logo.svg"> <span class="site-name">Blockchain</span>
+              <a href="/">
+                <div class="loom-logo"/> <span class="site-name">Blockchain</span>
               </a>
             </div>
             <div class="header-table-name">
               <div class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></div>
             </div>
+            <!--
             <div class="header-profile">
               <img src="~@/images/user_image.png" class="user-head">
-              <img src="~@/images/down_gray_arrow.svg" class="down-arrow">
-
+              <div class="down-arrow"/>
             </div>
+            -->
         </div>
         <!-- TODO
         <div class="bg-dark ml-auto px-0">
@@ -173,6 +174,19 @@
 
 .pagination {
   flex: 1 1 auto;
+}
+
+.down-arrow {
+  background: url('../images/down_gray_arrow.svg') no-repeat center;
+  width: 18px;
+  height: 9px;
+}
+
+.loom-logo {
+  background: url('../images/loom_logo.svg') no-repeat center;
+  width: 32px;
+  height: 28px;
+  vertical-align: top;
 }
 </style>
 
