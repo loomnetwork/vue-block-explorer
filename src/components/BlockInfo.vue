@@ -11,7 +11,7 @@
     <div v-if="!isLoading && !selectedTx">
       <div v-if="block" class="text-muted">Created by <span class="node-name">{{ nodeName }}</span></div>
       <div v-if="block" class="text-muted">On <span class="time-tamp"> {{blockTimestamp }}</span></div>
-      <div v-if="isVerified" class="text-muted"><img class="verified_icon" src="../images/verified.svg">Verified</div>
+      <div v-if="isVerified" class="text-muted d-flex flex-row align-items-center"><span class="verified-icon"></span>Verified</div>
       <h5 class="text-white">Transactions</h5>
       <TransactionTable v-bind="txTableProps"/>
     </div>
@@ -125,8 +125,12 @@ li.active {
       font-size: 18px;
       letter-spacing: 0.4px;
     }
-    .verified_icon {
+    .verified-icon {
+      display: inline-block;
+      background: url('../images/verified.svg');
       margin-right: 8px;
+      width: 23px;
+      height: 18px;
     }
     h5 {
       font-size: 20px;
