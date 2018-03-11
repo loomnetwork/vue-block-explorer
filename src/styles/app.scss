@@ -2,8 +2,8 @@
 @import './bootstrap-override.scss';
 @import 'mixin';
 @import 'variables';
-// Additional global styles go below...
 
+// Additional global styles go below...
 
 body {
   width: 100vw;
@@ -12,13 +12,7 @@ body {
   overflow: hidden;
 }
 
-.table .thead-gray th {
-  background-color: theme-color('muted');
-}
-
 #app {
-  background-color: theme-color("dark");
-  font-family: "proxima-nova" sans-serif;
+  background-color: theme-color('secondary');
+  font-family: proxima-nova, sans-serif;
 }
-
-
