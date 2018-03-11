@@ -36,14 +36,13 @@
 .form-control-plaintext {
   color: $white;
   padding: 23px 58px;
-  margin-top: 31px;
-  background-color:$dark-text-bg;
+  margin: 31px 0 15px 0;
+  background-color: $dark-text-bg;
   font-size: 18px;
   width: calc(100% + #{$block_side_padding} * 2) !important;
   margin-left: -#{$block_side_padding};
-}
+  max-height: 480px;
 
-textarea {
   &::-webkit-scrollbar {
     width: 12px;
   }
@@ -54,29 +53,31 @@ textarea {
   }
   &::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background:$dark-text-bg;
+    background: $dark-text-bg;
   }
 
-  &:hover, &:active, &:focus{
+  &:hover,
+  &:active,
+  &:focus {
     outline: none;
   }
 }
 
 .badge-secondary {
   border-radius: 5px;
-  border: solid 1.2px theme-color("info");
+  border: solid 1.2px theme-color('info');
   background: none;
   font-size: 13px;
   font-weight: normal;
   text-align: left;
-  color: theme-color("info");
+  color: theme-color('info');
   height: 24px;
   position: relative;
   margin-right: 12px;
 
-  &::before{
+  &::before {
     content: '●';
-    margin-right: 4px;    
+    margin-right: 4px;
   }
 }
 </style>

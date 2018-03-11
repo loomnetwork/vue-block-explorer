@@ -5,7 +5,7 @@
         <div class="bg-dark">
             <div class="header-logo">
               <a href="/">
-                <div class="loom-logo"/> <span class="site-name">Blockchain</span>
+                <div class="loom-logo"/> <span class="site-name">DAppChain</span>
               </a>
             </div>
             <div class="header-table-name">
@@ -125,10 +125,10 @@
       line-height: 0.88;
       letter-spacing: 0.7px;
       text-align: left;
-      color: theme-color("primary");
+      color: theme-color('primary');
       display: inline-block;
       margin: 0 auto;
-      width: 180px
+      width: 180px;
     }
   }
   .header-profile {
