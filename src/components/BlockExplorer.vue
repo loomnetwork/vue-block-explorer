@@ -10,14 +10,9 @@
 @import '~@/styles/_variables.scss';
 @import '~@/styles/bootstrap-override.scss';
 
-#app {
-  background-color: theme-color('secondary');
-  font-family:"proxima-nova" sans-serif ;
-}
-
 .table .thead-gray th {
   background-color: theme-color('muted');
-  border:none;
+  border: none;
 }
 
 .pointer-only {
