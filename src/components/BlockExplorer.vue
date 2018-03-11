@@ -8,6 +8,18 @@
 <style lang="scss">
 @import '~@/styles/_mixin.scss';
 @import '~@/styles/_variables.scss';
+@import '~@/styles/bootstrap-override.scss';
+
+#app {
+  background-color: theme-color('secondary');
+  font-family:"proxima-nova" sans-serif ;
+}
+
+.table .thead-gray th {
+  background-color: theme-color('muted');
+  border:none;
+}
+
 .pointer-only {
   user-select: none;
   cursor: default;
