@@ -3,12 +3,12 @@
     <TxPreviewField class="kind" label="Kind:" :value="kind"/>
     <div class="text-white text-title">Owner</div>
     <div class="row user-profile">
-      <TxPreviewField >
-        <img :src="image" v-on:mouseenter="onHeadImageHover" v-on:mouseleave="onHeadImageHover">
+      <TxPreviewField class="user-image-small">
+        <img :src="image" v-on:mouseenter="onHeadImageHover" v-on:mouseleave="onHeadImageHover"/>
       </TxPreviewField>
      <TxPreviewField class="author author-name" label="" :value="name"/>
-     <TxPreviewField class="user-image" v-show="active">
-        <img :src="image">
+     <TxPreviewField class="user-image" v-show="showLargeHead">
+        <img :src="image"/>
       </TxPreviewField>
     </div>
       <TxPreviewField class="author" label="User Name: " :value="username"/>
@@ -17,10 +17,6 @@
       <TxPreviewField class="text-normal" label="App:" :value="owner.app"/>
       <TxPreviewField class="address" label="Address:" :value="owner.address"/>
     </div>
-   
-   
-    
-      
   </div>
 </template>
 
@@ -53,26 +49,29 @@
 }
 
 .user-profile {
-  $line_height: 82px;
+  $profile_head_height: 82px;
   margin: {
     left: 0;
     bottom: 10px;
   }
   img {
     width: auto;
-    height: $line_height;
+    height: $profile_head_height;
   }
 
   .author-name {
-    line-height: $line_height;
+    line-height: $profile_head_height;
     margin-left: 20px;
   }
-  
+  .user-image-small{
+    width: $profile_head_height;
+    height: $profile_head_height;
+  }
   .user-image{
     img{
       width: initial;
       height: initial;
-      max-height: $line_height * 7;
+      max-height: $profile_head_height * 7;
       position: absolute;
       left: 145px;
       box-shadow: 8px 12px 20px 1px #101010
