@@ -13,12 +13,17 @@ export enum BlockExplorerView {
   Transactions = 'transactions'
 }
 
+export interface ISearchQuery {
+  blockHeight: number | null
+}
+
 @Component
 export default class BlockExplorer extends Vue {
   @Prop() view!: string // prettier-ignore
   @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
   @Prop({ required: true }) defaultUrl!: string // prettier-ignore
   @Prop({ required: true }) allowedUrls!: string[] // prettier-ignore
+  @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
 
   blockchain: Blockchain | null = new Blockchain({
     serverUrl: this.defaultUrl,
@@ -34,5 +39,9 @@ export default class BlockExplorer extends Vue {
 
   get viewComponent(): VueConstructor {
     return this.view === BlockExplorerView.Transactions ? TransactionList : BlockList
+  }
+
+  get curSearchQuery(): ISearchQuery {
+    return this.searchQuery
   }
 }

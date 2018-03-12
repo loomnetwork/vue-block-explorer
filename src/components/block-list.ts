@@ -1,4 +1,4 @@
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 import formatDate from 'date-fns/format'
 
@@ -9,6 +9,7 @@ import ConnectionStatus from './ConnectionStatus.vue'
 
 import { IBlockInfoProps } from './block-info'
 import { Blockchain, IBlockchainBlock } from '../blockchain'
+import { ISearchQuery } from './block-explorer'
 
 interface IBlockListItem {
   blockHeight: number
@@ -28,6 +29,7 @@ export default class BlockList extends Vue {
   @Prop({ required: true }) blockchain!: Blockchain // prettier-ignore
   @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
   @Prop({ default: 10 }) blocksPerPage!: number // prettier-ignore
+  @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
 
   sortBy = 'blockHeight'
   sortDesc = true
@@ -168,6 +170,13 @@ export default class BlockList extends Vue {
     this.currentPage = 1
     if (this.$refs.blocksTable) {
       ;(this.$refs.blocksTable as any).refresh()
+    }
+  }
+
+  @Watch('searchQuery')
+  search(query: ISearchQuery) {
+    if (query.blockHeight) {
+      this.showBlock(query.blockHeight)
     }
   }
 }
