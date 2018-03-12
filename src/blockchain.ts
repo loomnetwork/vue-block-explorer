@@ -182,6 +182,25 @@ export class Blockchain {
     }
   }
 
+  async fetchBlock(blockHeight: number): Promise<IBlockchainBlock> {
+    const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/blockchain`, {
+      params: {
+        minHeight: blockHeight,
+        maxHeight: blockHeight
+      }
+    })
+    const blocks = chainResp.data.result.block_metas.map<IBlockchainBlock>(meta => ({
+      hash: meta.block_id.hash,
+      height: meta.header.height,
+      time: meta.header.time,
+      numTxs: meta.header.num_txs,
+      isFetchingTxs: false,
+      didFetchTxs: false,
+      txs: []
+    }))
+    return blocks[0]
+  }
+
   async fetchTxsInBlock(block: IBlockchainBlock) {
     if (block.numTxs === 0 || block.isFetchingTxs || block.didFetchTxs) {
       return

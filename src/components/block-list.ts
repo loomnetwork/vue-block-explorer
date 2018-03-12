@@ -116,6 +116,18 @@ export default class BlockList extends Vue {
     return items
   }
 
+  async showBlock(blockHeight: number) {
+    const block = await this.blockchain.fetchBlock(blockHeight)
+    const item = {
+      blockHeight: block.height,
+      numTransactions: block.numTxs,
+      age: distanceInWordsToNow(new Date(block.time)),
+      time: formatDate(new Date(block.time), 'YYYY-MM-DD HH:mm:ss.SSS (Z)'),
+      block
+    }
+    this.selectItem(item)
+  }
+
   get blockInfoProps(): IBlockInfoProps {
     return {
       transaction: null,
@@ -129,7 +141,7 @@ export default class BlockList extends Vue {
     return this.showConnectionDropdown ? 'right' : 'center'
   }
 
-  onRowClicked(item: IBlockListItem /*, index: number, event: Event*/) {
+  selectItem(item: IBlockListItem) {
     if (this.selectedItem) {
       this.isBlockInfoVisible =
         this.selectedItem.blockHeight !== item.blockHeight || !this.isBlockInfoVisible
@@ -141,6 +153,10 @@ export default class BlockList extends Vue {
     if (this.isBlockInfoVisible && this.selectedItem.block.numTxs > 0) {
       this.blockchain.fetchTxsInBlock(this.selectedItem.block)
     }
+  }
+
+  onRowClicked(item: IBlockListItem /*, index: number, event: Event*/) {
+    this.selectItem(item)
   }
 
   closeBlockInfoOverlay() {
