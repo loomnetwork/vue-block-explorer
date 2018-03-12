@@ -13,6 +13,8 @@ import TxPreviewField from './TxPreviewField.vue'
 export default class CreateAccountTxPreview extends Vue {
   @Prop() tx!: ICreateAccountTx // prettier-ignore
 
+  showLargeHead: boolean = false;
+
   get kind(): string {
     return this.tx.txKind
   }
@@ -26,14 +28,19 @@ export default class CreateAccountTxPreview extends Vue {
     return this.tx.username
   }
 
-  get email(): string{
+  get email(): string {
     return this.tx.email
   }
-  
-  get name(): string{
+
+  get name(): string {
     return this.tx.name
   }
-  get image(): string{
+
+  get image(): string {
     return this.tx.image
+  }
+
+  onHeadImageHover(): void {
+    this.showLargeHead = !this.showLargeHead;
   }
 }
