@@ -137,6 +137,7 @@ const txVersions: { [index: string]: Array<ITxField[]> } = {
 }
 
 class InvalidTxVersionError extends Error {}
+class UnsupportedTxTypeError extends Error {}
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const buf = new Buffer(base64Str, 'base64')
@@ -144,15 +145,16 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   // structure evolved over time
   let attempt = 0
   let lastError: Error | null = null
-  while (true) {
+  while (attempt < 10) {
     const r = new Reader(buf)
     const txType = r.readUint8()
     if (txType !== 0x16) {
       throw new Error('Invalid OneSigTx')
     }
+    const wrappedTxType = r.readUint8()
 
     try {
-      const payload = readTxPayload(r, attempt++)
+      const payload = readTxPayload(r, wrappedTxType, attempt++)
       const sig = readTxSignature(r)
       return { tx: payload, signed: sig }
     } catch (e) {
@@ -163,14 +165,14 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
       }
     }
   }
+  throw lastError
 }
 
 // @param attempt Indicates which tx version the function should attempt to read, zero corresponds
 //                to the latest version, one corresponds to the second to second to last version, etc.
 //                The function will throw InvalidTxVersionError if this parameter exceeds the number
 //                of available tx versions.
-function readTxPayload(r: Reader, attempt: number): DelegateCallTx | INonceTx {
-  const txType = r.readUint8()
+function readTxPayload(r: Reader, txType: number, attempt: number): DelegateCallTx | INonceTx {
   switch (txType) {
     case 0x40:
       return readCreateAccountTxPayload(r, attempt)
@@ -184,7 +186,7 @@ function readTxPayload(r: Reader, attempt: number): DelegateCallTx | INonceTx {
     case 0x69:
       return readNonceTxPayload(r, attempt)
   }
-  throw new Error('Unknown Tx Type: ' + txType.toString(16))
+  throw new UnsupportedTxTypeError(txType.toString(16))
 }
 
 function readCreateAccountTxPayload(r: Reader, attempt: number): ICreateAccountTx {
@@ -260,7 +262,13 @@ function readNonceTxPayload(r: Reader, attempt: number): INonceTx {
   for (let i = 0; i < numSigners; i++) {
     signers.push(readActor(r))
   }
-  return { txKind, sequence, signers, tx: readTxPayload(r, attempt) as DelegateCallTx }
+  const wrappedTxType = r.readUint8()
+  return {
+    txKind,
+    sequence,
+    signers,
+    tx: readTxPayload(r, wrappedTxType, attempt) as DelegateCallTx
+  }
 }
 
 function readActor(r: Reader): IActor {
