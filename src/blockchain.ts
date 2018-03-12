@@ -85,7 +85,7 @@ export class Blockchain {
       this.refreshTimer = window.setInterval(async () => {
         const { latestBlockHeight } = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
-      }, 2000)
+      }, 5000)
     }
   }
 
