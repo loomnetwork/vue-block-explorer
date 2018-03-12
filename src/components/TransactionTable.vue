@@ -28,10 +28,44 @@
     </b-table>
   </div>
 </template>
+
 <style lang="scss" scoped>
-@import '~@/styles/_variables.scss';
+@import '~@/styles/bootstrap-override.scss';
+@import '~@/styles/mixin';
+@import '~@/styles/variables';
+
+.block-explorer-tx-table {
+  table /deep/ .thead-gray th {
+    background-color: theme-color('muted');
+    border: none;
+  }
+
+  table /deep/ th,
+  table /deep/ td {
+    font-size: 18px;
+    border-color: #2d2c2c;
+    letter-spacing: 0.4px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: normal !important;
+    &:first-child {
+      text-align: left;
+      padding-left: 20px;
+    }
+    &:last-child {
+      text-align: right;
+      padding-right: 20px;
+    }
+  }
+  table /deep/ td {
+    font-size: 16px;
+    padding: 11px 12px;
+  }
+}
+
 .author {
   color: $info-green;
 }
 </style>
+
 <script lang="ts" src="./transaction-table.ts"></script>

@@ -84,8 +84,16 @@
 
 <style lang="scss" scoped>
 @import '~@/styles/app.scss';
+
+.header-table-name {
+  text-transform: uppercase;
+}
+
 // header bar
 .section-header {
+  padding: 26px 0;
+  @include normal-font();
+
   .bg-dark {
     width: 100%;
     height: 26px;
@@ -96,8 +104,7 @@
       padding: 0;
     }
   }
-  padding: 26px 0;
-  @include normal-font();
+  
   .header-logo {
     width: 20%;
     a {
@@ -108,14 +115,9 @@
       &:hover {
         text-decoration: none;
       }
-      img {
-        height: 25px;
-        width: auto;
-        vertical-align: top;
-        margin-right: 4px;
-      }
     }
   }
+  
   .header-table-name {
     width: 60%;
     text-align: center;

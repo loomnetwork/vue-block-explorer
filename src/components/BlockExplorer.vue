@@ -11,17 +11,9 @@
 @import '~@/styles/_variables.scss';
 @import '~@/styles/bootstrap-override.scss';
 
-.table .thead-gray th {
-  background-color: theme-color('muted');
-  border: none;
-}
-
 .pointer-only {
   user-select: none;
   cursor: default;
-}
-.header-table-name{
-  text-transform: uppercase;
 }
 
 //table
@@ -80,37 +72,12 @@
   }
 }
 
-//block info table
-.block-explorer-tx-table {
-  th,
-  td {
-    font-size: 18px;
-    border-color: #2d2c2c;
-    letter-spacing: 0.4px;
-    text-align: center;
-    color: #ffffff;
-    font-weight: normal !important;
-    &:first-child {
-      text-align: left;
-      padding-left: 20px;
-    }
-    &:last-child {
-      text-align: right;
-      padding-right: 20px;
-    }
-  }
-  td {
-    font-size: 16px;
-    padding: 11px 12px;
-  }
-}
-
-//pagination
 .pagination {
   .page-link {
     border: none;
     background: none !important;
   }
+
   li {
     width: 24px;
     height: 24px;
@@ -165,6 +132,7 @@
     }
   }
 }
+
 </style>
 
 <script lang="ts" src="./block-explorer"></script>
