@@ -10,6 +10,8 @@ import CreateAccountTxPreview from './delegatecall/CreateAccountTxPreview.vue'
 import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue'
 // @ts-ignore
 import VoteTxPreview from './delegatecall/VoteTxPreview.vue'
+// @ts-ignore
+import AcceptAnswerTxPreview from './delegatecall/AcceptAnswerTxPreview.vue'
 
 import {
   Blockchain,
@@ -106,6 +108,8 @@ export default class BlockInfo extends Vue {
           return PostCommentTxPreview
         case TxKind.Vote:
           return VoteTxPreview
+        case TxKind.AcceptAnswer:
+          return AcceptAnswerTxPreview
       }
     }
     return null
