@@ -43,7 +43,10 @@ export interface IActor {
 export interface ICreateAccountTx {
   txKind: TxKind.CreateAccount
   owner: IActor
-  username: string
+  username: string,
+  name: string, 
+  email:string,
+  image:string
 }
 
 export enum CommentKind {
@@ -138,7 +141,7 @@ function readCreateAccountTxPayload(r: Reader): ICreateAccountTx {
   const email = r.readString()
   const name = r.readString()
   const image = r.readString()
-  return { txKind: TxKind.CreateAccount, owner, username }
+  return { txKind: TxKind.CreateAccount, owner, username, email, name, image}
 }
 
 function readPostCommentTxPayload(r: Reader): IPostCommentTx {

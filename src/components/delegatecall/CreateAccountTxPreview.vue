@@ -7,7 +7,12 @@
       <TxPreviewField class="text-normal" label="App:" :value="owner.app"/>
       <TxPreviewField class="address" label="Address:" :value="owner.address"/>
     </div>
-    <TxPreviewField class="author" label="Username:" :value="username"/>
+    <TxPreviewField class="author" label="Username" :value="username"/>
+    <TxPreviewField class="author" label="Acountname:" :value="name"/>
+    <TxPreviewField label="">
+        <img :src="image">
+    </TxPreviewField>
+      
   </div>
 </template>
 
@@ -16,7 +21,7 @@
 .ml-3 {
   margin-left: 0 !important;
 
-  div{
+  div {
     margin-bottom: 7px;
   }
 }
@@ -32,13 +37,12 @@
   text-transform: uppercase;
 }
 
-.text-bold{
-  .text-colored{
-    font-weight:600px;
-    font-color:#ffffff; 
+.text-bold {
+  .text-colored {
+    font-weight: 600px;
+    font-color: #ffffff;
   }
 }
-
 </style>
 
 <script lang="ts" src="./create-account-tx-preview.ts"></script>
