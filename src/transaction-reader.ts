@@ -44,6 +44,10 @@ export interface ICreateAccountTx {
   txKind: TxKind.CreateAccount
   owner: IActor
   username: string
+  // fields below are only available in v2
+  email?: string
+  name?: string
+  image?: string
 }
 
 export enum CommentKind {
@@ -101,47 +105,102 @@ export type DelegateCallTx =
   | IAcceptAnswerTx
   | IVoteTx
 
-export function extractTxDataFromStr(base64Str: string): IOneSigTx {
-  const buf = new Buffer(base64Str, 'base64')
-  const r = new Reader(buf)
-  const txType = r.readUint8()
-  if (txType !== 0x16) {
-    throw new Error('Invalid OneSigTx')
-  }
-  const payload = readTxPayload(r)
-  const sig = readTxSignature(r)
-  return { tx: payload, signed: sig }
+enum TxFieldKind {
+  String = 'string',
+  UInt8 = 'uint8',
+  UInt32 = 'uint32'
 }
 
-function readTxPayload(r: Reader): DelegateCallTx | INonceTx {
+interface ITxField {
+  name: string
+  kind: TxFieldKind | { (r: Reader): any }
+}
+
+const txVersions: { [index: string]: Array<ITxField[]> } = {
+  [TxKind.CreateAccount]: [
+    // v2
+    [
+      { name: 'inner', kind: TxFieldKind.UInt8 },
+      { name: 'owner', kind: readActor },
+      { name: 'username', kind: TxFieldKind.String },
+      { name: 'email', kind: TxFieldKind.String },
+      { name: 'name', kind: TxFieldKind.String },
+      { name: 'image', kind: TxFieldKind.String }
+    ],
+    // v1
+    [
+      { name: 'inner', kind: TxFieldKind.UInt8 },
+      { name: 'owner', kind: readActor },
+      { name: 'username', kind: TxFieldKind.String }
+    ]
+  ]
+}
+
+class InvalidTxVersionError extends Error {}
+
+export function extractTxDataFromStr(base64Str: string): IOneSigTx {
+  const buf = new Buffer(base64Str, 'base64')
+  // version info isn't stored in txs so may have to make multiple attempts to decode tx types whose
+  // structure evolved over time
+  let attempt = 0
+  let lastError: Error | null = null
+  while (true) {
+    const r = new Reader(buf)
+    const txType = r.readUint8()
+    if (txType !== 0x16) {
+      throw new Error('Invalid OneSigTx')
+    }
+
+    try {
+      const payload = readTxPayload(r, attempt++)
+      const sig = readTxSignature(r)
+      return { tx: payload, signed: sig }
+    } catch (e) {
+      if (e instanceof InvalidTxVersionError) {
+        throw lastError
+      } else {
+        lastError = e
+      }
+    }
+  }
+}
+
+// @param attempt Indicates which tx version the function should attempt to read, zero corresponds
+//                to the latest version, one corresponds to the second to second to last version, etc.
+//                The function will throw InvalidTxVersionError if this parameter exceeds the number
+//                of available tx versions.
+function readTxPayload(r: Reader, attempt: number): DelegateCallTx | INonceTx {
   const txType = r.readUint8()
   switch (txType) {
     case 0x40:
-      return readCreateAccountTxPayload(r)
+      return readCreateAccountTxPayload(r, attempt)
     case 0x41:
     case 0x44:
-      return readPostCommentTxPayload(r)
+      return readPostCommentTxPayload(r, attempt)
     case 0x42:
-      return readAcceptAnswerTxPayload(r)
+      return readAcceptAnswerTxPayload(r, attempt)
     case 0x43:
-      return readVoteTxPayload(r)
+      return readVoteTxPayload(r, attempt)
     case 0x69:
-      return readNonceTxPayload(r)
+      return readNonceTxPayload(r, attempt)
   }
   throw new Error('Unknown Tx Type: ' + txType.toString(16))
 }
 
-function readCreateAccountTxPayload(r: Reader): ICreateAccountTx {
-  const inner = r.readUint8()
-  const owner = readActor(r)
-  const username = r.readString()
-  const email = r.readString()
-  const name = r.readString()
-  const image = r.readString()
-  return { txKind: TxKind.CreateAccount, owner, username }
+function readCreateAccountTxPayload(r: Reader, attempt: number): ICreateAccountTx {
+  const versions = txVersions[TxKind.CreateAccount]
+  if (!versions || attempt >= versions.length) {
+    throw new InvalidTxVersionError()
+  }
+  const fieldDefs = versions[attempt]
+  const fields = readFields(r, fieldDefs)
+  return { txKind: TxKind.CreateAccount, ...(fields as any) }
 }
 
-function readPostCommentTxPayload(r: Reader): IPostCommentTx {
+function readPostCommentTxPayload(r: Reader, attempt: number): IPostCommentTx {
+  if (attempt !== 0) {
+    throw new InvalidTxVersionError()
+  }
   // In Go the inner field is of type TxInner (from Cosmos SDK), in JS though DelegateCall seems to
   // leave it undefined so it gets serialized as a zero byte, so just read & discard for now.
   const inner = r.readUint8()
@@ -170,7 +229,10 @@ function readPostCommentTxPayload(r: Reader): IPostCommentTx {
 }
 
 // TODO: test this, haven't seen any transactions of this kind yet
-function readAcceptAnswerTxPayload(r: Reader): IAcceptAnswerTx {
+function readAcceptAnswerTxPayload(r: Reader, attempt: number): IAcceptAnswerTx {
+  if (attempt !== 0) {
+    throw new InvalidTxVersionError()
+  }
   const inner = r.readUint8()
   // tslint:disable-next-line:variable-name
   const answer_permalink = r.readString()
@@ -178,7 +240,10 @@ function readAcceptAnswerTxPayload(r: Reader): IAcceptAnswerTx {
   return { txKind: TxKind.AcceptAnswer, answer_permalink, acceptor }
 }
 
-function readVoteTxPayload(r: Reader): IVoteTx {
+function readVoteTxPayload(r: Reader, attempt: number): IVoteTx {
+  if (attempt !== 0) {
+    throw new InvalidTxVersionError()
+  }
   const inner = r.readUint8()
   // tslint:disable-next-line:variable-name
   const comment_permalink = r.readString()
@@ -187,7 +252,7 @@ function readVoteTxPayload(r: Reader): IVoteTx {
   return { txKind: TxKind.Vote, comment_permalink, voter, up }
 }
 
-function readNonceTxPayload(r: Reader): INonceTx {
+function readNonceTxPayload(r: Reader, attempt: number): INonceTx {
   const txKind = TxKind.Nonce
   const sequence = r.readUint32()
   const numSigners = r.readUvarint()
@@ -195,7 +260,7 @@ function readNonceTxPayload(r: Reader): INonceTx {
   for (let i = 0; i < numSigners; i++) {
     signers.push(readActor(r))
   }
-  return { txKind, sequence, signers, tx: readTxPayload(r) as DelegateCallTx }
+  return { txKind, sequence, signers, tx: readTxPayload(r, attempt) as DelegateCallTx }
 }
 
 function readActor(r: Reader): IActor {
@@ -230,4 +295,29 @@ function readTxSignature(r: Reader): ISigned {
   const sig = readUint8Array(r, 64)
   const pubkey = readUint8Array(r, 32)
   return { sig, pubkey }
+}
+
+// TODO: move this to loom-js
+function readFields(r: Reader, fields: ITxField[]): { [index: string]: any } {
+  const result: { [index: string]: any } = {}
+  for (let f of fields) {
+    result[f.name] = readField(r, f)
+  }
+  return result
+}
+
+function readField(r: Reader, f: ITxField): any {
+  switch (f.kind) {
+    case TxFieldKind.String:
+      return r.readString()
+    case TxFieldKind.UInt8:
+      return r.readUint8()
+    case TxFieldKind.UInt32:
+      return r.readUint32()
+    default:
+      if (f.kind instanceof Function) {
+        return f.kind(r)
+      }
+  }
+  throw new Error('Unsupported tx field kind')
 }
