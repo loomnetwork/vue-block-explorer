@@ -7,7 +7,7 @@
         <img :src="image" v-on:mouseenter="onHeadImageHover" v-on:mouseleave="onHeadImageHover">
       </TxPreviewField>
      <TxPreviewField class="author author-name" label="" :value="name"/>
-     <TxPreviewField class="user-image" v-show="active">
+     <TxPreviewField class="user-image" v-show="showLargeHead">
         <img :src="image">
       </TxPreviewField>
     </div>
