@@ -1,2 +1,2 @@
 # vue-block-explorer
-Vue component for inspecting Loom Blockchains
+Vue component for inspecting Loom DAppChains
