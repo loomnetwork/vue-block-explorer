@@ -28,15 +28,15 @@ export default class CreateAccountTxPreview extends Vue {
     return this.tx.username
   }
 
-  get email(): string {
+  get email(): string | undefined {
     return this.tx.email
   }
 
-  get name(): string {
+  get name(): string | undefined {
     return this.tx.name
   }
 
-  get image(): string {
+  get image(): string | undefined {
     return this.tx.image
   }
 
