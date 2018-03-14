@@ -40,7 +40,13 @@ export default class CreateAccountTxPreview extends Vue {
     return this.tx.image
   }
 
+  get isNewTx(): boolean {
+   return this.tx.email !== undefined;
+  }
+
   onHeadImageHover(): void {
     this.showLargeHead = !this.showLargeHead;
   }
+
+
 }

@@ -2,7 +2,7 @@
   <div>
     <TxPreviewField class="kind" label="Kind:" :value="kind"/>
     <div class="text-white text-title">Owner</div>
-    <div class="row user-profile">
+    <div class="row user-profile" v-show="isNewTx">
       <TxPreviewField class="user-image-small">
         <img :src="image" v-on:mouseenter="onHeadImageHover" v-on:mouseleave="onHeadImageHover"/>
       </TxPreviewField>
@@ -63,25 +63,25 @@
     line-height: $profile_head_height;
     margin-left: 20px;
   }
-  .user-image-small{
+  .user-image-small {
     width: $profile_head_height;
     height: $profile_head_height;
   }
-  .user-image{
-    img{
+  .user-image {
+    img {
       width: initial;
       height: initial;
       max-height: $profile_head_height * 7;
       position: absolute;
       left: 145px;
-      box-shadow: 8px 12px 20px 1px #101010
+      box-shadow: 8px 12px 20px 1px #101010;
     }
   }
 }
 
- .author{
-    margin-bottom: 10px;
-  }
+.author {
+  margin-bottom: 10px;
+}
 </style>
 
 <script lang="ts" src="./create-account-tx-preview.ts"></script>
