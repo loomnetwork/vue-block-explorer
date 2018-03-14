@@ -13,7 +13,7 @@ import TxPreviewField from './TxPreviewField.vue'
 export default class CreateAccountTxPreview extends Vue {
   @Prop() tx!: ICreateAccountTx // prettier-ignore
 
-  showLargeHead: boolean = false;
+  showLargeHead: boolean = false
 
   get kind(): string {
     return this.tx.txKind
@@ -41,12 +41,10 @@ export default class CreateAccountTxPreview extends Vue {
   }
 
   get isNewTx(): boolean {
-   return this.tx.email !== undefined;
+    return this.tx.email !== undefined
   }
 
   onHeadImageHover(): void {
-    this.showLargeHead = !this.showLargeHead;
+    this.showLargeHead = !this.showLargeHead
   }
-
-
 }

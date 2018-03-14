@@ -43,7 +43,7 @@
 
 .text-bold {
   .text-colored {
-    font-weight: 600px;
+    font-weight: 600;
     color: #ffffff;
   }
 }
