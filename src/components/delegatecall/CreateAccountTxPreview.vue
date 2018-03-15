@@ -2,13 +2,13 @@
   <div>
     <TxPreviewField class="kind" label="Kind:" :value="kind"/>
     <div class="row user-profile" v-show="hasProfilePic">
-      <TxPreviewField class="user-image-small">
+      <div class="user-image-small">
         <img :src="image" v-on:mouseenter="onHeadImageHover" v-on:mouseleave="onHeadImageHover"/>
-      </TxPreviewField>
+      </div>
       <TxPreviewField class="author author-name" label="" :value="username"/>
-      <TxPreviewField class="user-image" v-show="showLargeHead">
+      <div class="user-image" v-show="showLargeHead">
         <img :src="image"/>
-      </TxPreviewField>
+      </div>
     </div>
     <TxPreviewField v-show="!hasProfilePic" class="author" label="Username:" :value="username"/>
     <div class="text-white text-title">Owner</div>
