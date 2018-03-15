@@ -1,17 +1,17 @@
 <template>
   <div>
     <TxPreviewField class="kind" label="Kind:" :value="kind"/>
-    <div class="text-white text-title">Owner</div>
-    <div class="row user-profile" v-show="isNewTx">
+    <div class="row user-profile" v-show="hasProfilePic">
       <TxPreviewField class="user-image-small">
         <img :src="image" v-on:mouseenter="onHeadImageHover" v-on:mouseleave="onHeadImageHover"/>
       </TxPreviewField>
-     <TxPreviewField class="author author-name" label="" :value="name"/>
-     <TxPreviewField class="user-image" v-show="showLargeHead">
+      <TxPreviewField class="author author-name" label="" :value="username"/>
+      <TxPreviewField class="user-image" v-show="showLargeHead">
         <img :src="image"/>
       </TxPreviewField>
     </div>
-      <TxPreviewField class="author" label="User Name: " :value="username"/>
+    <TxPreviewField v-show="!hasProfilePic" class="author" label="Username:" :value="username"/>
+    <div class="text-white text-title">Owner</div>
     <div class="ml-3">
       <TxPreviewField class="text-bold" label="Chain ID:" :value="owner.chainId"/>
       <TxPreviewField class="text-normal" label="App:" :value="owner.app"/>
@@ -22,13 +22,6 @@
 
 <style lang="scss" scoped>
 @import '~@/styles/_variables.scss';
-.ml-3 {
-  margin-left: 0 !important;
-
-  div {
-    margin-bottom: 7px;
-  }
-}
 
 .text-title {
   margin-top: 26px;
