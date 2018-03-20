@@ -9,7 +9,7 @@
       <component :is="txInfoComponent" :tx="selectedTx.data"/>
     </div>
     <div v-if="!isLoading && !selectedTx">
-      <div v-if="block" class="text-muted">Created by <span class="node-name">{{ nodeName }}</span></div>
+      <!-- <div v-if="block" class="text-muted">Created by <span class="node-name">{{ nodeName }}</span></div> -->
       <div v-if="block" class="text-muted">On <span class="time-tamp"> {{blockTimestamp }}</span></div>
       <div v-if="isVerified" class="text-muted d-flex flex-row align-items-center"><span class="verified-icon"></span>Verified</div>
       <h5 class="text-white">Transactions</h5>
