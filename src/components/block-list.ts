@@ -36,7 +36,6 @@ export default class BlockList extends Vue {
   sortDesc = true
   fields = [
     { key: 'blockHeight', label: 'Block', sortable: true },
-    // { key: 'numTransactions', label: 'Txs Processed', sortable: true },
     { key: 'hash', label: 'Hash', sortable: true },
     { key: 'age', sortable: true },
     { key: 'time', sortable: true }
