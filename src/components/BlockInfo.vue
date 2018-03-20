@@ -38,7 +38,7 @@ div.close-btn {
   }
   position: absolute;
   top: 14px;
-  right: 10px;
+  right: 26px;
   background-image: url(../images/close_icon.svg);
 }
 

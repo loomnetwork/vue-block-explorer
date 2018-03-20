@@ -31,7 +31,7 @@
       text-align: left;
       font-weight: normal !important;
       position: relative;
-      background-color: theme-color("muted") !important;
+      background-color: theme-color('muted') !important;
       padding: 0;
       &::before,
       &::after {
@@ -69,6 +69,14 @@
   }
   th:nth-child(2) {
     min-width: 220px;
+  }
+
+  .hash-value {
+    display: inline-block;
+    width: 11em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
@@ -132,7 +140,6 @@
     }
   }
 }
-
 </style>
 
 <script lang="ts" src="./block-explorer"></script>
