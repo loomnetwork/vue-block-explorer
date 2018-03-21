@@ -48,8 +48,8 @@
           <template slot="blockHeight" slot-scope="row">
             <span>#{{ row.value }}</span>
           </template>
-          <template slot="numTransactions" slot-scope="row">
-            <span class="text-info">{{ row.value }}</span>
+          <template slot="hash" slot-scope="row">
+            <span class="text-info hash-value" :title="row.value">{{ row.value }}</span>
           </template>
           <template slot="age" slot-scope="row">
             <span>{{ row.value }}</span>

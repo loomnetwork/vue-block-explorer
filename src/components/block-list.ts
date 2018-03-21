@@ -14,6 +14,7 @@ import { ISearchQuery } from './block-explorer'
 interface IBlockListItem {
   blockHeight: number
   numTransactions: number
+  hash: string
   age: string
   time: string
   block: IBlockchainBlock
@@ -35,7 +36,7 @@ export default class BlockList extends Vue {
   sortDesc = true
   fields = [
     { key: 'blockHeight', label: 'Block', sortable: true },
-    { key: 'numTransactions', label: 'Txs Processed', sortable: true },
+    { key: 'hash', label: 'Hash', sortable: true },
     { key: 'age', sortable: true },
     { key: 'time', sortable: true }
   ]
@@ -103,6 +104,7 @@ export default class BlockList extends Vue {
       items = blocks.map<IBlockListItem>(block => ({
         blockHeight: block.height,
         numTransactions: block.numTxs,
+        hash: block.hash,
         age: distanceInWordsToNow(new Date(block.time)),
         time: formatDate(new Date(block.time), 'YYYY-MM-DD HH:mm:ss.SSS (Z)'),
         block
@@ -123,6 +125,7 @@ export default class BlockList extends Vue {
     const item = {
       blockHeight: block.height,
       numTransactions: block.numTxs,
+      hash: block.hash,
       age: distanceInWordsToNow(new Date(block.time)),
       time: formatDate(new Date(block.time), 'YYYY-MM-DD HH:mm:ss.SSS (Z)'),
       block
