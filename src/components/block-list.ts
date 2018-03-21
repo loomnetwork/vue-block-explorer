@@ -14,7 +14,7 @@ import { ISearchQuery } from './block-explorer'
 interface IBlockListItem {
   blockHeight: number
   numTransactions: number
-  hash:string
+  hash: string
   age: string
   time: string
   block: IBlockchainBlock
@@ -104,7 +104,7 @@ export default class BlockList extends Vue {
       items = blocks.map<IBlockListItem>(block => ({
         blockHeight: block.height,
         numTransactions: block.numTxs,
-        hash:block.hash,
+        hash: block.hash,
         age: distanceInWordsToNow(new Date(block.time)),
         time: formatDate(new Date(block.time), 'YYYY-MM-DD HH:mm:ss.SSS (Z)'),
         block
@@ -125,7 +125,7 @@ export default class BlockList extends Vue {
     const item = {
       blockHeight: block.height,
       numTransactions: block.numTxs,
-      hash:block.hash,
+      hash: block.hash,
       age: distanceInWordsToNow(new Date(block.time)),
       time: formatDate(new Date(block.time), 'YYYY-MM-DD HH:mm:ss.SSS (Z)'),
       block
