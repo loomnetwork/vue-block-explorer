@@ -52,6 +52,7 @@ import { ISearchQuery } from './components/block-explorer'
 })
 export default class App extends Vue {
   allowedUrls = [
+    'https://prodwss2.delegatecall.com',
     'https://prodwss.delegatecall.com',
     'https://stagewss.delegatecall.com'
   ]
