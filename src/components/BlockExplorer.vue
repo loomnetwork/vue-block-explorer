@@ -33,9 +33,18 @@
       position: relative;
       background-color: theme-color('muted') !important;
       padding: 0;
+      border: none;
       &::before,
       &::after {
+        left: 6em;
         bottom: 8px !important;
+      }
+      &::before {
+        left: 5.5em;
+      }
+
+      &:focus {
+        outline: none;
       }
     }
   }
@@ -46,7 +55,7 @@
     line-height: 33px;
     height: 67px;
     td {
-      border-bottom: solid $dark-border;
+      border-bottom: 1px solid $dark-border;
       padding-top: 16px;
     }
   }
@@ -84,20 +93,20 @@
   .page-link {
     border: none;
     background: none !important;
+    line-height: 24px;
+    padding: 0 !important;
   }
 
   li {
-    width: 24px;
+    min-width: 24px;
     height: 24px;
     margin: 6px;
     a {
       margin-left: 0;
-      padding: 0 !important;
       font-size: 16px;
       font-weight: 600;
       text-align: center;
       color: #ffffff;
-      line-height: 24px;
       height: 24px;
       &:focus {
         box-shadow: none;
@@ -106,6 +115,7 @@
   }
   .active a {
     background-color: $red2 !important;
+    line-height: 24px;
   }
 
   .page-item {

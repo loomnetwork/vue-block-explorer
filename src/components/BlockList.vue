@@ -104,9 +104,10 @@
       padding: 0;
     }
   }
-  
+
   .header-logo {
     width: 20%;
+    min-width: 180px;
     a {
       color: $blue2;
       font-size: 25px;
@@ -117,7 +118,7 @@
       }
     }
   }
-  
+
   .header-table-name {
     width: 60%;
     text-align: center;
