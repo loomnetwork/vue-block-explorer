@@ -1,5 +1,6 @@
-<template>
-  <component :is="viewComponent"
+<template>  
+  <component 
+    :is="viewComponent"
     :blockchain="blockchain"
     :showConnectionDropdown="showConnectionDropdown"
     :searchQuery="curSearchQuery">

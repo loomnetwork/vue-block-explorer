@@ -79,7 +79,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    rowClickHandler(item: ITransactionTableItem, index: number, event: Event) {
+    rowClickHandler(item: ITransactionTableItem, index: number, event: Event) {      
       if (this.onRowClicked) {
         this.onRowClicked(item, index, event)
       }

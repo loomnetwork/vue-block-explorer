@@ -1,14 +1,20 @@
 <template>
-  <div id="app">
+  <div id="app">    
     <b-container fluid>
+      <Nav></Nav>      
+      <b-row id="flex-wrapper">        
+        <Sidebar></Sidebar>
+        <div class="custom-col">
+          <component :is="currentTab"
+                     :showConnectionDropdown="true"
+                     :defaultUrl="allowedUrls[0]"
+                     :allowedUrls="allowedUrls"
+                     :searchQuery="searchQuery">
+          </component>
+        </div>
+      </b-row>
       <b-row>
-        <b-col cols="12">
-          <BlockExplorer
-            :showConnectionDropdown="true"
-            :defaultUrl="allowedUrls[0]"
-            :allowedUrls="allowedUrls"
-            :searchQuery="searchQuery"/>
-        </b-col>
+        Footer
       </b-row>
       <div class="block-search-query d-flex flex-row align-items-center">
         <fa :icon="['fas', 'search']" class="search-icon text-white" fixed-width/>
@@ -36,18 +42,46 @@
       flex: 0 0 200px;
     }
   }
+
+  #flex-wrapper {
+    flex-wrap: nowrap;
+    flex-direction: row;
+  }  
+
+  @media (max-width: 576px) {
+    #flex-wrapper {      
+      flex-direction: column;
+    }
+  }
+
+  // @media (min-width: 992px) {
+  //   #sliding-column {
+  //     max-width: 250px;
+  //   }
+  // }
+
+  .custom-col {
+    flex-grow: 1;
+  }
+
 </style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import BlockExplorer from './components/BlockExplorer.vue'
+// @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
+import Sidebar from './components/Sidebar.vue'
+// @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
+import Nav from './components/Nav.vue'
 
 import { ISearchQuery } from './components/block-explorer'
 
 @Component({
   components: {
-    BlockExplorer
+    BlockExplorer,
+    Sidebar,
+    Nav
   },
 })
 export default class App extends Vue {
@@ -58,6 +92,12 @@ export default class App extends Vue {
   ]
   
   blockHeight: string | null = null
+  showSidebar: boolean = true
+
+
+  switchTab(tab) {
+    console.log(tab)
+  }
 
   get searchQuery(): ISearchQuery {
     let blockHeight: number | null = null
@@ -69,5 +109,10 @@ export default class App extends Vue {
     }
     return { blockHeight }
   }
+
+  get currentTab() {
+    return BlockExplorer
+  }
+
 }
 </script>

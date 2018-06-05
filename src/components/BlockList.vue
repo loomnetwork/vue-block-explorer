@@ -1,35 +1,12 @@
 <template>
   <div class="position-relative">
     <div>
-      <div class="section-header d-flex flex-row">
-        <div class="bg-dark">
-            <div class="header-logo">
-              <a href="/">
-                <div class="loom-logo"/> <span class="site-name">DAppChain</span>
-              </a>
-            </div>
-            <div class="header-table-name">
-              <div class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></div>
-            </div>
-            <!--
-            <div class="header-profile">
-              <img src="~@/images/user_image.png" class="user-head">
-              <div class="down-arrow"/>
-            </div>
-            -->
-        </div>
-        <!-- TODO
-        <div class="bg-dark ml-auto px-0">
-          <div class="d-flex flex-row">
-            <h3 class="mx-2 text-white pointer-only">Filter by</h3>
-            <b-dropdown text="Most recent" right variant="dark">
-              <b-dropdown-item>Most old</b-dropdown-item>
-              <b-dropdown-item>Pending</b-dropdown-item>
-            </b-dropdown>
-          </div>
-        </div>
-        -->
-      </div>
+      <h2 class="block-heading">
+        Blocks <fa v-if="isBusy"
+                   icon="spinner"
+                   class="spinner"
+                   spin/>
+      </h2>      
       <div class="blocks-table">
         <b-table ref="blocksTable"
           :sort-by.sync="sortBy"
@@ -85,8 +62,27 @@
 <style lang="scss" scoped>
 @import '~@/styles/app.scss';
 
-.header-table-name {
-  text-transform: uppercase;
+.blocks-table {
+  padding-left: 24px;
+}
+
+.block-heading {
+  position: relative;
+  font-size: 25px;
+  padding: 24px 36px 24px 36px;    
+  font-weight: 300;
+  line-height: 0.88;
+  letter-spacing: 0.7px;
+  text-align: left;
+  color: theme-color('primary');
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.spinner {
+  position: absolute;
+  top: 22px;
+  right: 0px;
 }
 
 // header bar
@@ -118,21 +114,6 @@
     }
   }
   
-  .header-table-name {
-    width: 60%;
-    text-align: center;
-    .text-primary {
-      font-size: 28px;
-      font-weight: 300;
-      line-height: 0.88;
-      letter-spacing: 0.7px;
-      text-align: left;
-      color: theme-color('primary');
-      display: inline-block;
-      margin: 0 auto;
-      width: 180px;
-    }
-  }
   .header-profile {
     text-align: right;
     float: right;
