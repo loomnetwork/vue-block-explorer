@@ -5,6 +5,10 @@ import BlockExplorer from '../components/BlockExplorer.vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import Dashboard from '../components/Dashboard.vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
+import Deployment from '../components/Deployment.vue'
+// @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
+import Peers from '../components/Peers.vue'
+// @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import Sidebar from '../components/Sidebar.vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import Nav from '../components/Nav.vue'
@@ -27,7 +31,9 @@ export default class Layout extends Vue {
   blockHeight: string | null = null
   pages: Object | null = {
   	"dashboard": Dashboard,
-  	"blocks": BlockExplorer
+  	"blocks": BlockExplorer,
+    "deployment": Deployment,
+    "peers": Peers
   }
 
 	switchTabHandler(tab: string) {
@@ -46,7 +52,7 @@ export default class Layout extends Vue {
   }
 
   get activeComponent(): VueConstructor {
-  	return this.pages[this.activeTab]
+  	return this.pages[this.activeTab] || BlockExplorer
   }
 
 }

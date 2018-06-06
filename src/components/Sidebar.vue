@@ -1,10 +1,10 @@
 <template>
 	<div id="sliding-column">
     <ul class="sidebar-content">
-			<li @click="switchTab('dashboard')" class="active"><fa icon="chart-line" class="sidebar-icon"/>Dashboard</li>
-			<li @click="switchTab('nodes')"><fa icon="thermometer-quarter" class="sidebar-icon"/>Peer</li>
-			<li @click="switchTab('deployment')"><fa icon="code-branch" class="sidebar-icon"/>Deployment</li>
-			<li @click="switchTab('blocks')"><fa icon="code-branch" class="sidebar-icon"/>Blocks</li>
+			<li @click="switchTab('dashboard')" :class="{ active: activeTab == 'dashboard' }"><fa icon="chart-line" class="sidebar-icon"/>Dashboard</li>
+			<li @click="switchTab('blocks')" :class="{ active: activeTab == 'blocks' }"><fa icon="code-branch" class="sidebar-icon"/>Blocks</li>
+			<li @click="switchTab('peers')" :class="{ active: activeTab == 'peers' }"><fa icon="thermometer-quarter" class="sidebar-icon"/>Peers</li>
+			<li @click="switchTab('deployment')" :class="{ active: activeTab == 'deployment' }"><fa icon="code-branch" class="sidebar-icon"/>Deployment</li>
     </ul>
   </div>
 </template>

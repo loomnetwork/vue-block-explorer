@@ -1,12 +1,22 @@
 <template>
   <div class="position-relative">
     <div>
-      <h2 class="block-heading">
-        Blocks <fa v-if="isBusy"
-                   icon="spinner"
-                   class="spinner"
-                   spin/>
-      </h2>      
+      <b-row>
+        <b-col>
+          <h2 class="block-heading">
+            Blocks <fa v-if="isBusy"
+                       icon="spinner"
+                       class="spinner"
+                       spin/>
+          </h2>          
+        </b-col>
+          <div class="block-search-query d-flex flex-row align-items-center">
+            <fa :icon="['fas', 'search']" class="search-icon text-white" fixed-width/>
+            <label for="sq-block-height" class="height-label text-white">Block Height:</label>
+            <b-form-input id="sq-block-height" class="height-input bg-dark text-white" type="number" v-model="blockHeight"></b-form-input>
+          </div>
+        </b-col>
+      </b-row>     
       <div class="blocks-table">
         <b-table ref="blocksTable"
           :sort-by.sync="sortBy"
@@ -53,6 +63,7 @@
         </div>
       </div>
     </div>
+
     <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">
       <BlockInfo class="block-info-card" v-bind="blockInfoProps"/>
     </div>
