@@ -1,20 +1,21 @@
 <template>
   <div>
-    <b-container fluid>
-      <Nav></Nav>
-      <b-row id="flex-wrapper">        
-        <Sidebar v-on:switch-tab="switchTabHandler"/>
-        <div class="main-content">
-        	<transition mode="out-in" name="fade">
-        		<component :is="activeComponent"
-	        						 :showConnectionDropdown="true"
-	            				 :defaultUrl="allowedUrls[0]"
-	            				 :allowedUrls="allowedUrls"
-	            				 :searchQuery="searchQuery"/>
-					</transition>
-        </div>
-      </b-row>
-    </b-container>
+    <Nav></Nav>
+    <div id="flex-wrapper">        
+      <Sidebar v-on:switch-tab="switchTabHandler"/>
+      <div class="main-content">
+        <b-container fluid>        
+
+      	<transition mode="out-in" name="fade">
+      		<component :is="activeComponent"
+        						 :showConnectionDropdown="true"
+            				 :defaultUrl="allowedUrls[0]"
+            				 :allowedUrls="allowedUrls"
+            				 :searchQuery="searchQuery"/>
+				</transition>
+        </b-container>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -39,6 +40,7 @@
   }
 
   #flex-wrapper {
+    display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
   }
@@ -63,7 +65,7 @@
   //   }
   // }
 
-  .main-content {
+  .main-content {    
    	height: 100vh;
    	padding: 24px;
     flex-grow: 1;

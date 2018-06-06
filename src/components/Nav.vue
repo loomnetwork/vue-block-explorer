@@ -18,7 +18,7 @@
     z-index: 100;
     position: relative;
     background-color: $bg_light_gray;    
-    box-shadow: 5px 12px 20px rgba(17, 18, 19, 0.33);
+    @include dark-shadow();
   }
 
   .section-header {

@@ -9,3 +9,7 @@
 @mixin important-font {
   font-weight: 600;
 }
+
+@mixin dark-shadow {
+  box-shadow: 5px 12px 20px rgba(17, 18, 19, 0.33);
+}

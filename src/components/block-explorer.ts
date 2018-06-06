@@ -17,7 +17,12 @@ export interface ISearchQuery {
   blockHeight: number | null
 }
 
-@Component
+@Component({
+  components: {
+    TransactionList,
+    BlockList
+  }
+})
 export default class BlockExplorer extends Vue {
   @Prop() view!: string // prettier-ignore
   @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore

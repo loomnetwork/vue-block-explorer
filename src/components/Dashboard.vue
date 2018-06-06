@@ -1,9 +1,16 @@
 <template>
-	<div>
+	<div>		
     <h1>
     	Dashboard
     </h1>
-    <canvas id="myChart"></canvas>
+    <b-row>
+    	<b-col>
+    		<Card></Card>
+    	</b-col>
+			<b-col>
+				<Card></Card>
+    	</b-col>    	
+    </b-row>    
   </div>
 </template>
 

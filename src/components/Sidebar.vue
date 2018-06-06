@@ -33,11 +33,11 @@
 
   #sliding-column {
 		z-index: 99;
-    position: relative;  	
-    width: 264px;
-    min-width: 228px;
+    position: relative;
+    min-width: 264px;
     padding: 36px 0;    
     background-color: $bg_light_gray;
+    @include dark-shadow();
     box-shadow: 5px 12px 20px rgba(17, 18, 19, 0.33);
     transition: max-width 0.2s ease 0.5s;
   }

@@ -18,9 +18,9 @@
       </div>
       <TransactionTable v-bind="txTableProps"/>
     </div>
-    <div class="tx-info-overlay" :class="{ show: isTxInfoVisible }">
+<!--     <div class="tx-info-overlay" :class="{ show: isTxInfoVisible }">
       <BlockInfo class="tx-info-card" v-bind="txInfoProps"/>
-    </div>
+    </div> -->
   </div>
 </template>
 

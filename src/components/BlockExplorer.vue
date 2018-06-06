@@ -1,10 +1,22 @@
-<template>  
-  <component 
+<template>
+  <div>
+    <b-row>
+      <b-col>
+        <BlockList :blockchain="blockchain"
+                   :showConnectionDropdown="showConnectionDropdown"
+                   :searchQuery="curSearchQuery"/>        
+      </b-col>
+      <b-col>
+        <TransactionList :blockchain="blockchain"/>
+      </b-col>
+    </b-row>    
+  </div>
+<!--   <component 
     :is="viewComponent"
     :blockchain="blockchain"
     :showConnectionDropdown="showConnectionDropdown"
     :searchQuery="curSearchQuery">
-  </component>
+  </component> -->
 </template>
 
 <style lang="scss">

@@ -8,74 +8,73 @@
                        icon="spinner"
                        class="spinner"
                        spin/>
-          </h2>          
+          </h2>
         </b-col>
+        <b-col>
           <div class="block-search-query d-flex flex-row align-items-center">
             <fa :icon="['fas', 'search']" class="search-icon text-white" fixed-width/>
             <label for="sq-block-height" class="height-label text-white">Block Height:</label>
             <b-form-input id="sq-block-height" class="height-input bg-dark text-white" type="number" v-model="blockHeight"></b-form-input>
           </div>
         </b-col>
-      </b-row>     
-      <div class="blocks-table">
-        <b-table ref="blocksTable"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :no-provider-sorting="true"
-          :show-empty="true"
-          :items="blocks"
-          :fields="fields"
-          :hover="true"
-          :head-variant="muted"
-          @row-clicked="onRowClicked"
-          :current-page="currentPage"
-          :per-page="perPage"
-          :busy.sync="isBusy"
-          class="table-dark bg-dark">
-          <template slot="blockHeight" slot-scope="row">
-            <span>#{{ row.value }}</span>
-          </template>
-          <template slot="hash" slot-scope="row">
-            <span class="text-info hash-value" :title="row.value">{{ row.value }}</span>
-          </template>
-          <template slot="age" slot-scope="row">
-            <span>{{ row.value }}</span>
-          </template>
-          <template slot="time" slot-scope="row">
-            <span>{{ row.value }}</span>
-          </template>
-        </b-table>
-        <div class="d-flex flex-row">
-        <ConnectionStatus v-if="showConnectionDropdown" class="connection-status"
-          :blockchain="blockchain"
-          @urlClicked="onConnectionUrlChanged"/>
-        <b-pagination
-          v-model="currentPage"
-          size="sm"
-          :total-rows="totalNumBlocks"
-          :per-page="perPage"
-          :align="paginationAlignment"
-          first-text="&nbsp;"
-          last-text="&nbsp;"
-          prev-text="&nbsp;"
-          next-text="&nbsp;"
-          />
-        </div>
-      </div>
+      </b-row>
+      <b-row>
+        <div class="blocks-table">
+          <b-table ref="blocksTable"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
+            :no-provider-sorting="true"
+            :show-empty="true"
+            :items="blocks"
+            :fields="fields"
+            :hover="true"
+            :head-variant="muted"
+            @row-clicked="onRowClicked"
+            :current-page="currentPage"
+            :per-page="perPage"
+            :busy.sync="isBusy"
+            class="table-dark bg-dark">
+            <template slot="blockHeight" slot-scope="row">
+              <span>#{{ row.value }}</span>
+            </template>
+            <template slot="hash" slot-scope="row">
+              <span class="text-info hash-value" :title="row.value">{{ row.value }}</span>
+            </template>
+            <template slot="age" slot-scope="row">
+              <span>{{ row.value }}</span>
+            </template>
+            <template slot="time" slot-scope="row">
+              <span>{{ row.value }}</span>
+            </template>
+          </b-table>
+          <div class="d-flex flex-row">
+          <ConnectionStatus v-if="showConnectionDropdown" class="connection-status"
+            :blockchain="blockchain"
+            @urlClicked="onConnectionUrlChanged"/>
+          <b-pagination
+            v-model="currentPage"
+            size="sm"
+            :total-rows="totalNumBlocks"
+            :per-page="perPage"
+            :align="paginationAlignment"
+            first-text="&nbsp;"
+            last-text="&nbsp;"
+            prev-text="&nbsp;"
+            next-text="&nbsp;"
+            />
+          </div>
+        </div>        
+      </b-row>
     </div>
 
-    <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">
+<!--     <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">
       <BlockInfo class="block-info-card" v-bind="blockInfoProps"/>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <style lang="scss" scoped>
 @import '~@/styles/app.scss';
-
-.blocks-table {
-  padding-left: 24px;
-}
 
 .block-heading {
   position: relative;
