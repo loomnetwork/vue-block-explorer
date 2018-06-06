@@ -1,9 +1,10 @@
 <template>
 	<div id="sliding-column">
     <ul class="sidebar-content">
-			<li @click="triggerTabChange('dashboard')"><fa icon="chart-line" class="sidebar-icon"/>Dashboard</li>
-			<li @click="triggerTabChange('nodes')"><fa icon="thermometer-quarter" class="sidebar-icon"/>Peer nodes</li>
-			<li @click="triggerTabChange('deployment')"><fa icon="code-branch" class="sidebar-icon"/>Deployment</li>
+			<li @click="switchTab('dashboard')" class="active"><fa icon="chart-line" class="sidebar-icon"/>Dashboard</li>
+			<li @click="switchTab('nodes')"><fa icon="thermometer-quarter" class="sidebar-icon"/>Peer</li>
+			<li @click="switchTab('deployment')"><fa icon="code-branch" class="sidebar-icon"/>Deployment</li>
+			<li @click="switchTab('blocks')"><fa icon="code-branch" class="sidebar-icon"/>Blocks</li>
     </ul>
   </div>
 </template>
@@ -12,18 +13,20 @@
 	@import '~@/styles/app.scss';
 	.sidebar-content {
 		color: #ffffff;
-		padding-left: 24px;
+		padding-left: 0;
 		font-size: 18px;
 		li {
+			cursor: pointer;
 			list-style: none;
 			margin-rigth: 12px;
-			margin-bottom: 12px;
+			padding: 12px 0 12px 24px;
+			border-left: 4px solid transparent;			
 			.sidebar-icon {
 				width: 30px;
 			}
-			a {
-				padding-left: 18px;
-				text-decoration: none;
+			&.active {
+				background-color: rgb(37, 37, 37);
+    		border-left: 4px solid #fc4b7f;
 			}
 		}		
 	}
