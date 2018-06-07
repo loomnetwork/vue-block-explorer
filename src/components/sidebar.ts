@@ -11,9 +11,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class Sidebar extends Vue {
-	activeTab: String | null = 'dashboard'
+	activeTab: string | null = 'dashboard'
+	expandAccordion: boolean = false
 	switchTab(tab: String) {
 		this.activeTab = tab
 		this.$emit('switch-tab', tab)
+		this.expandAccordion = false
 	}
 }

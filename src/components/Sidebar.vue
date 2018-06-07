@@ -6,7 +6,7 @@
 				<a v-b-toggle="'submenu'" @click="switchTab('blocks')">
 					<fa icon="code-branch" class="sidebar-icon"/>Blocks
 				</a>
-			  <b-collapse id="submenu">
+			  <b-collapse id="submenu" v-model="expandAccordion">
 		      <ul class="submenu">
 		      	<li>
 		      		<a @click="switchTab('blocks')">Blocks</a>
@@ -52,7 +52,6 @@
 	.submenu {		
 		li {
 			padding: 6px 0 6px 12px;
-			background-color: rgb(37, 37, 37);
 			a {
 				padding: 0px;
 			}
