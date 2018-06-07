@@ -1,16 +1,7 @@
 <template>
-  <div>
-    <b-row>
-      <b-col>
-        <BlockList :blockchain="blockchain"
-                   :showConnectionDropdown="showConnectionDropdown"
-                   :searchQuery="curSearchQuery"/>        
-      </b-col>
-      <b-col>
-        <TransactionList :blockchain="blockchain"/>
-      </b-col>
-    </b-row>    
-  </div>
+  <BlockList :blockchain="blockchain"
+             :showConnectionDropdown="showConnectionDropdown"
+             :searchQuery="curSearchQuery"/>
 <!--   <component 
     :is="viewComponent"
     :blockchain="blockchain"
@@ -31,6 +22,7 @@
 
 //table
 .blocks-table {
+  width: 100%;
   @include normal-font();
   color: #ffffff;
   thead {

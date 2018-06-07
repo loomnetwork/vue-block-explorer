@@ -23,7 +23,7 @@
 
   .section-header {
     width: 100%;
-    padding: 24px;
+    padding: 24px 48px;    
     @include normal-font();
 
     .bg-dark {

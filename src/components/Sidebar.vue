@@ -1,10 +1,24 @@
 <template>
 	<div id="sliding-column">
     <ul class="sidebar-content">
-			<li @click="switchTab('dashboard')" :class="{ active: activeTab == 'dashboard' }"><fa icon="chart-line" class="sidebar-icon"/>Dashboard</li>
-			<li @click="switchTab('blocks')" :class="{ active: activeTab == 'blocks' }"><fa icon="code-branch" class="sidebar-icon"/>Blocks</li>
-			<li @click="switchTab('peers')" :class="{ active: activeTab == 'peers' }"><fa icon="thermometer-quarter" class="sidebar-icon"/>Peers</li>
-			<li @click="switchTab('deployment')" :class="{ active: activeTab == 'deployment' }"><fa icon="code-branch" class="sidebar-icon"/>Deployment</li>
+			<li :class="{ active: activeTab == 'dashboard' }"><a @click="switchTab('dashboard')"><fa icon="chart-line" class="sidebar-icon"/>Dashboard</a></li>
+			<li :class="{ active: activeTab == 'blocks' || activeTab == 'transactions' }">
+				<a v-b-toggle="'submenu'" @click="switchTab('blocks')">
+					<fa icon="code-branch" class="sidebar-icon"/>Blocks
+				</a>
+			  <b-collapse id="submenu">
+		      <ul class="submenu">
+		      	<li>
+		      		<a @click="switchTab('blocks')">Blocks</a>
+		      	</li>
+		      	<li>
+		      		<a @click="switchTab('transactions')">Transactions</a>
+		      	</li>
+		      </ul>
+			  </b-collapse>
+			</li>
+			<li :class="{ active: activeTab == 'peers' }"><a @click="switchTab('peers')"><fa icon="thermometer-quarter" class="sidebar-icon"/>Peers</a></li>
+			<li :class="{ active: activeTab == 'deployment' }"><a @click="switchTab('deployment')"><fa icon="code-branch" class="sidebar-icon"/>Deployment</a></li>
     </ul>
   </div>
 </template>
@@ -18,9 +32,13 @@
 		li {
 			cursor: pointer;
 			list-style: none;
-			margin-rigth: 12px;
-			padding: 12px 0 12px 24px;
-			border-left: 4px solid transparent;			
+			margin-rigth: 12px;		
+			border-left: 4px solid transparent;
+			a {
+				display: inline-block;
+				width: 100%;
+				padding: 12px 0 12px 24px;	
+			}			
 			.sidebar-icon {
 				width: 30px;
 			}
@@ -29,6 +47,16 @@
     		border-left: 4px solid #fc4b7f;
 			}
 		}		
+	}
+
+	.submenu {		
+		li {
+			padding: 6px 0 6px 12px;
+			background-color: rgb(37, 37, 37);
+			a {
+				padding: 0px;
+			}
+		}
 	}
 
   #sliding-column {

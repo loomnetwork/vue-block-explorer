@@ -1,6 +1,6 @@
 <template>
 	<div class="custom-card">
-		<canvas id="myChart"></canvas>
+		<slot></slot>		
   </div>
 </template>
 
@@ -9,6 +9,7 @@
 	.custom-card {
 		padding: 12px;
 		border-radius: 12px;
+		margin-bottom: 36px;
 		@include dark-shadow();
 	}
 </style>

@@ -4,9 +4,14 @@ import planetChartData from '../chartdata'
 
 @Component
 export default class Card extends Vue {
+
+  @Prop() elementId!: string
+
   mounted() {
-    this.createChart('myChart', planetChartData);
+    console.log("The prop: ", this.elementId)
+    this.createChart(this.elementId, planetChartData);
   } 
+
   createChart(chartId: string, chartData: object) {
     const ctx = document.getElementById(chartId)
     const myChart = new Chart(ctx, {
@@ -14,5 +19,6 @@ export default class Card extends Vue {
       data: chartData.data,
       options: chartData.options
     });
-  }  
+  }
+
 }
