@@ -3,24 +3,28 @@
     <div>
       <b-row class="block-heading">
         <b-col>
-          <h2>
+          <h1 class="page-header">
             Blocks <fa v-if="isBusy"
                        icon="spinner"
                        class="spinner"
                        spin/>
-          </h2>
+          </h1>
         </b-col>
         <b-col>
           <div class="block-search-query d-flex flex-row align-items-center">
-            <fa :icon="['fas', 'search']" class="search-icon text-white" fixed-width/>
-            <label for="sq-block-height" class="height-label text-white">Block Height:</label>
-            <b-form-input id="sq-block-height" class="height-input bg-dark text-white" type="number" v-model="blockHeight"></b-form-input>
+            <fa :icon="['fas', 'search']" class="search-icon text-grey" fixed-width/>
+            <label for="sq-block-height" class="height-label text-grey">Block Height:</label>
+            <b-form-input id="sq-block-height"
+                          class="custom-input fieldheight-input bg-light text-white"
+                          type="number"
+                          v-model="blockHeight">
+            </b-form-input>
           </div>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <div class="blocks-table">
+          <div class="table-container">
             <b-table ref="blocksTable"
               :sort-by.sync="sortBy"
               :sort-desc.sync="sortDesc"
@@ -34,7 +38,7 @@
               :current-page="currentPage"
               :per-page="perPage"
               :busy.sync="isBusy"
-              class="table-dark bg-dark">
+              class="custom-table">
               <template slot="blockHeight" slot-scope="row">
                 <span>#{{ row.value }}</span>
               </template>
@@ -69,14 +73,15 @@
       </b-row>
     </div>
 
-<!--     <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">
+    <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">
       <BlockInfo class="block-info-card" v-bind="blockInfoProps"/>
-    </div> -->
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~@/styles/app.scss';
+
 
 .block-heading {
   align-items: center;

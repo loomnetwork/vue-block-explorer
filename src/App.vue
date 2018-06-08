@@ -5,7 +5,7 @@
 </template>
 
 <style lang="scss">
-
+  body {font-family: 'Open Sans', sans-serif;}  
 </style>
 
 <script lang="ts">

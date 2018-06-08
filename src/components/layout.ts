@@ -55,7 +55,7 @@ export default class Layout extends Vue {
   }
 
   get activeComponent(): VueConstructor {
-  	return this.pages[this.activeTab] || Dashboard
+  	return this.pages[this.activeTab] || BlockExplorer
   }
 
 }

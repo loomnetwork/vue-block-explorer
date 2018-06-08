@@ -68,6 +68,7 @@
   .main-content {    
    	height: 100vh;
    	padding: 24px;
+    background-color: #eff3f5;
     flex-grow: 1;
   }
 

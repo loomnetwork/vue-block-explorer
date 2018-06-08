@@ -17,8 +17,8 @@
   #nav-container {
     z-index: 100;
     position: relative;
-    background-color: $bg_light_gray;    
-    @include dark-shadow();
+    background-color: #ffffff;
+    @include shadow();
   }
 
   .section-header {
@@ -69,7 +69,14 @@
     height: 28px;
     margin-right: 12px;
     vertical-align: top;
-  }  
+  }
+
+  .site-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #354167;
+  }
+
 
 </style>
 

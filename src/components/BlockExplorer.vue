@@ -101,7 +101,7 @@
       font-size: 16px;
       font-weight: 600;
       text-align: center;
-      color: #ffffff;
+      color: #354168;
       line-height: 24px;
       height: 24px;
       &:focus {
@@ -110,7 +110,7 @@
     }
   }
   .active a {
-    background-color: $red2 !important;
+    background-color: $primary !important;
   }
 
   .page-item {

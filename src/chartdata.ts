@@ -7,37 +7,37 @@ export const planetChartData = {
         label: 'Number of Moons',
         data: [0, 0, 1, 2, 67, 62, 27, 14],
         backgroundColor: [
-          'rgba(54,73,93,.5)', // Blue
-          'rgba(54,73,93,.5)',
-          'rgba(54,73,93,.5)',
-          'rgba(54,73,93,.5)',
-          'rgba(54,73,93,.5)',
-          'rgba(54,73,93,.5)',
-          'rgba(54,73,93,.5)',
-          'rgba(54,73,93,.5)'
+          'rgba(52, 156, 250, 0.8)',
+          'rgba(52, 156, 250, 0.8)',
+          'rgba(52, 156, 250, 0.8)',
+          'rgba(52, 156, 250, 0.8)',
+          'rgba(52, 156, 250, 0.8)',
+          'rgba(52, 156, 250, 0.8)',
+          'rgba(52, 156, 250, 0.8)',
+          'rgba(52, 156, 250, 0.8)'
         ],
         borderColor: [
-          '#36495d',
-          '#36495d',
-          '#36495d',
-          '#36495d',
-          '#36495d',
-          '#36495d',
-          '#36495d',
-          '#36495d',
+          '#0861af',
+          '#0861af',
+          '#0861af',
+          '#0861af',
+          '#0861af',
+          '#0861af',
+          '#0861af',
+          '#0861af',
         ],
-        borderWidth: 3
+        borderWidth: 2
       },
       { // another line graph
         label: 'Planet Mass (x1,000 km)',
         data: [4.8, 12.1, 12.7, 6.7, 139.8, 116.4, 50.7, 49.2],
         backgroundColor: [
-          'rgba(71, 183,132,.5)', // Green
+          'rgba(52, 156, 250, 0.5)',
         ],
         borderColor: [
-          '#47b784',
+          '#0861af',
         ],
-        borderWidth: 3
+        borderWidth: 2
       }
     ]
   },

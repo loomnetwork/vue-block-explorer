@@ -30,8 +30,9 @@ export default class BlockList extends Vue {
   @Prop({ required: true }) blockchain!: Blockchain // prettier-ignore
   @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
   @Prop({ default: 10 }) blocksPerPage!: number // prettier-ignore
-  @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
+  // @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
 
+  blockHeight: string | null = null
   sortBy = 'blockHeight'
   sortDesc = true
   fields = [
@@ -175,11 +176,23 @@ export default class BlockList extends Vue {
       ;(this.$refs.blocksTable as any).refresh()
     }
   }
-
-  @Watch('searchQuery')
-  search(query: ISearchQuery) {
-    if (query.blockHeight) {
-      this.showBlock(query.blockHeight)
+  
+  get searchQuery(): ISearchQuery {
+    let blockHeight: number | null = null
+    if (this.blockHeight) {
+      blockHeight = parseInt(this.blockHeight, 10)
+      if (!Number.isInteger(blockHeight) || blockHeight < 0) {
+        blockHeight = null
+      }
     }
+    return { blockHeight }
   }
+
+  // @Watch('searchQuery')
+  // search(query: ISearchQuery) {
+  //   if (query.blockHeight) {
+  //     this.showBlock(query.blockHeight)
+  //   }
+  // }
+
 }
