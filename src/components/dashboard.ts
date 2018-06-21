@@ -6,5 +6,4 @@ import Card from './Card.vue'
     Card
   }
 })
-export default class Dashboard extends Vue {
-}
+export default class Dashboard extends Vue {}

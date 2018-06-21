@@ -54,17 +54,17 @@ export interface IBlockchainStatus {
 }
 
 export class Blockchain {
-  serverUrl: string;
-  allowedUrls: string[];
-  isConnected: boolean = false;
-  blocks: IBlockchainBlock[] = [];
-  transactions: IBlockchainTransaction[] = [];
-  totalNumBlocks: number = 0;
-  refreshTimer: number | null = null;
-  blockStep: number = 10;
+  serverUrl: string
+  allowedUrls: string[]
+  isConnected: boolean = false
+  blocks: IBlockchainBlock[] = []
+  transactions: IBlockchainTransaction[] = []
+  totalNumBlocks: number = 0
+  refreshTimer: number | null = null
+  blockStep: number = 10
 
   constructor(params: { serverUrl: string; allowedUrls: string[] }) {
-    this.serverUrl = params.serverUrl;
+    this.serverUrl = params.serverUrl
     this.allowedUrls = params.allowedUrls
   }
 
@@ -74,20 +74,20 @@ export class Blockchain {
 
   setServerUrl(newUrl: string) {
     if (this.serverUrl !== newUrl) {
-      console.log('set Server Url');
-      this.clearRefreshTimer();
-      this.serverUrl = newUrl;
-      this.isConnected = false;
-      this.blocks = [];
-      this.transactions = [];
-      this.totalNumBlocks = 0;
+      console.log('set Server Url')
+      this.clearRefreshTimer()
+      this.serverUrl = newUrl
+      this.isConnected = false
+      this.blocks = []
+      this.transactions = []
+      this.totalNumBlocks = 0
     }
   }
 
   setRefreshTimer() {
     if (this.refreshTimer === null) {
       this.refreshTimer = window.setInterval(async () => {
-        const { latestBlockHeight } = await this.fetchStatus();
+        const { latestBlockHeight } = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
       }, 5000)
     }
@@ -95,15 +95,15 @@ export class Blockchain {
 
   clearRefreshTimer() {
     if (this.refreshTimer !== null) {
-      clearInterval(this.refreshTimer);
+      clearInterval(this.refreshTimer)
       this.refreshTimer = null
     }
   }
 
   async fetchStatus(): Promise<IBlockchainStatus> {
-    const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`);
-    const latestBlockHeight = statusResp.data.result.sync_info.latest_block_height;
-    this.totalNumBlocks = latestBlockHeight;
+    const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`)
+    const latestBlockHeight = statusResp.data.result.sync_info.latest_block_height
+    this.totalNumBlocks = latestBlockHeight
     return { latestBlockHeight }
   }
 
@@ -119,12 +119,12 @@ export class Blockchain {
     limit?: number
     autoFetch: boolean
   }): Promise<IBlockchainBlock[]> {
-    this.clearRefreshTimer();
+    this.clearRefreshTimer()
     try {
       // When a block range isn't specified we'll fetch the most recent ones, but to do that
       // we need to find out how many blocks there are.
       if (!opts || (opts.maxHeight === undefined && opts.minHeight === undefined)) {
-        const { latestBlockHeight } = await this.fetchStatus();
+        const { latestBlockHeight } = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
       }
       /* Iterate backwards through the blockchain and dumps transaction data */
@@ -148,15 +148,15 @@ export class Blockchain {
       }
       */
 
-      let maxBlocksToFetch = (opts && opts.limit) || this.blockStep;
-      let minHeight = Math.max(this.totalNumBlocks - (maxBlocksToFetch - 1), 1);
-      let maxHeight = this.totalNumBlocks;
+      let maxBlocksToFetch = (opts && opts.limit) || this.blockStep
+      let minHeight = Math.max(this.totalNumBlocks - (maxBlocksToFetch - 1), 1)
+      let maxHeight = this.totalNumBlocks
       // NOTE: the blockchain API endpoint currently only returns max of 20 blocks per request
       if (opts && opts.minHeight !== undefined) {
-        minHeight = opts.minHeight;
+        minHeight = opts.minHeight
         maxHeight = opts.maxHeight || minHeight + maxBlocksToFetch - 1
       } else if (opts && opts.maxHeight !== undefined) {
-        minHeight = Math.max(opts.maxHeight - (maxBlocksToFetch - 1), 0);
+        minHeight = Math.max(opts.maxHeight - (maxBlocksToFetch - 1), 0)
         maxHeight = opts.maxHeight
       }
 
@@ -165,9 +165,9 @@ export class Blockchain {
           minHeight: minHeight,
           maxHeight: maxHeight
         }
-      });
+      })
 
-      this.totalNumBlocks = chainResp.data.result.last_height;
+      this.totalNumBlocks = chainResp.data.result.last_height
       this.isConnected = true
 
       // TODO: Connect to the websocket for updates instead of hammering the server.
@@ -184,7 +184,7 @@ export class Blockchain {
         txs: []
       }))
     } catch (e) {
-      this.isConnected = false;
+      this.isConnected = false
       throw e
     }
   }
@@ -195,7 +195,7 @@ export class Blockchain {
         minHeight: blockHeight,
         maxHeight: blockHeight
       }
-    });
+    })
 
     const blocks = chainResp.data.result.block_metas.map<IBlockchainBlock>(meta => ({
       hash: meta.block_id.hash,
@@ -205,7 +205,7 @@ export class Blockchain {
       isFetchingTxs: false,
       didFetchTxs: false,
       txs: []
-    }));
+    }))
 
     return blocks[0]
   }
@@ -274,11 +274,11 @@ function getTxType(tx: DelegateCallTx): string {
 function getTxSender(tx: DelegateCallTx): string {
   switch (tx.txKind) {
     case TxKind.CreateAccount:
-      return tx.username;
+      return tx.username
     case TxKind.PostComment:
-      return tx.author;
+      return tx.author
     case TxKind.AcceptAnswer:
-      return tx.acceptor;
+      return tx.acceptor
     case TxKind.Vote:
       return tx.voter
   }

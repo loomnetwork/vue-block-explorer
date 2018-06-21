@@ -33,7 +33,7 @@ export default class BlockExplorer extends Vue {
   blockchain: Blockchain | null = new Blockchain({
     serverUrl: this.defaultUrl,
     allowedUrls: this.allowedUrls
-  });
+  })
 
   beforeDestroy() {
     if (this.blockchain) {

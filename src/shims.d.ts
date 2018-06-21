@@ -3,7 +3,7 @@ declare module 'bootstrap-vue'
 declare module 'bootstrap-vue/es/components'
 declare module '@fortawesome/vue-fontawesome'
 
-declare module "*.vue" {
+declare module '*.vue' {
   import Vue from 'vue'
   export default Vue
 }

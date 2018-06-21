@@ -33,21 +33,21 @@ export default class BlockList extends Vue {
   // @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
 
   blockHeight: string | null = null
-  sortBy = 'blockHeight';
-  sortDesc = true;
+  sortBy = 'blockHeight'
+  sortDesc = true
   fields = [
     { key: 'blockHeight', label: 'Block', sortable: true },
     { key: 'hash', label: 'Hash', sortable: true },
     { key: 'age', sortable: true },
     { key: 'time', sortable: true }
   ]
-  muted = 'gray';
-  selectedItem: IBlockListItem | null = null;
-  isBlockInfoVisible = false;
-  currentPage = 1;
-  perPage = this.blocksPerPage;
-  isBusy = false;
-  totalNumBlocks = 0;
+  muted = 'gray'
+  selectedItem: IBlockListItem | null = null
+  isBlockInfoVisible = false
+  currentPage = 1
+  perPage = this.blocksPerPage
+  isBusy = false
+  totalNumBlocks = 0
   refreshTimer: number | null = null
 
   beforeDestroy() {
@@ -69,18 +69,18 @@ export default class BlockList extends Vue {
 
   clearRefreshTimer() {
     if (this.refreshTimer !== null) {
-      clearInterval(this.refreshTimer);
+      clearInterval(this.refreshTimer)
       this.refreshTimer = null
     }
   }
 
   async blocks(): Promise<IBlockListItem[]> {
-    this.clearRefreshTimer();
+    this.clearRefreshTimer()
 
-    let minHeight: number | undefined;
-    let maxHeight: number | undefined;
-    let autoFetch = false;
-    const numPages = Math.ceil(this.totalNumBlocks / this.perPage);
+    let minHeight: number | undefined
+    let maxHeight: number | undefined
+    let autoFetch = false
+    const numPages = Math.ceil(this.totalNumBlocks / this.perPage)
 
     // NOTE: currently this code only works with the default sort order (most recent to least)
     if (this.currentPage === 1) {
@@ -94,14 +94,14 @@ export default class BlockList extends Vue {
     }
 
     // Must return empty array on error so that b-table can update busy state
-    let items: IBlockListItem[] = [];
+    let items: IBlockListItem[] = []
     try {
       const blocks = await this.blockchain.fetchBlocks({
         minHeight,
         maxHeight,
         limit: this.perPage,
         autoFetch
-      });
+      })
       items = blocks.map<IBlockListItem>(block => ({
         blockHeight: block.height,
         numTransactions: block.numTxs,
@@ -117,7 +117,7 @@ export default class BlockList extends Vue {
     if (autoFetch) {
       this.setRefreshTimer()
     }
-    this.totalNumBlocks = this.blockchain.totalNumBlocks;
+    this.totalNumBlocks = this.blockchain.totalNumBlocks
     return items
   }
 
@@ -155,7 +155,7 @@ export default class BlockList extends Vue {
     } else {
       this.isBlockInfoVisible = true
     }
-    this.selectedItem = item;
+    this.selectedItem = item
 
     if (this.isBlockInfoVisible && this.selectedItem.block.numTxs > 0) {
       this.blockchain.fetchTxsInBlock(this.selectedItem.block)
@@ -171,17 +171,17 @@ export default class BlockList extends Vue {
   }
 
   onConnectionUrlChanged(newUrl: string) {
-    this.blockchain.setServerUrl(newUrl);
-    this.currentPage = 1;
+    this.blockchain.setServerUrl(newUrl)
+    this.currentPage = 1
     if (this.$refs.blocksTable) {
       ;(this.$refs.blocksTable as any).refresh()
     }
   }
 
   get searchQuery(): ISearchQuery {
-    let blockHeight: number | null = null;
+    let blockHeight: number | null = null
     if (this.blockHeight) {
-      blockHeight = parseInt(this.blockHeight, 10);
+      blockHeight = parseInt(this.blockHeight, 10)
       if (!Number.isInteger(blockHeight) || blockHeight < 0) {
         blockHeight = null
       }
@@ -195,5 +195,4 @@ export default class BlockList extends Vue {
   //     this.showBlock(query.blockHeight)
   //   }
   // }
-
 }

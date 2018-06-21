@@ -4,20 +4,18 @@ import planetChartData from '@/chartdata'
 
 @Component({})
 export default class Card extends Vue {
-
-  @Prop() elementId!: string;
+  @Prop() elementId: string
 
   mounted() {
-    console.log("The prop: ", this.elementId)
+    console.log('The prop: ', this.elementId)
 
-    this.createChart(this.elementId, planetChartData);
+    this.createChart(this.elementId, planetChartData)
   }
 
   createChart(chartId: string, chartData: object) {
-    const ctx = document.getElementById(chartId);
+    const ctx = document.getElementById(chartId)
     if (ctx) {
-      const myChart = new Chart(ctx as HTMLCanvasElement, chartData);
+      const myChart = new Chart(ctx as HTMLCanvasElement, chartData)
     }
   }
-
 }
