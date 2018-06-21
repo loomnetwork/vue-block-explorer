@@ -9,7 +9,7 @@
 
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import TransactionList from './TransactionList.vue'
-import { Blockchain } from '../blockchain'
+import { Blockchain } from '@/blockchain'
 
 @Component({
 	components: {
@@ -17,8 +17,11 @@ import { Blockchain } from '../blockchain'
 	}
 })
 export default class Transactions extends Vue {
+  defaultUrl: string = "";
+  allowedUrls: any;
+
   blockchain: Blockchain | null = new Blockchain({
     serverUrl: this.defaultUrl,
     allowedUrls: this.allowedUrls
-  })	
+  })
 }

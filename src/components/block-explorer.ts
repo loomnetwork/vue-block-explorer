@@ -6,7 +6,7 @@ import BlockList from './BlockList.vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import TransactionList from './TransactionList.vue'
 
-import { Blockchain } from '../blockchain'
+import { Blockchain } from '@/blockchain'
 
 export enum BlockExplorerView {
   Blocks = 'blocks',
@@ -33,7 +33,7 @@ export default class BlockExplorer extends Vue {
   blockchain: Blockchain | null = new Blockchain({
     serverUrl: this.defaultUrl,
     allowedUrls: this.allowedUrls
-  })
+  });
 
   beforeDestroy() {
     if (this.blockchain) {
