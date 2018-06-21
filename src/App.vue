@@ -5,7 +5,7 @@
 </template>
 
 <style lang="scss">
-  body {font-family: 'Open Sans', sans-serif;}  
+  body {font-family: 'Open Sans', sans-serif;}
 </style>
 
 <script lang="ts">
@@ -19,10 +19,11 @@ import { ISearchQuery } from './components/block-explorer'
 @Component({
   components: {
     Layout
-  }  
+  }
 })
 export default class App extends Vue {
   allowedUrls = [
+    'http://127.0.0.1:46657',
     'https://prodwss2.delegatecall.com',
     'https://prodwss.delegatecall.com',
     'https://stagewss.delegatecall.com'
