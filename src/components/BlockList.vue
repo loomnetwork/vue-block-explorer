@@ -15,7 +15,7 @@
             <fa :icon="['fas', 'search']" class="search-icon text-grey" fixed-width/>
             <label for="sq-block-height" class="height-label text-grey">Block Height:</label>
             <b-form-input id="sq-block-height"
-                          class="custom-input fieldheight-input bg-light text-white"
+                          class="custom-input fieldheight-input bg-light"
                           type="number"
                           v-model="blockHeight">
             </b-form-input>
@@ -69,7 +69,7 @@
               />
             </div>
           </div>
-        </b-col>       
+        </b-col>
       </b-row>
     </div>
 
@@ -99,13 +99,13 @@
   }
   svg {
     font-size: 16px;
-    margin-right: 2px;    
+    margin-right: 2px;
   }
   .height-label {
     font-size: 18px;
     margin-bottom: 0px;
     margin-right: 12px;
-    font-size: 18px;    
+    font-size: 18px;
   }
   input {
     width: 220px;
@@ -120,6 +120,10 @@
 
 .block-search-query {
   float: right;
+
+  input{
+    color:black;
+  }
 }
 
 // header bar
@@ -137,7 +141,7 @@
       padding: 0;
     }
   }
-  
+
   .header-logo {
     width: 20%;
     a {
@@ -150,7 +154,7 @@
       }
     }
   }
-  
+
   .header-profile {
     text-align: right;
     float: right;
