@@ -12,13 +12,13 @@ import TransactionList from './TransactionList.vue'
 import { Blockchain } from '@/blockchain'
 
 @Component({
-	components: {
-		TransactionList
-	}
+  components: {
+    TransactionList
+  }
 })
 export default class Transactions extends Vue {
-  defaultUrl: string = "";
-  allowedUrls: any;
+  defaultUrl: string = ''
+  allowedUrls: any
 
   blockchain: Blockchain | null = new Blockchain({
     serverUrl: this.defaultUrl,
