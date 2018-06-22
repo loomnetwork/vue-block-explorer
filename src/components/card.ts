@@ -7,8 +7,6 @@ export default class Card extends Vue {
   @Prop() elementId: string
 
   mounted() {
-    console.log('The prop: ', this.elementId)
-
     this.createChart(this.elementId, planetChartData)
   }
 
