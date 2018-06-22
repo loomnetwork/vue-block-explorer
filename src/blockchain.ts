@@ -74,7 +74,6 @@ export class Blockchain {
 
   setServerUrl(newUrl: string) {
     if (this.serverUrl !== newUrl) {
-      console.log('set Server Url')
       this.clearRefreshTimer()
       this.serverUrl = newUrl
       this.isConnected = false
