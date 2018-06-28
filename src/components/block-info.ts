@@ -101,16 +101,17 @@ export default class BlockInfo extends Vue {
 
   get txInfoComponent(): VueConstructor | null {
     if (this.selectedTx) {
-      switch (this.selectedTx.data.txKind) {
-        case TxKind.CreateAccount:
-          return CreateAccountTxPreview
-        case TxKind.PostComment:
-          return PostCommentTxPreview
-        case TxKind.Vote:
-          return VoteTxPreview
-        case TxKind.AcceptAnswer:
-          return AcceptAnswerTxPreview
-      }
+      // switch (this.selectedTx.data.txData) {
+      //   case TxKind.CreateAccount:
+      //     return CreateAccountTxPreview
+      //   case TxKind.PostComment:
+      //     return PostCommentTxPreview
+      //   case TxKind.Vote:
+      //     return VoteTxPreview
+      //   case TxKind.AcceptAnswer:
+      //     return AcceptAnswerTxPreview
+      // }
+      return VoteTxPreview;
     }
     return null
   }

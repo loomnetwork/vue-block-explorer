@@ -14,7 +14,7 @@ export enum BlockExplorerView {
 }
 
 export interface ISearchQuery {
-  blockHeight: number | null
+  blockHeight: number | null | string
 }
 
 @Component({

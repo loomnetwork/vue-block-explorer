@@ -13,7 +13,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 export default class Sidebar extends Vue {
 	activeTab: string | null = 'blocks'
 	expandAccordion: boolean = true
-	switchTab(tab: String) {
+	switchTab(tab: string) {
 		this.activeTab = tab
 		this.$emit('switch-tab', tab)
 		this.expandAccordion = false

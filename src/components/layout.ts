@@ -14,7 +14,8 @@ import Sidebar from '../components/Sidebar.vue'
 import Peers from '../components/Peers.vue'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import Nav from '../components/Nav.vue'
-
+// @ts-ignore
+import ISearchQuery from 'block-explorer'
 @Component({
   components: {
     BlockExplorer,
@@ -25,11 +26,11 @@ import Nav from '../components/Nav.vue'
 	  showConnectionDropdown: Boolean,
 	  defaultUrl: String,
 	  allowedUrls: Array
-	}  
+	}
 })
 export default class Layout extends Vue {
 
-	activeTab: string | null = null
+	activeTab!: string
   blockHeight: string | null = null
   pages: Object | null = {
   	"dashboard": Dashboard,
@@ -55,7 +56,8 @@ export default class Layout extends Vue {
   }
 
   get activeComponent(): VueConstructor {
-  	return this.pages[this.activeTab] || BlockExplorer
+  	// return this.pages![this.activeTab] || BlockExplorer
+    return BlockExplorer
   }
 
 }

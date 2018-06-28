@@ -9,16 +9,16 @@ export default class Card extends Vue {
 
   mounted() {
     console.log("The prop: ", this.elementId)
-    this.createChart(this.elementId, planetChartData);
-  } 
-
-  createChart(chartId: string, chartData: object) {
-    const ctx = document.getElementById(chartId)
-    const myChart = new Chart(ctx, {
-      type: chartData.type,
-      data: chartData.data,
-      options: chartData.options
-    });
+    // this.createChart(this.elementId, planetChartData);
   }
+
+  // createChart(chartId: string, chartData: object) {
+  //   const ctx = document.getElementById(chartId)
+  //   const myChart = new Chart(ctx, {
+  //     type: chartData.type,
+  //     data: chartData.data,
+  //     options: chartData.options
+  //   });
+  // }
 
 }
