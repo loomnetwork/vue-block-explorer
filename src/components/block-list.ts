@@ -156,10 +156,10 @@ export default class BlockList extends Vue {
       this.isBlockInfoVisible = true
     }
     this.selectedItem = item
-
-    if (this.isBlockInfoVisible && this.selectedItem.block.numTxs > 0) {
-      this.blockchain.fetchTxsInBlock(this.selectedItem.block)
-    }
+    this.blockchain.fetchTxsInBlock(this.selectedItem.block)
+    // if (this.isBlockInfoVisible && this.selectedItem.block.numTxs > 0) {
+    //   this.blockchain.fetchTxsInBlock(this.selectedItem.block)
+    // }
   }
 
   onRowClicked(item: IBlockListItem /*, index: number, event: Event*/) {

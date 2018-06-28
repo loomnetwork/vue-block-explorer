@@ -25,6 +25,7 @@
     "chart.js": "^2.7.2",
     "date-fns": "^1.29.0",
     "loom": "loomnetwork/loom-js",
+    "loom-js": "https://github.com/HangYang/loom-js.git#decode-tx",
     "node-sass": "^4.7.2",
     "open-iconic": "^1.1.1",
     "sass-loader": "^6.0.6",

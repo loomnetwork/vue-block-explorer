@@ -210,40 +210,42 @@ export class Blockchain {
   }
 
   async fetchTxsInBlock(block: IBlockchainBlock) {
-    if (block.numTxs === 0 || block.isFetchingTxs || block.didFetchTxs) {
-      return
-    }
+    // if (block.numTxs === 0 || block.isFetchingTxs || block.didFetchTxs) {
+    //   return
+    // }
     try {
       block.isFetchingTxs = true
       const blockResp = await Axios.get<any>(`${this.serverUrl}/block`, {
         params: { height: block.height }
       })
 
-      const rawTxs: any[] = blockResp.data.result.block.data.txs
+      // const rawTxs: any[] = blockResp.data.result.block.data.txs
+      const rawTxs = [
+        "CmgKZAgCEmAKHwoHZGVmYXVsdBIU4ojW7scVDWoi/eM/CqLYHgZZHE0SHwoHZGVmYXVsdBIU47JdgTJK2hiIsb4SCExOIy5f6iQaHBIaCAEQARoUCgZTZXRNc2cSCgoFc2NvcmUSATEQARJA3eZj+S9N3W4gMqiRtOwu23rBKK7sMtlUWqhEDeBwwNGqSDUm41hgIJVx3BpqkQ/ExZVSjZ/BPQ4wxNiL+WWwCRogrlWPFbzWG+FbaZWjId2nnBvnmbqNSLc5zimMwZbIO3A="
+      ]
       block.txs = []
-
       for (let i = 0; i < rawTxs.length; i++) {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
-          if (data.tx.txKind === TxKind.Nonce) {
-            block.txs.push({
-              hash: new Buffer(data.signed.sig).toString('hex'),
-              blockHeight: block.height,
-              txType: getTxType(data.tx.tx),
-              time: block.time,
-              sender: getTxSender(data.tx.tx),
-              data: data.tx.tx
-            })
-          } else {
-            block.txs.push({
-              hash: new Buffer(data.signed.sig).toString('hex'),
-              blockHeight: block.height,
-              txType: getTxType(data.tx),
-              time: block.time,
-              sender: getTxSender(data.tx),
-              data: data.tx
-            })
-          }
+          // if (data.tx.txKind === TxKind.Nonce) {
+          //   block.txs.push({
+          //     hash: new Buffer(data.signed.sig).toString('hex'),
+          //     blockHeight: block.height,
+          //     txType: getTxType(data.tx.tx),
+          //     time: block.time,
+          //     sender: getTxSender(data.tx.tx),
+          //     data: data.tx.tx
+          //   })
+          // } else {
+          //   block.txs.push({
+          //     hash: new Buffer(data.signed.sig).toString('hex'),
+          //     blockHeight: block.height,
+          //     txType: getTxType(data.tx),
+          //     time: block.time,
+          //     sender: getTxSender(data.tx),
+          //     data: data.tx
+          //   })
+          // }
         } catch (e) {
           console.log(e)
         }

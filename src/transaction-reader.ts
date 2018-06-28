@@ -1,5 +1,6 @@
-import { Reader } from 'loom/wire'
-
+import { CryptoUtils, decodeRawTx} from 'loom-js';
+import { SignedTx, NonceTx, Transaction, MessageTx, CallTx, Request, ContractMethodCall } from 'loom-js/dist/proto/loom_pb'
+import { MapEntry } from "./phaser_setscore_pb";
 /*
 // loom-js/modules/auth.js
 registerType(Signed, ['sig', 'pubkey'], 0x00);
@@ -139,33 +140,49 @@ const txVersions: { [index: string]: Array<ITxField[]> } = {
 class InvalidTxVersionError extends Error {}
 class UnsupportedTxTypeError extends Error {}
 
-export function extractTxDataFromStr(base64Str: string): IOneSigTx {
-  const buf = new Buffer(base64Str, 'base64')
-  // version info isn't stored in txs so may have to make multiple attempts to decode tx types whose
-  // structure evolved over time
-  let attempt = 0
-  let lastError: Error | null = null
-  while (attempt < 10) {
-    const r = new Reader(buf)
-    const txType = r.readUint8()
-    if (txType !== 0x16) {
-      throw new Error('Invalid OneSigTx')
-    }
-    const wrappedTxType = r.readUint8()
+export function extractTxDataFromStr(txStr: string): IOneSigTx {
+  const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(txStr));
+  const c = SignedTx.deserializeBinary(pbBuf);
+  const d = NonceTx.deserializeBinary(c.array[0]);
 
-    try {
-      const payload = readTxPayload(r, wrappedTxType, attempt++)
-      const sig = readTxSignature(r)
-      return { tx: payload, signed: sig }
-    } catch (e) {
-      if (e instanceof InvalidTxVersionError) {
-        throw lastError
-      } else {
-        lastError = e
-      }
-    }
-  }
-  throw lastError
+  const e = Transaction.deserializeBinary(d.array[0]);
+  const f = MessageTx.deserializeBinary(e.array[1]);
+  const g = CallTx.deserializeBinary(f.array[2]);
+  const h = Request.deserializeBinary(g.array[1]);
+  const i = ContractMethodCall.deserializeBinary(h.array[2]);
+  console.log(i);
+  console.log(MapEntry.deserializeBinary(i.array[1]));
+
+  // console.log(pbBuf);
+  // // const phaserTx = MapEntry.deserializeBinary(decodedTx[1]).array.toString();
+  // const decodedTx = decodeRawTx(pbBuf);
+  // const phaserTx = MapEntry.deserializeBinary(decodedTx[1]).array.toString();
+  // console.log(phaserTx);
+  // // version info isn't stored in txs so may have to make multiple attempts to decode tx types whose
+  // // structure evolved over time
+  // let attempt = 0
+  // let lastError: Error | null = null
+  // while (attempt < 10) {
+  //   const r = new Reader(buf)
+  //   const txType = r.readUint8()
+  //   if (txType !== 0x16) {
+  //     throw new Error('Invalid OneSigTx')
+  //   }
+  //   const wrappedTxType = r.readUint8()
+  //
+  //   try {
+  //     const payload = readTxPayload(r, wrappedTxType, attempt++)
+  //     const sig = readTxSignature(r)
+  //     return { tx: payload, signed: sig }
+  //   } catch (e) {
+  //     if (e instanceof InvalidTxVersionError) {
+  //       throw lastError
+  //     } else {
+  //       lastError = e
+  //     }
+  //   }
+  // }
+  // throw lastError
 }
 
 // @param attempt Indicates which tx version the function should attempt to read, zero corresponds
