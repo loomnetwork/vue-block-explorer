@@ -1,12 +1,17 @@
 <template>
   <div>
-    <TxPreviewField label="Kind:" class="kind" :value="kind"/>
-    <TxPreviewField label="Permalink:" class="permalink" :value="permalink"/>
-    <TxPreviewField label="Vote:">
-      <span  v-if="isUpvote" class="arrow arrow-up" fixed-width> </span>
-      <span v-else class="arrow arrow-down" fixed-width> </span>
-    </TxPreviewField>
-    <TxPreviewField label="Voter:" class="author" :value="voter"/>
+    <!--<TxPreviewField label="Kind:" class="kind" :value="kind"/>-->
+    <!--<TxPreviewField label="Permalink:" class="permalink" :value="permalink"/>-->
+    <!--<TxPreviewField label="Vote:">-->
+      <!--<span  v-if="isUpvote" class="arrow arrow-up" fixed-width> </span>-->
+      <!--<span v-else class="arrow arrow-down" fixed-width> </span>-->
+    <!--</TxPreviewField>-->
+    <!--<TxPreviewField label="Voter:" class="author" :value="voter"/>-->
+    <TxPreviewField label="Method:" class="kind" :value="txMethod"/>
+    <div v-for="txValue in txData">
+      <TxPreviewField label="Key:" class="kind" :value="txValue.key"/>
+      <TxPreviewField label="Value:" class="kind" :value="txValue.value"/>
+    </div>
   </div>
 </template>
 

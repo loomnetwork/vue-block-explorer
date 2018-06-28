@@ -23,7 +23,7 @@ export interface IOneSigTx {
 }
 
 export interface IDecodedTx {
-  txData: Array<any>
+  txArrData: Array<any>
 }
 
 export interface IActor {
@@ -167,7 +167,7 @@ function readTxPayload(i: Uint8Array): IDecodedTx {
   // const phaserTx = MapEntry.deserializeBinary(deContractMethodCall.toArray()[1]).array.toString();
   // return phaserTx;
   let txArrData = readProtoData(deContractMethodCall);
-  return {txData: txArrData}
+  return {txArrData}
 }
 
 

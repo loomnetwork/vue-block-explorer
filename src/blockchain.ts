@@ -4,7 +4,9 @@ import { extractTxDataFromStr, TxKind, IOneSigTx, IDecodedTx } from './transacti
 
 interface IBlockchainStatusResponse {
   result: {
-    latest_block_height: number
+    sync_info:{
+      latest_block_height: number
+    }
   }
 }
 
@@ -45,6 +47,14 @@ interface IBlockchainResponse {
     last_height: number
     block_metas: IBlockchainBlockMeta[]
   }
+}
+
+interface IBlockResponse{
+  result:{
+    last_height:number,
+    block_meta: IBlockchainBlockMeta
+  }
+
 }
 
 export interface IBlockchainStatus {
@@ -98,9 +108,9 @@ export class Blockchain {
 
   async fetchStatus(): Promise<IBlockchainStatus> {
     const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`)
-    const latestBlockHeight = statusResp.data.result.latest_block_height
+    const latestBlockHeight = statusResp.data.result.sync_info.latest_block_height
     this.totalNumBlocks = latestBlockHeight
-    return { latestBlockHeight }
+    return {latestBlockHeight}
   }
 
   /**
@@ -120,7 +130,7 @@ export class Blockchain {
       // When a block range isn't specified we'll fetch the most recent ones, but to do that
       // we need to find out how many blocks there are.
       if (!opts || (opts.maxHeight === undefined && opts.minHeight === undefined)) {
-        const { latestBlockHeight } = await this.fetchStatus()
+        const  {latestBlockHeight}  = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
       }
       /* Iterate backwards through the blockchain and dumps transaction data */
@@ -183,13 +193,11 @@ export class Blockchain {
   }
 
   async fetchBlock(blockHeight: number): Promise<IBlockchainBlock> {
-    const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/blockchain`, {
-      params: {
-        minHeight: blockHeight,
-        maxHeight: blockHeight
-      }
+    const chainResp = await Axios.get<IBlockResponse>(`${this.serverUrl}/block`, {
+      params: { height: blockHeight }
     })
-    const blocks = chainResp.data.result.block_metas.map<IBlockchainBlock>(meta => ({
+    const meta = chainResp.data.result.block_meta;
+    const block = {
       hash: meta.block_id.hash,
       height: meta.header.height,
       time: meta.header.time,
@@ -197,8 +205,8 @@ export class Blockchain {
       isFetchingTxs: false,
       didFetchTxs: false,
       txs: []
-    }))
-    return blocks[0]
+    }
+    return block;
   }
 
   async fetchTxsInBlock(block: IBlockchainBlock) {
