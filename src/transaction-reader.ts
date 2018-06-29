@@ -1,7 +1,15 @@
 // @ts-ignore
 import { CryptoUtils } from 'loom-js'
-import {SignedTx, NonceTx, Transaction, MessageTx, CallTx, Request, ContractMethodCall} from 'loom-js/dist/proto/loom_pb'
-import {MapEntry} from '@/pbs/phaser/setscore_pb'
+import {
+  SignedTx,
+  NonceTx,
+  Transaction,
+  MessageTx,
+  CallTx,
+  Request,
+  ContractMethodCall
+} from 'loom-js/dist/proto/loom_pb'
+import { MapEntry } from '@/pbs/phaser/setscore_pb'
 
 export enum TxKind {
   CreateAccount = 'createAccount',
@@ -23,7 +31,7 @@ export interface IOneSigTx {
 }
 
 export interface IDecodedTx {
-  method: string,
+  method: string
   arrData: Array<any>
 }
 
@@ -110,12 +118,9 @@ interface ITxField {
   kind: TxFieldKind
 }
 
+class InvalidTxVersionError extends Error {}
 
-class InvalidTxVersionError extends Error {
-}
-
-class UnsupportedTxTypeError extends Error {
-}
+class UnsupportedTxTypeError extends Error {}
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   // const buf = new Buffer(base64Str, 'base64')
@@ -152,31 +157,30 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
 
 function readTxPayload(i: Uint8Array): IDecodedTx {
   const deSignedTx = SignedTx.deserializeBinary(i)
-  console.log(deSignedTx.toObject());
+  console.log(deSignedTx.toObject())
   const deNonceTx = NonceTx.deserializeBinary(deSignedTx.toArray()[0])
-  console.log(deNonceTx.toObject());
+  console.log(deNonceTx.toObject())
   const deTransaction = Transaction.deserializeBinary(deNonceTx.toArray()[0])
-  console.log(deTransaction.toObject());
+  console.log(deTransaction.toObject())
   const deMessageTx = MessageTx.deserializeBinary(deTransaction.toArray()[1])
-  console.log(deMessageTx.toObject());
+  console.log(deMessageTx.toObject())
   const deCallTx = CallTx.deserializeBinary(deMessageTx.toArray()[2])
-  console.log(deCallTx.toObject());
+  console.log(deCallTx.toObject())
   const deRequest = Request.deserializeBinary(deCallTx.toArray()[1])
-  console.log(deRequest.toObject());
+  console.log(deRequest.toObject())
   const deContractMethodCall = ContractMethodCall.deserializeBinary(deRequest.toArray()[2])
-  console.log(deContractMethodCall.toObject());
+  console.log(deContractMethodCall.toObject())
   // const phaserTx = MapEntry.deserializeBinary(deContractMethodCall.toArray()[1]).array.toString();
   // return phaserTx;
-  let txArrData = readProtoData(deContractMethodCall);
+  let txArrData = readProtoData(deContractMethodCall)
   return txArrData
 }
-
 
 function readProtoData(cmc: ContractMethodCall): IDecodedTx {
   const methodName = cmc.toObject().method
   const txData = MapEntry.deserializeBinary(cmc.toArray()[1])
   const txStringArrData = txData.toArray()
-  return {method: methodName, arrData:txStringArrData}
+  return { method: methodName, arrData: txStringArrData }
 }
 
 // @param attempt Indicates which tx version the function should attempt to read, zero corresponds

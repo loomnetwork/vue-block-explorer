@@ -31,6 +31,7 @@ export default class DecodedTx extends Vue {
   get txJSONData(): Object {
     let txValueData = this.tx.arrData
     let jsonData = txValueData
+    // if can be parsed to json, then parse it, if not just return raw data
     try {
       jsonData = JSON.parse(txValueData.toString())
     } catch (e) {

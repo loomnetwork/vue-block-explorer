@@ -22,27 +22,26 @@ import ISearchQuery from 'block-explorer'
     Sidebar,
     Nav
   },
-	props: {
-	  showConnectionDropdown: Boolean,
-	  defaultUrl: String,
-	  allowedUrls: Array
-	}
+  props: {
+    showConnectionDropdown: Boolean,
+    defaultUrl: String,
+    allowedUrls: Array
+  }
 })
 export default class Layout extends Vue {
-
-	activeTab!: string
+  activeTab: string
   blockHeight: string | null = null
   pages: Object | null = {
-  	"dashboard": Dashboard,
-  	"blocks": BlockExplorer,
-    "transactions": Transactions,
-    "deployment": Deployment,
-    "peers": Peers
+    dashboard: Dashboard,
+    blocks: BlockExplorer,
+    transactions: Transactions,
+    deployment: Deployment,
+    peers: Peers
   }
 
-	switchTabHandler(tab: string) {
-		this.activeTab = tab
-	}
+  switchTabHandler(tab: string) {
+    this.activeTab = tab
+  }
 
   get searchQuery(): ISearchQuery {
     let blockHeight: number | null = null
@@ -56,8 +55,7 @@ export default class Layout extends Vue {
   }
 
   get activeComponent(): VueConstructor {
-  	// return this.pages![this.activeTab] || BlockExplorer
+    // return this.pages![this.activeTab] || BlockExplorer
     return BlockExplorer
   }
-
 }

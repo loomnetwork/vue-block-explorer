@@ -4,7 +4,7 @@ import { extractTxDataFromStr, TxKind, IOneSigTx, IDecodedTx } from './transacti
 
 interface IBlockchainStatusResponse {
   result: {
-    sync_info:{
+    sync_info: {
       latest_block_height: number
     }
   }
@@ -49,12 +49,11 @@ interface IBlockchainResponse {
   }
 }
 
-interface IBlockResponse{
-  result:{
-    last_height:number,
+interface IBlockResponse {
+  result: {
+    last_height: number
     block_meta: IBlockchainBlockMeta
   }
-
 }
 
 export interface IBlockchainStatus {
@@ -110,7 +109,7 @@ export class Blockchain {
     const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`)
     const latestBlockHeight = statusResp.data.result.sync_info.latest_block_height
     this.totalNumBlocks = latestBlockHeight
-    return {latestBlockHeight}
+    return { latestBlockHeight }
   }
 
   /**
@@ -130,7 +129,7 @@ export class Blockchain {
       // When a block range isn't specified we'll fetch the most recent ones, but to do that
       // we need to find out how many blocks there are.
       if (!opts || (opts.maxHeight === undefined && opts.minHeight === undefined)) {
-        const  {latestBlockHeight}  = await this.fetchStatus()
+        const { latestBlockHeight } = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
       }
       /* Iterate backwards through the blockchain and dumps transaction data */
@@ -196,7 +195,7 @@ export class Blockchain {
     const chainResp = await Axios.get<IBlockResponse>(`${this.serverUrl}/block`, {
       params: { height: blockHeight }
     })
-    const meta = chainResp.data.result.block_meta;
+    const meta = chainResp.data.result.block_meta
     const block = {
       hash: meta.block_id.hash,
       height: meta.header.height,
@@ -206,7 +205,7 @@ export class Blockchain {
       didFetchTxs: false,
       txs: []
     }
-    return block;
+    return block
   }
 
   async fetchTxsInBlock(block: IBlockchainBlock) {
@@ -244,9 +243,9 @@ export class Blockchain {
           block.txs.push({
             hash: new Buffer(data.signed.sig).toString('hex'),
             blockHeight: block.height,
-            txType: "default",
+            txType: 'default',
             time: block.time,
-            sender: "default",
+            sender: 'default',
             data: data.tx
           })
 

@@ -164,7 +164,7 @@ export default class BlockList extends Vue {
   onRowClicked(item: IBlockListItem /*, index: number, event: Event*/) {
     // this.selectItem(item)
     // let blockHeight = item.blockHeight;
-    this.showBlock(item.blockHeight);
+    this.showBlock(item.blockHeight)
   }
 
   closeBlockInfoOverlay() {
@@ -190,14 +190,12 @@ export default class BlockList extends Vue {
     return { blockHeight }
   }
 
-  async searchWithBlockHeight(){
-    if(this.blockHeight){
+  async searchWithBlockHeight() {
+    if (this.blockHeight) {
       let blockHeight = parseInt(this.blockHeight!)
       // let block = await this.blockchain.fetchBlock(blockHeight);
-      this.showBlock(blockHeight);
-
+      this.showBlock(blockHeight)
     }
-
   }
 
   // @Watch('searchQuery')
@@ -206,5 +204,4 @@ export default class BlockList extends Vue {
   //     this.showBlock(query.blockHeight)
   //   }
   // }
-
 }

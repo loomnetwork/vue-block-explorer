@@ -4,11 +4,10 @@ import planetChartData from '../chartdata'
 
 @Component
 export default class Card extends Vue {
-
-  @Prop() elementId!: string
+  @Prop() elementId: string
 
   mounted() {
-    console.log("The prop: ", this.elementId)
+    console.log('The prop: ', this.elementId)
     // this.createChart(this.elementId, planetChartData);
   }
 
@@ -20,5 +19,4 @@ export default class Card extends Vue {
   //     options: chartData.options
   //   });
   // }
-
 }

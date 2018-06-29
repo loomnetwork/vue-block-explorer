@@ -113,7 +113,7 @@ export default class BlockInfo extends Vue {
       //   case TxKind.AcceptAnswer:
       //     return AcceptAnswerTxPreview
       // }
-      return DecodedTX;
+      return DecodedTX
     }
     return null
   }
