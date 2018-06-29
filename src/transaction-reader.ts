@@ -23,7 +23,8 @@ export interface IOneSigTx {
 }
 
 export interface IDecodedTx {
-  txArrData: Array<any>
+  method: string,
+  arrData: Array<any>
 }
 
 export interface IActor {
@@ -167,15 +168,15 @@ function readTxPayload(i: Uint8Array): IDecodedTx {
   // const phaserTx = MapEntry.deserializeBinary(deContractMethodCall.toArray()[1]).array.toString();
   // return phaserTx;
   let txArrData = readProtoData(deContractMethodCall);
-  return {txArrData}
+  return txArrData
 }
 
 
-function readProtoData(cmc: ContractMethodCall): Array<string> {
-  const methodName = cmc.toObject().method;
-  const txData = MapEntry.deserializeBinary(cmc.toArray()[1]).toArray().toString();
-  return [methodName, txData];
-
+function readProtoData(cmc: ContractMethodCall): IDecodedTx {
+  const methodName = cmc.toObject().method
+  const txData = MapEntry.deserializeBinary(cmc.toArray()[1])
+  const txStringArrData = txData.toArray()
+  return {method: methodName, arrData:txStringArrData}
 }
 
 // @param attempt Indicates which tx version the function should attempt to read, zero corresponds
