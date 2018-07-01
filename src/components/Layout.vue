@@ -1,15 +1,15 @@
 <template>
   <div>
     <Nav></Nav>
-    <div id="flex-wrapper">        
+    <div id="flex-wrapper">
       <Sidebar v-on:switch-tab="switchTabHandler"/>
       <div class="main-content">
-        <b-container fluid>        
+        <b-container fluid>
 
       	<transition mode="out-in" name="fade">
       		<component :is="activeComponent"
         						 :showConnectionDropdown="true"
-            				 :defaultUrl="allowedUrls[0]"
+            				 :defaultUrl="allowedUrls[1]"
             				 :allowedUrls="allowedUrls"
             				 :searchQuery="searchQuery"/>
 				</transition>
@@ -28,7 +28,7 @@
       width: 32px;
       height: 32px;
     }
-  
+
     .height-label {
       margin-right: 0.5rem;
       flex: 0 0 auto;
@@ -54,7 +54,7 @@
 	}
 
   @media (max-width: 576px) {
-    #flex-wrapper {      
+    #flex-wrapper {
       flex-direction: column;
     }
   }
@@ -65,7 +65,7 @@
   //   }
   // }
 
-  .main-content {    
+  .main-content {
    	height: 100vh;
    	padding: 24px;
     background-color: #eff3f5;

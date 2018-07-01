@@ -17,14 +17,15 @@ export default Vue.extend({
   data() {
     return {
       blockchain: new Blockchain({
-        // serverUrl: this.defaultUrl,
-        // allowedUrls: this.allowedUrls
-        serverUrl: 'http://127.0.0.1:46657',
-        allowedUrls: ['http://127.0.0.1:46657']
+        serverUrl: this.defaultUrl,
+        allowedUrls: this.allowedUrls
+        // serverUrl: 'http://127.0.0.1:46657',
+        // allowedUrls: ['http://127.0.0.1:46657']
       })
     }
   },
   components: {
     TransactionList
-  }
+  },
+  props: ["defaultUrl", "allowedUrls"]
 })

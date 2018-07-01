@@ -1,6 +1,6 @@
 <template>
   <Layout :showConnectionDropdown="true"
-          :defaultUrl="allowedUrls[0]"
+          :defaultUrl="allowedUrls[1]"
           :allowedUrls="allowedUrls"/>
 </template>
 
@@ -23,7 +23,8 @@ import { ISearchQuery } from './components/block-explorer'
 })
 export default class App extends Vue {
   allowedUrls = [
-    "http://127.0.0.1:46657"
+    "http://127.0.0.1:46657",
+    "https://devwss-dc2.devdc.io",
   ]
 }
 </script>

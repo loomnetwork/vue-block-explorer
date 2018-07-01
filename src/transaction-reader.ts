@@ -7,7 +7,7 @@ import {
   MessageTx,
   CallTx,
   Request,
-  ContractMethodCall
+  ContractMethodCall,
 } from 'loom-js/dist/proto/loom_pb'
 import { MapEntry } from '@/pbs/phaser/setscore_pb'
 
