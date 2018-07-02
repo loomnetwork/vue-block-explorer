@@ -9,7 +9,7 @@
       	<transition mode="out-in" name="fade">
       		<component :is="activeComponent"
         						 :showConnectionDropdown="true"
-            				 :defaultUrl="allowedUrls[1]"
+            				 :defaultUrl="allowedUrl"
             				 :allowedUrls="allowedUrls"
             				 :searchQuery="searchQuery"/>
 				</transition>
