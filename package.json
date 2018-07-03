@@ -1,8 +1,8 @@
 {
-  "name": "VueBlockExplorer",
+  "name": "loom_block_explorer",
   "version": "0.1.0",
   "private": true,
-  "main": "dist/vue-block-explorer.common.js",
+  "main": "dist/loom-block-explorer.common.js",
   "scripts": {
     "postinstall": "yarn build",
     "serve": "vue-cli-service serve",
