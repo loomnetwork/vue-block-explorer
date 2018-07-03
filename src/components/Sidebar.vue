@@ -6,7 +6,7 @@
 				<a v-b-toggle="'submenu'" @click="switchTab('blocks')">
 					<fa icon="code-branch" class="sidebar-icon"/>Blocks
 				</a>
-			  <b-collapse id="submenu" v-model="expandAccordion">
+			  <b-collapse id="submenu" v-model="expandAccordion" class="disabled">
 		      <ul class="submenu">
 		      	<li>
 		      		<a @click="switchTab('blocks')">Blocks</a>
@@ -33,13 +33,13 @@
 			color: #223C61;
 			cursor: pointer;
 			list-style: none;
-			margin-rigth: 12px;		
+			margin-rigth: 12px;
 			border-left: 4px solid transparent;
-			a {				
+			a {
 				display: inline-block;
 				width: 100%;
-				padding: 12px 0 12px 24px;	
-			}			
+				padding: 12px 0 12px 24px;
+			}
 			.sidebar-icon {
 				color: #349cfa;
 				width: 30px;
@@ -48,10 +48,10 @@
 				background-color: #f9f9fc;
     		border-left: 4px solid #0861af;
 			}
-		}		
+		}
 	}
 
-	.submenu {		
+	.submenu {
 		li {
 			padding: 6px 0 6px 12px;
 			a {
@@ -64,17 +64,21 @@
 		z-index: 99;
     position: relative;
     min-width: 264px;
-    padding: 36px 0;    
+    padding: 36px 0;
     background-color: #ffffff;
     @include shadow();
     transition: max-width 0.2s ease 0.5s;
+  }
+
+  .disabled{
+    display: none !important;
   }
 
   @media (max-width: 576px) {
     #sliding-column {
       width: 100%;
     }
-  }  
+  }
 
 </style>
 
