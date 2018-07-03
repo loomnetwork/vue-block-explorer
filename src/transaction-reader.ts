@@ -10,6 +10,7 @@ import {
   ContractMethodCall,
 } from 'loom-js/dist/proto/loom_pb'
 import { MapEntry } from '@/pbs/phaser/setscore_pb'
+import * as DC from '@/pbs/delegatecall/delegatecall_txs_pb'
 
 export enum TxKind {
   CreateAccount = 'createAccount',
@@ -99,13 +100,13 @@ export interface INonceTx {
   tx: IDecodedTx
 }
 
-// export type DelegateCallTx =
-//   | ICreateAccountTx
-//   | IPostCommentTx
-//   | IUpdateCommentTx
-//   | IAcceptAnswerTx
-//   | IVoteTx
-//   | IDecodedTx
+export type DelegateCallTx =
+  | ICreateAccountTx
+  | IPostCommentTx
+  | IUpdateCommentTx
+  | IAcceptAnswerTx
+  | IVoteTx
+  | IDecodedTx
 
 enum TxFieldKind {
   String = 'string',
