@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+message Meta {
+    int32 version = 1;
+    string owner = 2;
+}
+message AccountDetails {
+    string username = 1;
+    int32 reputation = 2;
+    string name = 3;
+    string image  = 4;
+}
+message DelegatecallCreateAccountTx {
+    Meta meta = 1;
+    AccountDetails account_details = 2;
+}
+enum CommentKind {
+    COMMENT = 0;
+    QUESTION = 1;
+    ANSWER = 2;
+}
+message CommentTx {
+    CommentKind kind = 1;
+    string parent_permalink = 2;
+    string permalink = 3;
+    string author = 4;
+    string title = 5;
+    string body = 6;
+    repeated string tags = 7;
+    string accept_answer_permalink = 8;
+}
+message DelegatecallCommentTx {
+    Meta meta = 1;
+    CommentTx comment_tx= 2;
+}
+message AcceptAnswerTx {
+    string answer_permalink = 1;
+    string acceptor = 2;
+}
+message DelegatecallAcceptAnswerTx {
+    Meta meta = 1;
+    AcceptAnswerTx accept_answer_tx = 2;
+}
+message StateQueryParams {
+    string owner = 1;
+    string url = 2;
+}
+message VoteTx {
+    string comment_permalink = 1;
+    string voter = 2;
+    bool up = 3;
+}
+message DelegatecallVoteTx {
+    Meta meta = 1;
+    VoteTx vote_tx = 2;
+}
