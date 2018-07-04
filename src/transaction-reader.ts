@@ -188,88 +188,70 @@ function readProtoData(cmc: ContractMethodCall): IDecodedTx {
 //                to the latest version, one corresponds to the second to second to last version, etc.
 //                The function will throw InvalidTxVersionError if this parameter exceeds the number
 //                of available tx versions.
-// function readTxPayload(r: Reader, txType: number, attempt: number): DelegateCallTx | INonceTx {
+// function readTxPayload(r: Uint8Array, txType: string): DelegateCallTx | INonceTx {
 //   switch (txType) {
 //     case 0x40:
-//       return readCreateAccountTxPayload(r, attempt)
+//       return readCreateAccountTxPayload(r)
 //     case 0x41:
 //     case 0x44:
-//       return readPostCommentTxPayload(r, attempt)
+//       return readPostCommentTxPayload(r)
 //     case 0x42:
-//       return readAcceptAnswerTxPayload(r, attempt)
+//       return readAcceptAnswerTxPayload(r)
 //     case 0x43:
-//       return readVoteTxPayload(r, attempt)
-//     case 0x69:
-//       return readNonceTxPayload(r, attempt)
+//       return readVoteTxPayload(r)
+//     // case 0x69:
+//       // return readNonceTxPayload(r)
 //   }
-//   throw new UnsupportedTxTypeError(txType.toString(16))
+//   throw new UnsupportedTxTypeError(r)
 // }
 
-// function readCreateAccountTxPayload(r: Reader, attempt: number): ICreateAccountTx {
-//   const versions = txVersions[TxKind.CreateAccount]
-//   if (!versions || attempt >= versions.length) {
-//     throw new InvalidTxVersionError()
-//   }
-//   const fieldDefs = versions[attempt]
-//   const fields = readFields(r, fieldDefs)
-//   return { txKind: TxKind.CreateAccount, ...(fields as any) }
-// }
-//
-// function readPostCommentTxPayload(r: Reader, attempt: number): IPostCommentTx {
-//   if (attempt !== 0) {
-//     throw new InvalidTxVersionError()
-//   }
-//   // In Go the inner field is of type TxInner (from Cosmos SDK), in JS though DelegateCall seems to
-//   // leave it undefined so it gets serialized as a zero byte, so just read & discard for now.
-//   const inner = r.readUint8()
-//   const kind = r.readString() as CommentKind
-//   // tslint:disable-next-line:variable-name
-//   const parent_permalink = r.readString()
-//   const permalink = r.readString()
-//   const author = r.readString()
-//   const title = r.readString()
-//   const body = r.readString()
-//   const tagCount = r.readUvarint()
-//   const tags: string[] = []
-//   for (let i = 0; i < tagCount; i++) {
-//     tags.push(r.readString())
-//   }
-//   return {
-//     txKind: TxKind.PostComment,
-//     kind,
-//     parent_permalink,
-//     permalink,
-//     author,
-//     title,
-//     body,
-//     tags
-//   }
-// }
-//
+
+function readDCProtoData(cmc: ContractMethodCall): DelegateCallTx {
+  const methodName = cmc.toObject().method;
+  switch (methodName){
+    // case "";
+  }
+
+}
+
+function readCreateAccountTxPayload(r: Uint8Array): ICreateAccountTx {
+  // const versions = txVersions[TxKind.CreateAccount]
+  // if (!versions || attempt >= versions.length) {
+  //   throw new InvalidTxVersionError()
+  // }
+  // const fieldDefs = versions[attempt]
+  const fields = readFields(r)
+  return { txKind: TxKind.CreateAccount, ...(fields as any) }
+}
+
+function readPostCommentTxPayload(r:Uint8Array): IPostCommentTx {
+  if (attempt !== 0) {
+    throw new InvalidTxVersionError()
+  }
+
+  return {
+    txKind: TxKind.PostComment,
+    kind,
+    parent_permalink,
+    permalink,
+    author,
+    title,
+    body,
+    tags
+  }
+}
+
 // // TODO: test this, haven't seen any transactions of this kind yet
-// function readAcceptAnswerTxPayload(r: Reader, attempt: number): IAcceptAnswerTx {
-//   if (attempt !== 0) {
-//     throw new InvalidTxVersionError()
-//   }
-//   const inner = r.readUint8()
-//   // tslint:disable-next-line:variable-name
-//   const answer_permalink = r.readString()
-//   const acceptor = r.readString()
-//   return { txKind: TxKind.AcceptAnswer, answer_permalink, acceptor }
-// }
-//
-// function readVoteTxPayload(r: Reader, attempt: number): IVoteTx {
-//   if (attempt !== 0) {
-//     throw new InvalidTxVersionError()
-//   }
-//   const inner = r.readUint8()
-//   // tslint:disable-next-line:variable-name
-//   const comment_permalink = r.readString()
-//   const voter = r.readString()
-//   const up = r.readUint8() !== 0
-//   return { txKind: TxKind.Vote, comment_permalink, voter, up }
-// }
-//
+function readAcceptAnswerTxPayload(r:Uint8Array): IAcceptAnswerTx {
+
+  return { txKind: TxKind.AcceptAnswer, answer_permalink, acceptor }
+}
+
+function readVoteTxPayload(r:Uint8Array): IVoteTx {
+
+  return { txKind: TxKind.Vote, comment_permalink, voter, up }
+}
+
 // function readNonceTxPayload(r: Reader, attempt: number): INonceTx {
 //   const txKind = TxKind.Nonce
 //   const sequence = r.readUint32()
@@ -286,7 +268,7 @@ function readProtoData(cmc: ContractMethodCall): IDecodedTx {
 //     tx: readTxPayload(r, wrappedTxType, attempt) as DelegateCallTx
 //   }
 // }
-//
+
 // function readActor(r: Reader): IActor {
 //   const chainId = r.readString()
 //   const app = r.readString()
@@ -330,13 +312,14 @@ function readTxSignature(i: Uint8Array): ISigned {
 }
 
 // // TODO: move this to loom-js
-// function readFields(r: Reader, fields: ITxField[]): { [index: string]: any } {
-//   const result: { [index: string]: any } = {}
-//   for (let f of fields) {
-//     result[f.name] = readField(r, f)
-//   }
-//   return result
-// }
+function readFields(r: Uint8Array): { [index: string]: any } {
+  // const result: { [index: string]: any } = {}
+  // for (let f of fields) {
+  //   result[f.name] = readField(r, f)
+  // }
+  // return result
+  return [];
+}
 
 // function readField(r: Reader, f: ITxField): any {
 //   switch (f.kind) {
