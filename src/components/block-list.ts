@@ -28,7 +28,7 @@ interface IBlockListItem {
 })
 export default class BlockList extends Vue {
   @Prop({ required: true }) blockchain!: Blockchain // prettier-ignore
-  @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
+  @Prop({ default: true }) showConnectionDropdown!: boolean // prettier-ignore
   @Prop({ default: 10 }) blocksPerPage!: number // prettier-ignore
   // @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
 

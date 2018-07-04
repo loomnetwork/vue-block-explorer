@@ -1,5 +1,5 @@
 <template>
-  <Layout :showConnectionDropdown="false"
+  <Layout :showConnectionDropdown="true"
           :defaultUrl="defaultUrl"
           :allowedUrls="allowedUrls"/>
 </template>
