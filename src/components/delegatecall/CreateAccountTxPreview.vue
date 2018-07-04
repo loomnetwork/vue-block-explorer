@@ -12,7 +12,7 @@
       </div>
     </div>
     <TxPreviewField v-show="!hasProfilePic" class="author" label="Username:" :value="username"/>
-    <div class="text-white text-title">Owner</div>
+    <!--<div class="text-white text-title">Owner</div>-->
     <!--<div class="ml-3">-->
       <!--<TxPreviewField class="text-bold" label="Chain ID:" :value="owner.chainId"/>-->
       <!--<TxPreviewField class="text-normal" label="App:" :value="owner.app"/>-->
