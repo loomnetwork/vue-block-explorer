@@ -44,7 +44,6 @@ export interface IActor {
 
 export interface ICreateAccountTx {
   txKind: TxKind.CreateAccount
-  owner: IActor
   username: string
   // fields below are only available in v2
   email?: string
@@ -120,11 +119,9 @@ interface ITxField {
   kind: TxFieldKind
 }
 
-class InvalidTxVersionError extends Error {
-}
+class InvalidTxVersionError extends Error {}
 
-class UnsupportedTxTypeError extends Error {
-}
+class UnsupportedTxTypeError extends Error {}
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
@@ -159,7 +156,6 @@ function readProtoData(cmc: ContractMethodCall): IDecodedTx {
   return { method: methodName, arrData: txStringArrData }
 }
 
-
 function readDCProtoData(cmc: ContractMethodCall): DelegateCallTx {
   const methodName = cmc.toObject().method
   const dataArr = cmc.toArray()[1]
@@ -176,7 +172,6 @@ function readDCProtoData(cmc: ContractMethodCall): DelegateCallTx {
       return readAcceptAnswerTxPayload(dataArr)
   }
   throw new UnsupportedTxTypeError()
-
 }
 
 function readCreateAccountTxPayload(r: Uint8Array): ICreateAccountTx {
@@ -197,13 +192,13 @@ function readPostCommentTxPayload(r: Uint8Array): IPostCommentTx {
   let tags = ['']
   let title = ''
   if (commentTX) {
-    kind = commentKind[commentTX.kind],
-      parent_permalink = commentTX.parentPermalink,
-      permalink = commentTX.permalink,
-      author = commentTX.author,
-      title = commentTX.title,
-      body = commentTX.body,
-      tags = commentTX.tagsList
+    ;(kind = commentKind[commentTX.kind]),
+      (parent_permalink = commentTX.parentPermalink),
+      (permalink = commentTX.permalink),
+      (author = commentTX.author),
+      (title = commentTX.title),
+      (body = commentTX.body),
+      (tags = commentTX.tagsList)
   }
   return {
     txKind: TxKind.PostComment,
@@ -215,20 +210,27 @@ function readPostCommentTxPayload(r: Uint8Array): IPostCommentTx {
     body,
     tags
   }
-
 }
 
 function readAcceptAnswerTxPayload(r: Uint8Array): IAcceptAnswerTx {
   let acceptTX = DC.AcceptAnswerTx.deserializeBinary(r).toObject()
-  return { txKind: TxKind.AcceptAnswer, answer_permalink: acceptTX.answerPermalink, acceptor: acceptTX.acceptor }
+  return {
+    txKind: TxKind.AcceptAnswer,
+    answer_permalink: acceptTX.answerPermalink,
+    acceptor: acceptTX.acceptor
+  }
 }
 
 function readVoteTxPayload(r: Uint8Array): IVoteTx {
   let voteTX = DC.VoteTx.deserializeBinary(r).toObject()
   console.log(voteTX)
-  return { txKind: TxKind.Vote, comment_permalink: voteTX.commentPermalink.trim(), voter: voteTX.voter, up: voteTX.up }
+  return {
+    txKind: TxKind.Vote,
+    comment_permalink: voteTX.commentPermalink.trim(),
+    voter: voteTX.voter,
+    up: voteTX.up
+  }
 }
-
 
 function readTxSignature(i: Uint8Array): ISigned {
   const deSignedTx = SignedTx.deserializeBinary(i)
@@ -237,4 +239,3 @@ function readTxSignature(i: Uint8Array): ISigned {
   const pubkey = deSignedTxArr[1]
   return { sig, pubkey }
 }
-

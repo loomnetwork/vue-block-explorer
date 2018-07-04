@@ -29,7 +29,7 @@ import ISearchQuery from 'block-explorer'
   }
 })
 export default class Layout extends Vue {
-  activeTab: string = "blocks"
+  activeTab: string = 'blocks'
   blockHeight: string | null = null
   pages: Object | null = {
     dashboard: Dashboard,

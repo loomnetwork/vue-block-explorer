@@ -19,10 +19,10 @@ export default class CreateAccountTxPreview extends Vue {
     return this.tx.txKind
   }
 
-  get owner(): { chainId: string; app: string; address: string } {
-    const { chainId, app, address } = this.tx.owner
-    return { chainId, app, address: address.toString('hex') }
-  }
+  // get owner(): { chainId: string; app: string; address: string } {
+  //   // const { chainId, app, address } = this.tx.owner
+  //   // return { chainId, app, address: address.toString('hex') }
+  // }
 
   get username(): string {
     return this.tx.username
@@ -30,6 +30,10 @@ export default class CreateAccountTxPreview extends Vue {
 
   get image(): string | undefined {
     return this.tx.image
+  }
+
+  get name(): string {
+    return this.tx.name!
   }
 
   get hasProfilePic(): boolean {

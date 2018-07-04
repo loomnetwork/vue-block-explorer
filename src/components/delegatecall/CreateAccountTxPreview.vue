@@ -6,17 +6,18 @@
         <img :src="image" v-on:mouseenter="onHeadImageHover" v-on:mouseleave="onHeadImageHover"/>
       </div>
       <TxPreviewField class="author author-name" label="" :value="username"/>
+      <!--<TxPreviewField class="author author-name" label="" :value="name"/>-->
       <div class="user-image" v-show="showLargeHead">
         <img :src="image"/>
       </div>
     </div>
     <TxPreviewField v-show="!hasProfilePic" class="author" label="Username:" :value="username"/>
     <div class="text-white text-title">Owner</div>
-    <div class="ml-3">
-      <TxPreviewField class="text-bold" label="Chain ID:" :value="owner.chainId"/>
-      <TxPreviewField class="text-normal" label="App:" :value="owner.app"/>
-      <TxPreviewField class="address" label="Address:" :value="owner.address"/>
-    </div>
+    <!--<div class="ml-3">-->
+      <!--<TxPreviewField class="text-bold" label="Chain ID:" :value="owner.chainId"/>-->
+      <!--<TxPreviewField class="text-normal" label="App:" :value="owner.app"/>-->
+      <!--<TxPreviewField class="address" label="Address:" :value="owner.address"/>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -59,6 +60,10 @@
   .user-image-small {
     width: $profile_head_height;
     height: $profile_head_height;
+    img{
+      width: $profile_head_height;
+      height: $profile_head_height;
+    }
   }
   .user-image {
     img {

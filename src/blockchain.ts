@@ -1,6 +1,12 @@
 import Axios from 'axios'
 
-import { extractTxDataFromStr, TxKind, IOneSigTx, IDecodedTx, DelegateCallTx } from './transaction-reader'
+import {
+  extractTxDataFromStr,
+  TxKind,
+  IOneSigTx,
+  IDecodedTx,
+  DelegateCallTx
+} from './transaction-reader'
 
 interface IBlockchainStatusResponse {
   result: {

@@ -27,5 +27,5 @@ export default Vue.extend({
   components: {
     TransactionList
   },
-  props: ["defaultUrl", "allowedUrls"]
+  props: ['defaultUrl', 'allowedUrls']
 })

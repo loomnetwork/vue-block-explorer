@@ -1,6 +1,6 @@
 <template>
   <Layout :showConnectionDropdown="false"
-          :defaultUrl="allowedUrls[1]"
+          :defaultUrl="defaultUrl"
           :allowedUrls="allowedUrls"/>
 </template>
 
@@ -34,6 +34,6 @@
       'http://127.0.0.1:46657',
       'https://devwss-dc2.devdc.io'
     ];
-
+    defaultUrl = this.allowedUrls[1];
   }
 </script>
