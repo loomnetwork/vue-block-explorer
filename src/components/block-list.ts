@@ -179,6 +179,11 @@ export default class BlockList extends Vue {
     }
   }
 
+  onUserInputUrl(url:string){
+    localStorage.customUrl = url
+    this.onConnectionUrlChanged(url)
+  }
+
   searchQuery(): ISearchQuery {
     let blockHeight: number | null = null
     if (this.blockHeight) {

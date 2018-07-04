@@ -56,7 +56,8 @@
             <div class="d-flex flex-row">
             <ConnectionStatus v-if="showConnectionDropdown" class="connection-status"
               :blockchain="blockchain"
-              @urlClicked="onConnectionUrlChanged"/>
+              @urlClicked="onConnectionUrlChanged"
+              @urlInput="onUserInputUrl"/>
             <b-pagination
               v-model="currentPage"
               size="sm"

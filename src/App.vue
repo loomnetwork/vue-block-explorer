@@ -11,7 +11,6 @@
 </style>
 
 <script lang="ts">
-
   import {Component, Vue } from 'vue-property-decorator'
   import BootstrapVue from 'bootstrap-vue'
   import FontAwesome from '@fortawesome/fontawesome'
@@ -32,8 +31,15 @@
   export default class App extends Vue {
     allowedUrls = [
       'http://127.0.0.1:46657',
-      'https://devwss-dc2.devdc.io'
+      // 'https://devwss-dc2.devdc.io'
     ];
-    defaultUrl = this.allowedUrls[1];
+    defaultUrl = this.allowedUrls[0];
+    mounted(){
+      let customUrl = localStorage.customUrl;
+      if(customUrl && !this.allowedUrls.includes(customUrl)){
+        this.allowedUrls.push(customUrl);
+        this.defaultUrl = customUrl;
+      }
+    }
   }
 </script>
