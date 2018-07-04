@@ -7,7 +7,7 @@ import {
   MessageTx,
   CallTx,
   Request,
-  ContractMethodCall,
+  ContractMethodCall
 } from 'loom-js/dist/proto/loom_pb'
 import { MapEntry } from '@/pbs/phaser/setscore_pb'
 import * as DC from '@/pbs/delegatecall/delegatecall_txs_pb'
@@ -27,7 +27,7 @@ export interface ISigned {
 }
 
 export interface IOneSigTx {
-  tx: IDecodedTx
+  tx: IDecodedTx | DelegateCallTx
   signed: ISigned
 }
 
@@ -55,7 +55,8 @@ export interface ICreateAccountTx {
 export enum CommentKind {
   Question = 'question',
   Answer = 'answer',
-  Comment = 'comment'
+  Comment = 'comment',
+  Invalid = 'invalid'
 }
 
 export interface IPostCommentTx {
@@ -119,44 +120,20 @@ interface ITxField {
   kind: TxFieldKind
 }
 
-class InvalidTxVersionError extends Error {}
+class InvalidTxVersionError extends Error {
+}
 
-class UnsupportedTxTypeError extends Error {}
+class UnsupportedTxTypeError extends Error {
+}
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
-  // const buf = new Buffer(base64Str, 'base64')
-  // // version info isn't stored in txs so may have to make multiple attempts to decode tx types whose
-  // // structure evolved over time
-  // let attempt = 0
-  // let lastError: Error | null = null
-  // while (attempt < 10) {
-  //
-  //   const txType = r.readUint8()
-  //   if (txType !== 0x16) {
-  //     throw new Error('Invalid OneSigTx')
-  //   }
-  //   const wrappedTxType = r.readUint8()
-  //
-  //   try {
-  //     const payload = readTxPayload(r, wrappedTxType, attempt++)
-  //     const sig = readTxSignature(r)
-  //     return { tx: payload, signed: sig }
-  //   } catch (e) {
-  //     if (e instanceof InvalidTxVersionError) {
-  //       throw lastError
-  //     } else {
-  //       lastError = e
-  //     }
-  //   }
-  // }
-  // throw lastError
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
   const sig = readTxSignature(pbBuf)
   const payload = readTxPayload(pbBuf)
   return { tx: payload, signed: sig }
 }
 
-function readTxPayload(i: Uint8Array): IDecodedTx {
+function readTxPayload(i: Uint8Array): DelegateCallTx {
   const deSignedTx = SignedTx.deserializeBinary(i)
   console.log(deSignedTx.toObject())
   const deNonceTx = NonceTx.deserializeBinary(deSignedTx.toArray()[0])
@@ -171,10 +148,8 @@ function readTxPayload(i: Uint8Array): IDecodedTx {
   console.log(deRequest.toObject())
   const deContractMethodCall = ContractMethodCall.deserializeBinary(deRequest.toArray()[2])
   console.log(deContractMethodCall.toObject())
-  // const phaserTx = MapEntry.deserializeBinary(deContractMethodCall.toArray()[1]).array.toString();
-  // return phaserTx;
-  let txArrData = readProtoData(deContractMethodCall)
-  return txArrData
+  let dcData = readDCProtoData(deContractMethodCall)
+  return dcData
 }
 
 function readProtoData(cmc: ContractMethodCall): IDecodedTx {
@@ -184,51 +159,52 @@ function readProtoData(cmc: ContractMethodCall): IDecodedTx {
   return { method: methodName, arrData: txStringArrData }
 }
 
-// @param attempt Indicates which tx version the function should attempt to read, zero corresponds
-//                to the latest version, one corresponds to the second to second to last version, etc.
-//                The function will throw InvalidTxVersionError if this parameter exceeds the number
-//                of available tx versions.
-// function readTxPayload(r: Uint8Array, txType: string): DelegateCallTx | INonceTx {
-//   switch (txType) {
-//     case 0x40:
-//       return readCreateAccountTxPayload(r)
-//     case 0x41:
-//     case 0x44:
-//       return readPostCommentTxPayload(r)
-//     case 0x42:
-//       return readAcceptAnswerTxPayload(r)
-//     case 0x43:
-//       return readVoteTxPayload(r)
-//     // case 0x69:
-//       // return readNonceTxPayload(r)
-//   }
-//   throw new UnsupportedTxTypeError(r)
-// }
-
 
 function readDCProtoData(cmc: ContractMethodCall): DelegateCallTx {
-  const methodName = cmc.toObject().method;
-  switch (methodName){
-    // case "";
+  const methodName = cmc.toObject().method
+  const dataArr = cmc.toArray()[1]
+  switch (methodName) {
+    case 'CreateAccount':
+      return readCreateAccountTxPayload(dataArr)
+    case 'Vote':
+      return readVoteTxPayload(dataArr)
+    case 'CreateQuestion':
+    case 'CreateAnswer':
+    case 'CreateComment':
+      return readPostCommentTxPayload(dataArr)
+    case 'AcceptAnswer':
+      return readAcceptAnswerTxPayload(dataArr)
   }
+  throw new UnsupportedTxTypeError()
 
 }
 
 function readCreateAccountTxPayload(r: Uint8Array): ICreateAccountTx {
-  // const versions = txVersions[TxKind.CreateAccount]
-  // if (!versions || attempt >= versions.length) {
-  //   throw new InvalidTxVersionError()
-  // }
-  // const fieldDefs = versions[attempt]
-  const fields = readFields(r)
-  return { txKind: TxKind.CreateAccount, ...(fields as any) }
+  let accountTx = DC.DelegatecallCreateAccountTx.deserializeBinary(r).toObject()
+  return { txKind: TxKind.CreateAccount, ...(accountTx.accountDetails as any) }
 }
 
-function readPostCommentTxPayload(r:Uint8Array): IPostCommentTx {
-  if (attempt !== 0) {
-    throw new InvalidTxVersionError()
+function readPostCommentTxPayload(r: Uint8Array): IPostCommentTx {
+  const postTX = DC.DelegatecallCommentTx.deserializeBinary(r).toObject()
+  console.log(postTX)
+  const commentTX = postTX.commentTx
+  let commentKind = [CommentKind.Answer, CommentKind.Question, CommentKind.Comment]
+  let kind = CommentKind.Invalid
+  let parent_permalink = ''
+  let permalink = ''
+  let author = ''
+  let body = ''
+  let tags = ['']
+  let title = ''
+  if (commentTX) {
+    kind = commentKind[commentTX.kind],
+      parent_permalink = commentTX.parentPermalink,
+      permalink = commentTX.permalink,
+      author = commentTX.author,
+      title = commentTX.title,
+      body = commentTX.body,
+      tags = commentTX.tagsList
   }
-
   return {
     txKind: TxKind.PostComment,
     kind,
@@ -239,69 +215,20 @@ function readPostCommentTxPayload(r:Uint8Array): IPostCommentTx {
     body,
     tags
   }
+
 }
 
-// // TODO: test this, haven't seen any transactions of this kind yet
-function readAcceptAnswerTxPayload(r:Uint8Array): IAcceptAnswerTx {
-
-  return { txKind: TxKind.AcceptAnswer, answer_permalink, acceptor }
+function readAcceptAnswerTxPayload(r: Uint8Array): IAcceptAnswerTx {
+  let acceptTX = DC.AcceptAnswerTx.deserializeBinary(r).toObject()
+  return { txKind: TxKind.AcceptAnswer, answer_permalink: acceptTX.answerPermalink, acceptor: acceptTX.acceptor }
 }
 
-function readVoteTxPayload(r:Uint8Array): IVoteTx {
-
-  return { txKind: TxKind.Vote, comment_permalink, voter, up }
+function readVoteTxPayload(r: Uint8Array): IVoteTx {
+  let voteTX = DC.VoteTx.deserializeBinary(r).toObject()
+  console.log(voteTX)
+  return { txKind: TxKind.Vote, comment_permalink: voteTX.commentPermalink.trim(), voter: voteTX.voter, up: voteTX.up }
 }
 
-// function readNonceTxPayload(r: Reader, attempt: number): INonceTx {
-//   const txKind = TxKind.Nonce
-//   const sequence = r.readUint32()
-//   const numSigners = r.readUvarint()
-//   const signers: IActor[] = []
-//   for (let i = 0; i < numSigners; i++) {
-//     signers.push(readActor(r))
-//   }
-//   const wrappedTxType = r.readUint8()
-//   return {
-//     txKind,
-//     sequence,
-//     signers,
-//     tx: readTxPayload(r, wrappedTxType, attempt) as DelegateCallTx
-//   }
-// }
-
-// function readActor(r: Reader): IActor {
-//   const chainId = r.readString()
-//   const app = r.readString()
-//   const address = readBuffer(r)
-//   return { chainId, app, address }
-// }
-//
-// function readBuffer(r: Reader): Buffer {
-//   const byteCount = r.readUvarint()
-//   const buf = new Buffer(byteCount)
-//   for (let i = 0; i < byteCount; i++) {
-//     buf[i] = r.readByte()
-//   }
-//   return buf
-// }
-//
-// function readUint8Array(r: Reader, byteCount: number): Uint8Array {
-//   const buf = new Uint8Array(byteCount)
-//   for (let i = 0; i < byteCount; i++) {
-//     buf[i] = r.readByte()
-//   }
-//   return buf
-// }
-
-// function readTxSignature(r: Reader): ISigned {
-//   const typeByte = r.readUint8()
-//   if (typeByte !== 0x01) {
-//     throw new Error('Invalid ed25519 signature')
-//   }
-//   // const sig = readUint8Array(r, 64)
-//   // const pubkey = readUint8Array(r, 32)
-//   // return { sig, pubkey }
-// }
 
 function readTxSignature(i: Uint8Array): ISigned {
   const deSignedTx = SignedTx.deserializeBinary(i)
@@ -311,28 +238,3 @@ function readTxSignature(i: Uint8Array): ISigned {
   return { sig, pubkey }
 }
 
-// // TODO: move this to loom-js
-function readFields(r: Uint8Array): { [index: string]: any } {
-  // const result: { [index: string]: any } = {}
-  // for (let f of fields) {
-  //   result[f.name] = readField(r, f)
-  // }
-  // return result
-  return [];
-}
-
-// function readField(r: Reader, f: ITxField): any {
-//   switch (f.kind) {
-//     case TxFieldKind.String:
-//       return r.readString()
-//     case TxFieldKind.UInt8:
-//       return r.readUint8()
-//     case TxFieldKind.UInt32:
-//       return r.readUint32()
-//     default:
-//       if (f.kind instanceof Function) {
-//         return f.kind(r)
-//       }
-//   }
-//   throw new Error('Unsupported tx field kind')
-// }

@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-import { extractTxDataFromStr, TxKind, IOneSigTx, IDecodedTx } from './transaction-reader'
+import { extractTxDataFromStr, TxKind, IOneSigTx, IDecodedTx, DelegateCallTx } from './transaction-reader'
 
 interface IBlockchainStatusResponse {
   result: {
@@ -39,7 +39,7 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
-  data: IDecodedTx
+  data: IDecodedTx | DelegateCallTx
 }
 
 interface IBlockchainResponse {
@@ -222,30 +222,12 @@ export class Blockchain {
       for (let i = 0; i < rawTxs.length; i++) {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
-          // if (data.tx.txKind === TxKind.Nonce) {
-          //   block.txs.push({
-          //     hash: new Buffer(data.signed.sig).toString('hex'),
-          //     blockHeight: block.height,
-          //     txType: getTxType(data.tx.tx),
-          //     time: block.time,
-          //     sender: getTxSender(data.tx.tx),
-          //     data: data.tx.tx
-          //   })
-          // } else {
-          //   block.txs.push({
-          //     hash: new Buffer(data.signed.sig).toString('hex'),
-          //     blockHeight: block.height,
-          //     txType: getTxType(data.tx),
-          //     time: block.time,
-          //     sender: getTxSender(data.tx),
-          //     data: data.tx
-          //   })
           block.txs.push({
             hash: new Buffer(data.signed.sig).toString('hex'),
             blockHeight: block.height,
-            txType: 'default',
+            txType: getTxType(data.tx),
             time: block.time,
-            sender: 'default',
+            sender: getTxSender(data.tx),
             data: data.tx
           })
 
@@ -267,24 +249,24 @@ export function getShortTxHash(longHash: string): string {
   return '0x' + longHash.slice(0, 8)
 }
 
-// function getTxType(tx: DelegateCallTx): string {
-//   switch (tx.txKind) {
-//     case TxKind.PostComment:
-//       return tx.kind
-//     default:
-//       return tx.txKind
-//   }
-// }
-//
-// function getTxSender(tx: DelegateCallTx): string {
-//   switch (tx.txKind) {
-//     case TxKind.CreateAccount:
-//       return tx.username
-//     case TxKind.PostComment:
-//       return tx.author
-//     case TxKind.AcceptAnswer:
-//       return tx.acceptor
-//     case TxKind.Vote:
-//       return tx.voter
-//   }
-// }
+function getTxType(tx: DelegateCallTx): string {
+  switch (tx.txKind) {
+    case TxKind.PostComment:
+      return tx.kind
+    default:
+      return tx.txKind
+  }
+}
+
+function getTxSender(tx: DelegateCallTx): string {
+  switch (tx.txKind) {
+    case TxKind.CreateAccount:
+      return tx.username
+    case TxKind.PostComment:
+      return tx.author
+    case TxKind.AcceptAnswer:
+      return tx.acceptor
+    case TxKind.Vote:
+      return tx.voter
+  }
+}
