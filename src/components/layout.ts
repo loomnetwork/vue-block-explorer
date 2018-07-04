@@ -31,7 +31,6 @@ import ISearchQuery from 'block-explorer'
 export default class Layout extends Vue {
   activeTab: string = "blocks"
   blockHeight: string | null = null
-  allowedUrl : string = "http://127.0.0.1:46657"
   pages: Object | null = {
     dashboard: Dashboard,
     blocks: BlockExplorer,
