@@ -1,6 +1,6 @@
 <template>
-  <Layout :showConnectionDropdown="false"
-          :defaultUrl="allowedUrls[1]"
+  <Layout :showConnectionDropdown="true"
+          :defaultUrl="defaultUrl"
           :allowedUrls="allowedUrls"/>
 </template>
 

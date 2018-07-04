@@ -8,7 +8,7 @@
 
       	<transition mode="out-in" name="fade">
       		<component :is="activeComponent"
-        						 :showConnectionDropdown="false"
+        						 :showConnectionDropdown="showConnectionDropdown"
             				 :defaultUrl="defaultUrl"
             				 :allowedUrls="allowedUrls"
             				 :searchQuery="searchQuery"/>

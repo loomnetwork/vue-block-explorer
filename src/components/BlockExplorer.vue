@@ -2,7 +2,7 @@
   <BlockList :blockchain="blockchain"
              :showConnectionDropdown="showConnectionDropdown"
              :searchQuery="curSearchQuery"/>
-<!--   <component 
+<!--   <component
     :is="viewComponent"
     :blockchain="blockchain"
     :showConnectionDropdown="showConnectionDropdown"
