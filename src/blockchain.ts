@@ -45,7 +45,7 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
-  data: IDecodedTx | DelegateCallTx
+  data: DelegateCallTx
 }
 
 interface IBlockchainResponse {
@@ -138,27 +138,6 @@ export class Blockchain {
         const { latestBlockHeight } = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
       }
-      /* Iterate backwards through the blockchain and dumps transaction data */
-      /*
-      for (let i = lastBlockNum; i > 0; ) {
-        const testChainResp = await Axios.get<IBlockchainResponse>(
-          `${this.blockchain.serverUrl}/blockchain`, { params: { maxHeight: i } }
-        )
-        for (let j = 0; j < testChainResp.data.result.block_metas.length; j++) {
-          const block = testChainResp.data.result.block_metas[j]
-          if (block.header.num_txs > 0) {
-            const blockResp = await Axios.get<any>(
-              `${this.blockchain.serverUrl}/block`,
-              { params: { height: block.header.height } }
-            )
-            const data = extractTxDataFromStr(blockResp.data.result.block.data.txs[0])
-            console.log('block #', block.header.height, ' data: ', data)
-          }
-        }
-        i -= 20
-      }
-      */
-
       let maxBlocksToFetch = (opts && opts.limit) || 20
       let firstBlockNum = Math.max(this.totalNumBlocks - (maxBlocksToFetch - 1), 1)
       let lastBlockNum = this.totalNumBlocks
@@ -274,5 +253,7 @@ function getTxSender(tx: DelegateCallTx): string {
       return tx.acceptor
     case TxKind.Vote:
       return tx.voter
+    default:
+      return "Unkown"
   }
 }

@@ -27,7 +27,7 @@ export interface ISigned {
 }
 
 export interface IOneSigTx {
-  tx: IDecodedTx | DelegateCallTx
+  tx: DelegateCallTx
   signed: ISigned
 }
 
@@ -106,7 +106,6 @@ export type DelegateCallTx =
   | IUpdateCommentTx
   | IAcceptAnswerTx
   | IVoteTx
-  | IDecodedTx
 
 enum TxFieldKind {
   String = 'string',
@@ -119,9 +118,11 @@ interface ITxField {
   kind: TxFieldKind
 }
 
-class InvalidTxVersionError extends Error {}
+class InvalidTxVersionError extends Error {
+}
 
-class UnsupportedTxTypeError extends Error {}
+class UnsupportedTxTypeError extends Error {
+}
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
@@ -132,19 +133,19 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
 
 function readTxPayload(i: Uint8Array): DelegateCallTx {
   const deSignedTx = SignedTx.deserializeBinary(i)
-  console.log(deSignedTx.toObject())
+  // console.log(deSignedTx.toObject())
   const deNonceTx = NonceTx.deserializeBinary(deSignedTx.toArray()[0])
-  console.log(deNonceTx.toObject())
+  // console.log(deNonceTx.toObject())
   const deTransaction = Transaction.deserializeBinary(deNonceTx.toArray()[0])
-  console.log(deTransaction.toObject())
+  // console.log(deTransaction.toObject())
   const deMessageTx = MessageTx.deserializeBinary(deTransaction.toArray()[1])
-  console.log(deMessageTx.toObject())
+  // console.log(deMessageTx.toObject())
   const deCallTx = CallTx.deserializeBinary(deMessageTx.toArray()[2])
-  console.log(deCallTx.toObject())
+  // console.log(deCallTx.toObject())
   const deRequest = Request.deserializeBinary(deCallTx.toArray()[1])
-  console.log(deRequest.toObject())
+  // console.log(deRequest.toObject())
   const deContractMethodCall = ContractMethodCall.deserializeBinary(deRequest.toArray()[2])
-  console.log(deContractMethodCall.toObject())
+  // console.log(deContractMethodCall.toObject())
   let dcData = readDCProtoData(deContractMethodCall)
   return dcData
 }
@@ -222,8 +223,8 @@ function readAcceptAnswerTxPayload(r: Uint8Array): IAcceptAnswerTx {
 }
 
 function readVoteTxPayload(r: Uint8Array): IVoteTx {
-  let voteTX = DC.VoteTx.deserializeBinary(r).toObject()
-  console.log(voteTX)
+  const DCVoteTX = DC.DelegatecallVoteTx.deserializeBinary(r).toObject()
+  const voteTX = DCVoteTX.voteTx!
   return {
     txKind: TxKind.Vote,
     comment_permalink: voteTX.commentPermalink.trim(),
