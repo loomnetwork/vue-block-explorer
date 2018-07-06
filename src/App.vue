@@ -30,13 +30,13 @@
   })
   export default class App extends Vue {
     allowedUrls = [
-      'http://127.0.0.1:46657',
-      // 'https://devwss-dc2.devdc.io'
+      'https://devwss-dc2.devdc.io'
     ];
-    defaultUrl = this.allowedUrls[0];
+    defaultUrl = this.allowedUrls[0]
     mounted(){
-      let customUrl = localStorage.customUrl;
-      if(customUrl && !this.allowedUrls.includes(customUrl)){
+      const customUrl = localStorage.customUrl
+      const isInList = this.allowedUrls.indexOf(customUrl) > -1
+      if(customUrl && !isInList){
         this.allowedUrls.push(customUrl);
         this.defaultUrl = customUrl;
       }
