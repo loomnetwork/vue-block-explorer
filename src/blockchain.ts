@@ -254,6 +254,6 @@ function getTxSender(tx: DelegateCallTx): string {
     case TxKind.Vote:
       return tx.voter
     default:
-      return "Unkown"
+      return 'Unkown'
   }
 }

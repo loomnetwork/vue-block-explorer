@@ -118,11 +118,9 @@ interface ITxField {
   kind: TxFieldKind
 }
 
-class InvalidTxVersionError extends Error {
-}
+class InvalidTxVersionError extends Error {}
 
-class UnsupportedTxTypeError extends Error {
-}
+class UnsupportedTxTypeError extends Error {}
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
