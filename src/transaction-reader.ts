@@ -9,7 +9,8 @@ import {
   Request,
   ContractMethodCall,
 } from 'loom-js/dist/proto/loom_pb'
-import { MapEntry } from '@/pbs/phaser/setscore_pb'
+// import { MapEntry } from '@/pbs/phaser/setscore_pb'
+import * as Decoder from '@/pbs/protoc';
 
 export enum TxKind {
   CreateAccount = 'createAccount',
