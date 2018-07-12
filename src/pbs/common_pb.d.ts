@@ -1,5 +1,5 @@
 // package: 
-// file: src/pbs/setscore.proto
+// file: src/pbs/common.proto
 
 import * as jspb from "google-protobuf";
 
