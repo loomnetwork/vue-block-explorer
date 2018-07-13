@@ -39,7 +39,7 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
-  data: DelegateCallTx
+  data: IDecodedTx
 }
 
 interface IBlockchainResponse {
@@ -235,4 +235,3 @@ function getTxSender(tx: IDecodedTx): string {
   // you could use the app user as the sender, please check delegatecall for example
   return 'default'
 }
-

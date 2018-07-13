@@ -18,7 +18,7 @@ export interface ISigned {
 }
 
 export interface IOneSigTx {
-  tx: DelegateCallTx
+  tx: IDecodedTx
   signed: ISigned
 }
 
@@ -46,7 +46,7 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
 
 }
 
-function readTxPayload(i: Uint8Array): DelegateCallTx {
+function readTxPayload(i: Uint8Array): IDecodedTx {
   const deSignedTx = SignedTx.deserializeBinary(i)
   const deNonceTx = NonceTx.deserializeBinary(deSignedTx.toArray()[0])
   const deTransaction = Transaction.deserializeBinary(deNonceTx.toArray()[0])
