@@ -1,10 +1,12 @@
 import Axios from 'axios'
 
-import { extractTxDataFromStr, DelegateCallTx, TxKind, IOneSigTx } from './transaction-reader'
+import { extractTxDataFromStr, IDecodedTx } from './transaction-reader'
 
 interface IBlockchainStatusResponse {
   result: {
-    latest_block_height: number
+    sync_info: {
+      latest_block_height: number
+    }
   }
 }
 
@@ -37,13 +39,20 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
-  data: DelegateCallTx
+  data: IDecodedTx
 }
 
 interface IBlockchainResponse {
   result: {
     last_height: number
     block_metas: IBlockchainBlockMeta[]
+  }
+}
+
+interface IBlockResponse {
+  result: {
+    last_height: number
+    block_meta: IBlockchainBlockMeta
   }
 }
 
@@ -98,7 +107,7 @@ export class Blockchain {
 
   async fetchStatus(): Promise<IBlockchainStatus> {
     const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`)
-    const latestBlockHeight = statusResp.data.result.latest_block_height
+    const latestBlockHeight = statusResp.data.result.sync_info.latest_block_height
     this.totalNumBlocks = latestBlockHeight
     return { latestBlockHeight }
   }
@@ -123,26 +132,6 @@ export class Blockchain {
         const { latestBlockHeight } = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
       }
-      /* Iterate backwards through the blockchain and dumps transaction data */
-      /*
-      for (let i = lastBlockNum; i > 0; ) {
-        const testChainResp = await Axios.get<IBlockchainResponse>(
-          `${this.blockchain.serverUrl}/blockchain`, { params: { maxHeight: i } }
-        )
-        for (let j = 0; j < testChainResp.data.result.block_metas.length; j++) {
-          const block = testChainResp.data.result.block_metas[j]
-          if (block.header.num_txs > 0) {
-            const blockResp = await Axios.get<any>(
-              `${this.blockchain.serverUrl}/block`,
-              { params: { height: block.header.height } }
-            )
-            const data = extractTxDataFromStr(blockResp.data.result.block.data.txs[0])
-            console.log('block #', block.header.height, ' data: ', data)
-          }
-        }
-        i -= 20
-      }
-      */
 
       let maxBlocksToFetch = (opts && opts.limit) || 20
       let firstBlockNum = Math.max(this.totalNumBlocks - (maxBlocksToFetch - 1), 1)
@@ -183,13 +172,11 @@ export class Blockchain {
   }
 
   async fetchBlock(blockHeight: number): Promise<IBlockchainBlock> {
-    const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/blockchain`, {
-      params: {
-        minHeight: blockHeight,
-        maxHeight: blockHeight
-      }
+    const chainResp = await Axios.get<IBlockResponse>(`${this.serverUrl}/block`, {
+      params: { height: blockHeight }
     })
-    const blocks = chainResp.data.result.block_metas.map<IBlockchainBlock>(meta => ({
+    const meta = chainResp.data.result.block_meta
+    const block = {
       hash: meta.block_id.hash,
       height: meta.header.height,
       time: meta.header.time,
@@ -197,8 +184,8 @@ export class Blockchain {
       isFetchingTxs: false,
       didFetchTxs: false,
       txs: []
-    }))
-    return blocks[0]
+    }
+    return block
   }
 
   async fetchTxsInBlock(block: IBlockchainBlock) {
@@ -215,25 +202,14 @@ export class Blockchain {
       for (let i = 0; i < rawTxs.length; i++) {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
-          if (data.tx.txKind === TxKind.Nonce) {
-            block.txs.push({
-              hash: new Buffer(data.signed.sig).toString('hex'),
-              blockHeight: block.height,
-              txType: getTxType(data.tx.tx),
-              time: block.time,
-              sender: getTxSender(data.tx.tx),
-              data: data.tx.tx
-            })
-          } else {
-            block.txs.push({
-              hash: new Buffer(data.signed.sig).toString('hex'),
-              blockHeight: block.height,
-              txType: getTxType(data.tx),
-              time: block.time,
-              sender: getTxSender(data.tx),
-              data: data.tx
-            })
-          }
+          block.txs.push({
+            hash: new Buffer(data.signed.sig).toString('hex'),
+            blockHeight: block.height,
+            txType: getTxType(data.tx),
+            time: block.time,
+            sender: getTxSender(data.tx),
+            data: data.tx
+          })
         } catch (e) {
           console.log(e)
         }
@@ -251,24 +227,12 @@ export function getShortTxHash(longHash: string): string {
   return '0x' + longHash.slice(0, 8)
 }
 
-function getTxType(tx: DelegateCallTx): string {
-  switch (tx.txKind) {
-    case TxKind.PostComment:
-      return tx.kind
-    default:
-      return tx.txKind
-  }
+function getTxType(tx: IDecodedTx): string {
+  return tx.method
 }
 
-function getTxSender(tx: DelegateCallTx): string {
-  switch (tx.txKind) {
-    case TxKind.CreateAccount:
-      return tx.username
-    case TxKind.PostComment:
-      return tx.author
-    case TxKind.AcceptAnswer:
-      return tx.acceptor
-    case TxKind.Vote:
-      return tx.voter
-  }
+function getTxSender(tx: IDecodedTx): string {
+  // you could use the app user as the sender, please check delegatecall for example
+  return 'default'
 }
+

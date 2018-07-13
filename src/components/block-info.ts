@@ -5,13 +5,7 @@ import formatDate from 'date-fns/format'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import TransactionTable from './TransactionTable.vue'
 // @ts-ignore
-import CreateAccountTxPreview from './delegatecall/CreateAccountTxPreview.vue'
-// @ts-ignore
-import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue'
-// @ts-ignore
-import VoteTxPreview from './delegatecall/VoteTxPreview.vue'
-// @ts-ignore
-import AcceptAnswerTxPreview from './delegatecall/AcceptAnswerTxPreview.vue'
+import DecodedTX from './DecodedTX.vue'
 
 import {
   Blockchain,
@@ -25,7 +19,6 @@ import {
   TransactionTableColumnKey,
   ITransactionTableItem
 } from './transaction-table'
-import { TxKind } from '../transaction-reader'
 
 const txTableColumns: ITransactionTableColumn[] = [
   { key: TransactionTableColumnKey.TxHash, sortable: false },
@@ -101,16 +94,7 @@ export default class BlockInfo extends Vue {
 
   get txInfoComponent(): VueConstructor | null {
     if (this.selectedTx) {
-      switch (this.selectedTx.data.txKind) {
-        case TxKind.CreateAccount:
-          return CreateAccountTxPreview
-        case TxKind.PostComment:
-          return PostCommentTxPreview
-        case TxKind.Vote:
-          return VoteTxPreview
-        case TxKind.AcceptAnswer:
-          return AcceptAnswerTxPreview
-      }
+      return DecodedTX
     }
     return null
   }

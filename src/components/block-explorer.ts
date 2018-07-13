@@ -14,13 +14,18 @@ export enum BlockExplorerView {
 }
 
 export interface ISearchQuery {
-  blockHeight: number | null
+  blockHeight: number | null | string
 }
 
-@Component
+@Component({
+  components: {
+    TransactionList,
+    BlockList
+  }
+})
 export default class BlockExplorer extends Vue {
   @Prop() view!: string // prettier-ignore
-  @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
+  @Prop({ default: true }) showConnectionDropdown!: boolean // prettier-ignore
   @Prop({ required: true }) defaultUrl!: string // prettier-ignore
   @Prop({ required: true }) allowedUrls!: string[] // prettier-ignore
   @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore

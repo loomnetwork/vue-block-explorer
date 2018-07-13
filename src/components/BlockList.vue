@@ -1,92 +1,127 @@
 <template>
   <div class="position-relative">
     <div>
-      <div class="section-header d-flex flex-row">
-        <div class="bg-dark">
-            <div class="header-logo">
-              <a href="/">
-                <div class="loom-logo"/> <span class="site-name">DAppChain</span>
-              </a>
-            </div>
-            <div class="header-table-name">
-              <div class="text-primary pointer-only">Blocks <fa v-if="isBusy" icon="spinner" spin/></div>
-            </div>
-            <!--
-            <div class="header-profile">
-              <img src="~@/images/user_image.png" class="user-head">
-              <div class="down-arrow"/>
-            </div>
-            -->
-        </div>
-        <!-- TODO
-        <div class="bg-dark ml-auto px-0">
-          <div class="d-flex flex-row">
-            <h3 class="mx-2 text-white pointer-only">Filter by</h3>
-            <b-dropdown text="Most recent" right variant="dark">
-              <b-dropdown-item>Most old</b-dropdown-item>
-              <b-dropdown-item>Pending</b-dropdown-item>
-            </b-dropdown>
+      <b-row class="block-heading">
+        <b-col>
+          <h1 class="page-header">
+            Blocks <fa v-if="isBusy"
+                       icon="spinner"
+                       class="spinner"
+                       spin/>
+          </h1>
+        </b-col>
+        <b-col>
+          <div class="block-search-query d-flex flex-row align-items-center">
+            <fa :icon="['fas', 'search']" class="search-icon text-grey" fixed-width/>
+            <label for="sq-block-height" class="height-label text-grey">Block Height:</label>
+            <b-form-input id="sq-block-height"
+                          class="custom-input fieldheight-input bg-light"
+                          type="number"
+                          @keypress.enter.native="searchWithBlockHeight"
+                          v-model="blockHeight">
+            </b-form-input>
           </div>
-        </div>
-        -->
-      </div>
-      <div class="blocks-table">
-        <b-table ref="blocksTable"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :no-provider-sorting="true"
-          :show-empty="true"
-          :items="blocks"
-          :fields="fields"
-          :hover="true"
-          :head-variant="muted"
-          @row-clicked="onRowClicked"
-          :current-page="currentPage"
-          :per-page="perPage"
-          :busy.sync="isBusy"
-          class="table-dark bg-dark">
-          <template slot="blockHeight" slot-scope="row">
-            <span>#{{ row.value }}</span>
-          </template>
-          <template slot="hash" slot-scope="row">
-            <span class="text-info hash-value" :title="row.value">{{ row.value }}</span>
-          </template>
-          <template slot="age" slot-scope="row">
-            <span>{{ row.value }}</span>
-          </template>
-          <template slot="time" slot-scope="row">
-            <span>{{ row.value }}</span>
-          </template>
-        </b-table>
-        <div class="d-flex flex-row">
-        <ConnectionStatus v-if="showConnectionDropdown" class="connection-status"
-          :blockchain="blockchain"
-          @urlClicked="onConnectionUrlChanged"/>
-        <b-pagination
-          v-model="currentPage"
-          size="sm"
-          :total-rows="totalNumBlocks"
-          :per-page="perPage"
-          :align="paginationAlignment"
-          first-text="&nbsp;"
-          last-text="&nbsp;"
-          prev-text="&nbsp;"
-          next-text="&nbsp;"
-          />
-        </div>
-      </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <div class="table-container">
+            <b-table ref="blocksTable"
+              :sort-by.sync="sortBy"
+              :sort-desc.sync="sortDesc"
+              :no-provider-sorting="true"
+              :show-empty="true"
+              :items="blocks"
+              :fields="fields"
+              :hover="true"
+              :head-variant="muted"
+              @row-clicked="onRowClicked"
+              :current-page="currentPage"
+              :per-page="perPage"
+              :busy.sync="isBusy"
+              class="custom-table">
+              <template slot="blockHeight" slot-scope="row">
+                <span>#{{ row.value }}</span>
+              </template>
+              <template slot="hash" slot-scope="row">
+                <span class="text-info hash-value" :title="row.value">{{ row.value }}</span>
+              </template>
+              <template slot="age" slot-scope="row">
+                <span>{{ row.value }}</span>
+              </template>
+              <template slot="time" slot-scope="row">
+                <span>{{ row.value }}</span>
+              </template>
+            </b-table>
+            <div class="d-flex flex-row">
+            <ConnectionStatus v-if="showConnectionDropdown" class="connection-status"
+              :blockchain="blockchain"
+              @urlClicked="onConnectionUrlChanged"
+              @urlInput="onUserInputUrl"/>
+            <b-pagination
+              v-model="currentPage"
+              size="sm"
+              :total-rows="totalNumBlocks"
+              :per-page="perPage"
+              :align="paginationAlignment"
+              first-text="&nbsp;"
+              last-text="&nbsp;"
+              prev-text="&nbsp;"
+              next-text="&nbsp;"
+              />
+            </div>
+          </div>
+        </b-col>
+      </b-row>
     </div>
+
     <div class="block-info-overlay" :class="{ show: isBlockInfoVisible }">
       <BlockInfo class="block-info-card" v-bind="blockInfoProps"/>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '~@/styles/app.scss';
 
-.header-table-name {
-  text-transform: uppercase;
+
+.block-heading {
+  align-items: center;
+  h2 {
+    position: relative;
+    font-size: 25px;
+    padding: 24px 36px 24px 0;
+    font-weight: 300;
+    line-height: 0.88;
+    letter-spacing: 0.7px;
+    text-align: left;
+    color: theme-color('primary');
+    display: inline-block;
+    margin: 0 auto;
+  }
+  svg {
+    font-size: 16px;
+    margin-right: 2px;
+  }
+  .height-label {
+    font-size: 18px;
+    margin-bottom: 0px;
+    margin-right: 12px;
+    font-size: 18px;
+  }
+  input {
+    width: 220px;
+  }
+}
+
+.spinner {
+  position: absolute;
+  top: 22px;
+  right: 0px;
+}
+
+.block-search-query {
+  float: right;
 }
 
 // header bar
@@ -104,7 +139,7 @@
       padding: 0;
     }
   }
-  
+
   .header-logo {
     width: 20%;
     a {
@@ -117,22 +152,7 @@
       }
     }
   }
-  
-  .header-table-name {
-    width: 60%;
-    text-align: center;
-    .text-primary {
-      font-size: 28px;
-      font-weight: 300;
-      line-height: 0.88;
-      letter-spacing: 0.7px;
-      text-align: left;
-      color: theme-color('primary');
-      display: inline-block;
-      margin: 0 auto;
-      width: 180px;
-    }
-  }
+
   .header-profile {
     text-align: right;
     float: right;
