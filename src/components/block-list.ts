@@ -179,7 +179,7 @@ export default class BlockList extends Vue {
     }
   }
 
-  onUserInputUrl(url: string) {
+  onUserInputUrl(url:string){
     localStorage.customUrl = url
     this.onConnectionUrlChanged(url)
   }

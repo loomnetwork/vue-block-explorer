@@ -30,7 +30,7 @@
   })
   export default class App extends Vue {
     allowedUrls = [
-      'https://devwss-dc2.devdc.io'
+      'http://127.0.0.1:46657'
     ];
     defaultUrl = this.allowedUrls[0]
     mounted(){

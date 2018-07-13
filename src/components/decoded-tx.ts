@@ -3,7 +3,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { IDecodedTx } from '@/transaction-reader'
 
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
-import TxPreviewField from './delegatecall/TxPreviewField.vue'
+import TxPreviewField from './TxPreviewField.vue'
 // @ts-ignore
 import VueJsonPretty from 'vue-json-pretty'
 

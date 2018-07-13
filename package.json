@@ -6,11 +6,11 @@
   "scripts": {
     "postinstall": "yarn build",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib ./src/App.vue",
+    "build": "vue-cli-service build",
     "test": "vue-cli-service test",
     "lint": "vue-cli-service lint",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "proto": "protoc --plugin=\"protoc-gen-ts=node_modules/.bin/protoc-gen-ts\" --js_out=\"import_style=commonjs,binary:.\" --ts_out=\".\" src/pbs/delegatecall/delegatecall_txs.proto"
+    "proto": "protoc --plugin=\"protoc-gen-ts=node_modules/.bin/protoc-gen-ts\" --js_out=\"import_style=commonjs,binary:.\" --ts_out=\".\" src/pbs/*.proto"
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.3",

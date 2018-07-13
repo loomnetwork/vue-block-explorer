@@ -1,12 +1,6 @@
 import Axios from 'axios'
 
-import {
-  extractTxDataFromStr,
-  TxKind,
-  IOneSigTx,
-  IDecodedTx,
-  DelegateCallTx
-} from './transaction-reader'
+import { extractTxDataFromStr, IDecodedTx } from './transaction-reader'
 
 interface IBlockchainStatusResponse {
   result: {
@@ -45,7 +39,7 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
-  data: DelegateCallTx
+  data: IDecodedTx
 }
 
 interface IBlockchainResponse {
@@ -138,6 +132,7 @@ export class Blockchain {
         const { latestBlockHeight } = await this.fetchStatus()
         this.totalNumBlocks = latestBlockHeight
       }
+
       let maxBlocksToFetch = (opts && opts.limit) || 20
       let firstBlockNum = Math.max(this.totalNumBlocks - (maxBlocksToFetch - 1), 1)
       let lastBlockNum = this.totalNumBlocks
@@ -215,8 +210,6 @@ export class Blockchain {
             sender: getTxSender(data.tx),
             data: data.tx
           })
-
-          // }
         } catch (e) {
           console.log(e)
         }
@@ -234,26 +227,11 @@ export function getShortTxHash(longHash: string): string {
   return '0x' + longHash.slice(0, 8)
 }
 
-function getTxType(tx: DelegateCallTx): string {
-  switch (tx.txKind) {
-    case TxKind.PostComment:
-      return tx.kind
-    default:
-      return tx.txKind
-  }
+function getTxType(tx: IDecodedTx): string {
+  return tx.method
 }
 
-function getTxSender(tx: DelegateCallTx): string {
-  switch (tx.txKind) {
-    case TxKind.CreateAccount:
-      return tx.username
-    case TxKind.PostComment:
-      return tx.author
-    case TxKind.AcceptAnswer:
-      return tx.acceptor
-    case TxKind.Vote:
-      return tx.voter
-    default:
-      return 'Unkown'
-  }
+function getTxSender(tx: IDecodedTx): string {
+  // you could use the app user as the sender, please check delegatecall for example
+  return 'default'
 }
