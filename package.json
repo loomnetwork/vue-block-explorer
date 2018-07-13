@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "yarn build",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib ./src/App.vue",
+    "build": "vue-cli-service build",
     "test": "vue-cli-service test",
     "lint": "vue-cli-service lint",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
