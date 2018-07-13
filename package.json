@@ -7,6 +7,7 @@
     "postinstall": "yarn build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "stage": "vue-cli-service build --mode=stage",
     "test": "vue-cli-service test",
     "lint": "vue-cli-service lint",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
