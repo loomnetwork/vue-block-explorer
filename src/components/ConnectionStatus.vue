@@ -5,7 +5,7 @@
         <fa :icon="['far', 'check-circle']" fixed-width v-show="isConnected"/>
         <fa :icon="['far', 'times-circle']" fixed-width v-show="!isConnected"/>
       </b-input-group-prepend>
-      <b-form-input type="text" aria-label="Connection URL" :value="connectionUrl" readonly>
+      <b-form-input type="url" aria-label="Connection URL" :value="connectionUrl" @change="setUrl">
       </b-form-input>
       <b-input-group-append>
         <b-dropdown variant="dark" size="sm">

@@ -1,9 +1,13 @@
 <template>
-  <component :is="viewComponent"
+  <BlockList :blockchain="blockchain"
+             :showConnectionDropdown="showConnectionDropdown"
+             :searchQuery="curSearchQuery"/>
+<!--   <component
+    :is="viewComponent"
     :blockchain="blockchain"
     :showConnectionDropdown="showConnectionDropdown"
     :searchQuery="curSearchQuery">
-  </component>
+  </component> -->
 </template>
 
 <style lang="scss">
@@ -18,6 +22,7 @@
 
 //table
 .blocks-table {
+  width: 100%;
   @include normal-font();
   color: #ffffff;
   thead {
@@ -96,7 +101,7 @@
       font-size: 16px;
       font-weight: 600;
       text-align: center;
-      color: #ffffff;
+      color: #354168;
       line-height: 24px;
       height: 24px;
       &:focus {
@@ -105,7 +110,7 @@
     }
   }
   .active a {
-    background-color: $red2 !important;
+    background-color: $primary !important;
   }
 
   .page-item {

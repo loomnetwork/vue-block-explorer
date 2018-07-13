@@ -1,73 +1,45 @@
 <template>
-  <div id="app">
-    <b-container fluid>
-      <b-row>
-        <b-col cols="12">
-          <BlockExplorer
-            :showConnectionDropdown="true"
-            :defaultUrl="allowedUrls[0]"
-            :allowedUrls="allowedUrls"
-            :searchQuery="searchQuery"/>
-        </b-col>
-      </b-row>
-      <div class="block-search-query d-flex flex-row align-items-center">
-        <fa :icon="['fas', 'search']" class="search-icon text-white" fixed-width/>
-        <label for="sq-block-height" class="height-label text-white">Block Height:</label>
-        <b-form-input id="sq-block-height" class="height-input bg-dark text-white" type="number" v-model="blockHeight"></b-form-input>
-      </div>
-    </b-container>
-  </div>
+  <Layout :showConnectionDropdown="true"
+          :defaultUrl="defaultUrl"
+          :allowedUrls="allowedUrls"/>
 </template>
 
 <style lang="scss">
-  .block-search-query {
-    .search-icon {
-      margin-right: 0.5rem;
-      width: 32px;
-      height: 32px;
-    }
-  
-    .height-label {
-      margin-right: 0.5rem;
-      flex: 0 0 auto;
-    }
-
-    .height-input {
-      flex: 0 0 200px;
-    }
+  body {
+    font-family: 'Open Sans', sans-serif;
   }
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-// @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
-import BlockExplorer from './components/BlockExplorer.vue'
+  import {Component, Vue } from 'vue-property-decorator'
+  import BootstrapVue from 'bootstrap-vue'
+  import FontAwesome from '@fortawesome/fontawesome'
+  import SolidFontAwesome from '@fortawesome/fontawesome-free-solid'
+  import RegularFontAwesome from '@fortawesome/fontawesome-free-regular'
+  import FontAwesomeIcon  from '@fortawesome/vue-fontawesome'
+  // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
+  import Layout from './components/Layout.vue'
 
-import { ISearchQuery } from './components/block-explorer'
-
-@Component({
-  components: {
-    BlockExplorer
-  },
-})
-export default class App extends Vue {
-  allowedUrls = [
-    'https://prodwss2.delegatecall.com',
-    'https://prodwss.delegatecall.com',
-    'https://stagewss.delegatecall.com'
-  ]
-  
-  blockHeight: string | null = null
-
-  get searchQuery(): ISearchQuery {
-    let blockHeight: number | null = null
-    if (this.blockHeight) {
-      blockHeight = parseInt(this.blockHeight, 10)
-      if (!Number.isInteger(blockHeight) || blockHeight < 0) {
-        blockHeight = null
+  FontAwesome.library.add(SolidFontAwesome, RegularFontAwesome)
+  Vue.use(BootstrapVue)
+  Vue.component('fa', FontAwesomeIcon)
+  @Component({
+    components: {
+      Layout
+    }
+  })
+  export default class App extends Vue {
+    allowedUrls = [
+      'https://devwss-dc2.devdc.io'
+    ];
+    defaultUrl = this.allowedUrls[0]
+    mounted(){
+      const customUrl = localStorage.customUrl
+      const isInList = this.allowedUrls.indexOf(customUrl) > -1
+      if(customUrl && !isInList){
+        this.allowedUrls.push(customUrl);
+        this.defaultUrl = customUrl;
       }
     }
-    return { blockHeight }
   }
-}
 </script>

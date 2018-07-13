@@ -28,10 +28,11 @@ interface IBlockListItem {
 })
 export default class BlockList extends Vue {
   @Prop({ required: true }) blockchain!: Blockchain // prettier-ignore
-  @Prop({ default: false }) showConnectionDropdown!: boolean // prettier-ignore
+  @Prop({ default: true }) showConnectionDropdown!: boolean // prettier-ignore
   @Prop({ default: 10 }) blocksPerPage!: number // prettier-ignore
-  @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
+  // @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
 
+  blockHeight: string | null = null
   sortBy = 'blockHeight'
   sortDesc = true
   fields = [
@@ -161,7 +162,9 @@ export default class BlockList extends Vue {
   }
 
   onRowClicked(item: IBlockListItem /*, index: number, event: Event*/) {
-    this.selectItem(item)
+    // this.selectItem(item)
+    // let blockHeight = item.blockHeight;
+    this.showBlock(item.blockHeight)
   }
 
   closeBlockInfoOverlay() {
@@ -176,10 +179,34 @@ export default class BlockList extends Vue {
     }
   }
 
-  @Watch('searchQuery')
-  search(query: ISearchQuery) {
-    if (query.blockHeight) {
-      this.showBlock(query.blockHeight)
+  onUserInputUrl(url: string) {
+    localStorage.customUrl = url
+    this.onConnectionUrlChanged(url)
+  }
+
+  searchQuery(): ISearchQuery {
+    let blockHeight: number | null = null
+    if (this.blockHeight) {
+      blockHeight = parseInt(this.blockHeight, 10)
+      if (!Number.isInteger(blockHeight) || blockHeight < 0) {
+        blockHeight = null
+      }
+    }
+    return { blockHeight }
+  }
+
+  async searchWithBlockHeight() {
+    if (this.blockHeight) {
+      let blockHeight = parseInt(this.blockHeight!)
+      // let block = await this.blockchain.fetchBlock(blockHeight);
+      this.showBlock(blockHeight)
     }
   }
+
+  // @Watch('searchQuery')
+  // search(query: ISearchQuery) {
+  //   if (query.blockHeight) {
+  //     this.showBlock(query.blockHeight)
+  //   }
+  // }
 }

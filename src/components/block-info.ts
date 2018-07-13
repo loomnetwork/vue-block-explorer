@@ -12,6 +12,8 @@ import PostCommentTxPreview from './delegatecall/PostCommentTxPreview.vue'
 import VoteTxPreview from './delegatecall/VoteTxPreview.vue'
 // @ts-ignore
 import AcceptAnswerTxPreview from './delegatecall/AcceptAnswerTxPreview.vue'
+// @ts-ignore
+import DecodedTX from './DecodedTX.vue'
 
 import {
   Blockchain,
