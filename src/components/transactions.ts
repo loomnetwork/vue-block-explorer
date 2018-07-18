@@ -19,8 +19,6 @@ export default Vue.extend({
       blockchain: new Blockchain({
         serverUrl: this.defaultUrl,
         allowedUrls: this.allowedUrls
-        // serverUrl: 'http://127.0.0.1:46657',
-        // allowedUrls: ['http://127.0.0.1:46657']
       })
     }
   },
