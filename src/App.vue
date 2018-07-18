@@ -34,11 +34,30 @@
     ];
     defaultUrl = this.allowedUrls[0]
     mounted(){
+    }
+    beforeMount(){
+      this.getCurrentPRC()
+    }
+
+    getCurrentPRC():void{
+      const sharedURL = this.RPCFromURL;
+      if(sharedURL !== ""){
+        this.defaultUrl = sharedURL;
+        return;
+      }
       const customUrl = localStorage.customUrl
       const isInList = this.allowedUrls.indexOf(customUrl) > -1
       if(customUrl && !isInList){
-        this.allowedUrls.push(customUrl);
+        this.allowedUrls.unshift(customUrl);
         this.defaultUrl = customUrl;
+      }
+    }
+
+    get RPCFromURL():string{
+      try{
+        return window.location.search.split("&")[0].replace("?","").split("=")[1] || ""
+      }catch (e) {
+        return ""
       }
     }
   }
