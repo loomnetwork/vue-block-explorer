@@ -172,16 +172,22 @@ export default class BlockList extends Vue {
   }
 
   onConnectionUrlChanged(newUrl: string) {
+    this.setLocationSearch(newUrl)
     this.blockchain.setServerUrl(newUrl)
     this.currentPage = 1
     if (this.$refs.blocksTable) {
-      ;(this.$refs.blocksTable as any).refresh()
+      (this.$refs.blocksTable as any).refresh()
     }
   }
 
   onUserInputUrl(url:string){
     localStorage.customUrl = url
+    this.setLocationSearch(url)
     this.onConnectionUrlChanged(url)
+  }
+
+  setLocationSearch(url:string){
+    window.location.search = `rpc=${url}`
   }
 
   searchQuery(): ISearchQuery {
