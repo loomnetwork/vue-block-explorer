@@ -22,8 +22,8 @@ export default class ConnectionStatus extends Vue {
     // this comment is just for avoiding empty warn
   }
 
-  @Emit("urlInput")
-  setUrl(url:string){
+  @Emit('urlInput')
+  setUrl(url: string) {
     // this comment is just for avoiding empty warn
   }
 }

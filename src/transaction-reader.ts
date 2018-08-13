@@ -1,17 +1,17 @@
-// @ts-ignore
 import { CryptoUtils } from 'loom-js'
 import {
-  SignedTx,
-  NonceTx,
-  Transaction,
-  MessageTx,
   CallTx,
+  ContractMethodCall,
+  MessageTx,
+  NonceTx,
   Request,
-  ContractMethodCall
+  SignedTx,
+  Transaction
 } from 'loom-js/dist/proto/loom_pb'
 import { MapEntry } from '@/pbs/common_pb'
 
-
+const abiDecoder = require('abi-decoder')
+const CommonABI = require('./abi/SamplePostABI.json')
 export interface ISigned {
   sig: Uint8Array
   pubkey: Uint8Array
@@ -27,7 +27,6 @@ export interface IDecodedTx {
   arrData: Array<any>
 }
 
-
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
   let lastError = Error || null
@@ -42,8 +41,7 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
       lastError = e
     }
   }
-  throw  lastError
-
+  throw lastError
 }
 
 function readTxPayload(i: Uint8Array): IDecodedTx {
@@ -52,10 +50,16 @@ function readTxPayload(i: Uint8Array): IDecodedTx {
   const deTransaction = Transaction.deserializeBinary(deNonceTx.toArray()[0])
   const deMessageTx = MessageTx.deserializeBinary(deTransaction.toArray()[1])
   const deCallTx = CallTx.deserializeBinary(deMessageTx.toArray()[2])
-  const deRequest = Request.deserializeBinary(deCallTx.toArray()[1])
-  const deContractMethodCall = ContractMethodCall.deserializeBinary(deRequest.toArray()[2])
-  let txArrData = readProtoData(deContractMethodCall)
-  return txArrData
+  try {
+    const deRequest = Request.deserializeBinary(deCallTx.toArray()[1])
+    const deContractMethodCall = ContractMethodCall.deserializeBinary(deRequest.toArray()[2])
+    return readProtoData(deContractMethodCall)
+  } catch (e) {
+    abiDecoder.addABI(CommonABI)
+    const txData = deCallTx.toArray()[1]
+    // @ts-ignore
+    return readABIData(CryptoUtils.bytesToHex(txData))
+  }
 }
 
 function readProtoData(cmc: ContractMethodCall): IDecodedTx {
@@ -65,6 +69,11 @@ function readProtoData(cmc: ContractMethodCall): IDecodedTx {
   return { method: methodName, arrData: txStringArrData }
 }
 
+function readABIData(hex: object): IDecodedTx {
+  const txRawStr = ('0x' + hex).toLowerCase()
+  let decodedData = abiDecoder.decodeMethod(txRawStr)
+  return { method: decodedData.name, arrData: decodedData.params }
+}
 
 function readTxSignature(i: Uint8Array): ISigned {
   const deSignedTx = SignedTx.deserializeBinary(i)
