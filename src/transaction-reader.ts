@@ -11,6 +11,7 @@ import {
   VMType
 } from 'loom-js/dist/proto/loom_pb'
 import { MapEntry } from '@/pbs/common_pb'
+import { sha256 } from 'js-sha256'
 
 export interface ISigned {
   sig: Uint8Array
@@ -20,7 +21,7 @@ export interface ISigned {
 export interface IOneSigTx {
   tx: IDecodedTx
   signed: ISigned
-  txHash: Uint8Array
+  txHash: string
 }
 
 export interface IDecodedTx {
@@ -33,9 +34,10 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
   let lastError = Error || null
   try {
-    const sig = readTxSignature(pbBuf)
-    const payload = readTxPayload(pbBuf)
-    return { tx: payload, signed: sig, txHash: new Buffer(pbBuf.subarray(0, 20)) }
+    const signed = readTxSignature(pbBuf)
+    const tx = readTxPayload(pbBuf)
+    const txHash = sha256(pbBuf.subarray(0, 20))
+    return { tx, signed, txHash }
   } catch (e) {
     if (e instanceof Error) {
       throw lastError

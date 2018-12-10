@@ -3,7 +3,6 @@ import Axios from 'axios'
 import { extractTxDataFromStr, IDecodedTx } from './transaction-reader'
 import { Client, CryptoUtils } from 'loom-js'
 import { VMType } from 'loom-js/dist/proto/loom_pb'
-import { sha256 } from 'js-sha256'
 import { Uint8ArrayToB64 } from 'loom-js/dist/crypto-utils'
 
 interface IBlockchainStatusResponse {
@@ -218,20 +217,17 @@ export class Blockchain {
       for (let i = 0; i < rawTxs.length; i++) {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
-          const txHash = `0x${sha256(data.txHash)}`
           let txData
 
           if (data.tx.vmType == VMType.EVM) {
-            const evmHash: Uint8Array = Buffer.from(txHash.slice(2), 'hex')
-            console.log('evmHash', txHash)
+            const evmHash: Uint8Array = Buffer.from(data.txHash, 'hex')
             txData = await this.client.getEvmTxReceiptAsync(evmHash)
-            console.log('txData', txData)
           } else {
             txData = data.tx
           }
 
           block.txs.push({
-            hash: txHash,
+            hash: data.txHash,
             blockHeight: block.height,
             txType: getTxType(data.tx),
             time: block.time,
