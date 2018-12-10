@@ -1,6 +1,10 @@
 import Axios from 'axios'
 
 import { extractTxDataFromStr, IDecodedTx } from './transaction-reader'
+import { Client, CryptoUtils } from 'loom-js'
+import { VMType } from 'loom-js/dist/proto/loom_pb'
+import { sha256 } from 'js-sha256'
+import { Uint8ArrayToB64 } from 'loom-js/dist/crypto-utils'
 
 interface IBlockchainStatusResponse {
   result: {
@@ -39,6 +43,7 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
+  vmType: number
   data: IDecodedTx
 }
 
@@ -53,6 +58,8 @@ interface IBlockResponse {
   result: {
     last_height: number
     block_meta: IBlockchainBlockMeta
+    // TODO: Need a better type
+    block: any
   }
 }
 
@@ -68,10 +75,19 @@ export class Blockchain {
   transactions: IBlockchainTransaction[] = []
   totalNumBlocks: number = 0
   refreshTimer: number | null = null
+  client: Client
 
   constructor(params: { serverUrl: string; allowedUrls: string[] }) {
     this.serverUrl = params.serverUrl
     this.allowedUrls = params.allowedUrls
+    const tmpUrl = new URL(this.serverUrl)
+
+    // TODO: Get this values from user interface
+    this.client = new Client(
+      'default',
+      'ws://127.0.0.1:46658/websocket',
+      'ws://127.0.0.1:46658/queryws'
+    )
   }
 
   dispose() {
@@ -202,13 +218,26 @@ export class Blockchain {
       for (let i = 0; i < rawTxs.length; i++) {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
+          const txHash = `0x${sha256(data.txHash)}`
+          let txData
+
+          if (data.tx.vmType == VMType.EVM) {
+            const evmHash: Uint8Array = Buffer.from(txHash.slice(2), 'hex')
+            console.log('evmHash', txHash)
+            txData = await this.client.getEvmTxReceiptAsync(evmHash)
+            console.log('txData', txData)
+          } else {
+            txData = data.tx
+          }
+
           block.txs.push({
-            hash: new Buffer(data.signed.sig).toString('hex'),
+            hash: txHash,
             blockHeight: block.height,
             txType: getTxType(data.tx),
             time: block.time,
             sender: getTxSender(data.tx),
-            data: data.tx
+            vmType: data.tx.vmType,
+            data: txData
           })
         } catch (e) {
           console.log(e)

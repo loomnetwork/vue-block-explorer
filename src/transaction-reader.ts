@@ -7,10 +7,10 @@ import {
   MessageTx,
   CallTx,
   Request,
-  ContractMethodCall
+  ContractMethodCall,
+  VMType
 } from 'loom-js/dist/proto/loom_pb'
 import { MapEntry } from '@/pbs/common_pb'
-
 
 export interface ISigned {
   sig: Uint8Array
@@ -20,13 +20,14 @@ export interface ISigned {
 export interface IOneSigTx {
   tx: IDecodedTx
   signed: ISigned
+  txHash: Uint8Array
 }
 
 export interface IDecodedTx {
   method: string
   arrData: Array<any>
+  vmType: VMType
 }
-
 
 export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
@@ -34,7 +35,7 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   try {
     const sig = readTxSignature(pbBuf)
     const payload = readTxPayload(pbBuf)
-    return { tx: payload, signed: sig }
+    return { tx: payload, signed: sig, txHash: new Buffer(pbBuf.subarray(0, 20)) }
   } catch (e) {
     if (e instanceof Error) {
       throw lastError
@@ -42,8 +43,7 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
       lastError = e
     }
   }
-  throw  lastError
-
+  throw lastError
 }
 
 function readTxPayload(i: Uint8Array): IDecodedTx {
@@ -54,17 +54,16 @@ function readTxPayload(i: Uint8Array): IDecodedTx {
   const deCallTx = CallTx.deserializeBinary(deMessageTx.toArray()[2])
   const deRequest = Request.deserializeBinary(deCallTx.toArray()[1])
   const deContractMethodCall = ContractMethodCall.deserializeBinary(deRequest.toArray()[2])
-  let txArrData = readProtoData(deContractMethodCall)
+  let txArrData = readProtoData(deContractMethodCall, deCallTx.getVmType())
   return txArrData
 }
 
-function readProtoData(cmc: ContractMethodCall): IDecodedTx {
+function readProtoData(cmc: ContractMethodCall, vmType: VMType): IDecodedTx {
   const methodName = cmc.toObject().method
   const txData = MapEntry.deserializeBinary(cmc.toArray()[1])
   const txStringArrData = txData.toArray()
-  return { method: methodName, arrData: txStringArrData }
+  return { method: methodName, arrData: txStringArrData, vmType }
 }
-
 
 function readTxSignature(i: Uint8Array): ISigned {
   const deSignedTx = SignedTx.deserializeBinary(i)
