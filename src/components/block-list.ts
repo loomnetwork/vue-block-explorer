@@ -181,15 +181,6 @@ export default class BlockList extends Vue {
     }
   }
 
-  onConnectionWSChanged(WS: string) {
-    this.setLocationSearch(WS)
-    this.blockchain.setServerWS(WS)
-    this.currentPage = 1
-    if (this.$refs.blocksTable) {
-      ;(this.$refs.blocksTable as any).refresh()
-    }
-  }
-
   onUserInputUrl(url: string) {
     localStorage.customUrl = url
     this.setLocationSearch(url)

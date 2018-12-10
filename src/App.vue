@@ -1,11 +1,5 @@
 <template>
-  <Layout
-    :showConnectionDropdown="true"
-    :defaultUrl="defaultUrl"
-    :allowedUrls="allowedUrls"
-    :defaultWS="defaultWS"
-    :allowedWSs="allowedWSs"
-  />
+  <Layout :showConnectionDropdown="true" :defaultUrl="defaultUrl" :allowedUrls="allowedUrls"/>
 </template>
 
 <style lang="scss">
@@ -23,7 +17,6 @@ import RegularFontAwesome from '@fortawesome/fontawesome-free-regular'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 // @ts-ignore: Work around for https://github.com/Toilal/vue-webpack-template/issues/62
 import Layout from './components/Layout.vue'
-
 FontAwesome.library.add(SolidFontAwesome, RegularFontAwesome)
 Vue.use(BootstrapVue)
 Vue.component('fa', FontAwesomeIcon)
@@ -33,15 +26,12 @@ Vue.component('fa', FontAwesomeIcon)
   }
 })
 export default class App extends Vue {
-  allowedUrls = ['http://127.0.0.1:46657']
-  allowedWSs = ['ws://127.0.0.1:46658']
+  allowedUrls = ['http://127.0.0.1:46658']
   defaultUrl = this.allowedUrls[0]
-  defaultWS = this.allowedWSs[0]
   mounted() {}
   beforeMount() {
     this.getCurrentPRC()
   }
-
   getCurrentPRC(): void {
     const sharedURL = this.RPCFromURL
     if (sharedURL !== '') {
@@ -55,7 +45,6 @@ export default class App extends Vue {
       this.defaultUrl = customUrl
     }
   }
-
   get RPCFromURL(): string {
     try {
       return (

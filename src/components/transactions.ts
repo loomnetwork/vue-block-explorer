@@ -7,7 +7,7 @@
 //   block: IBlockchainBlock
 // }
 
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Vue } from 'vue-property-decorator'
 // @ts-ignore
 import TransactionList from './TransactionList.vue'
 import { Blockchain } from '../blockchain'
@@ -18,14 +18,12 @@ export default Vue.extend({
     return {
       blockchain: new Blockchain({
         serverUrl: this.defaultUrl,
-        allowedUrls: this.allowedUrls,
-        serverWS: this.defaultWS,
-        allowedWSs: this.allowedWSs
+        allowedUrls: this.allowedUrls
       })
     }
   },
   components: {
     TransactionList
   },
-  props: ['defaultUrl', 'allowedUrls', 'allowedWSs', 'defaultWS']
+  props: ['defaultUrl', 'allowedUrls']
 })

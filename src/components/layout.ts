@@ -25,9 +25,7 @@ import ISearchQuery from 'block-explorer'
   props: {
     showConnectionDropdown: Boolean,
     defaultUrl: String,
-    defaultWS: String,
-    allowedUrls: Array,
-    allowedWSs: Array
+    allowedUrls: Array
   }
 })
 export default class Layout extends Vue {

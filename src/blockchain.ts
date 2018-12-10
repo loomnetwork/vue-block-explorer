@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
 import { extractTxDataFromStr, IDecodedTx } from './transaction-reader'
-import { Client, CryptoUtils } from 'loom-js'
+import { Client, CryptoUtils, createJSONRPCClient } from 'loom-js'
 import { VMType, DeployResponse, DeployResponseData } from 'loom-js/dist/proto/loom_pb'
 import { EvmTxReceipt } from 'loom-js/dist/proto/evm_pb'
 import {
@@ -97,9 +97,7 @@ export interface IBlockchainStatus {
 
 export class Blockchain {
   serverUrl: string
-  serverWS: string
   allowedUrls: string[]
-  allowedWSs: string[]
   isConnected: boolean = false
   blocks: IBlockchainBlock[] = []
   transactions: IBlockchainTransaction[] = []
@@ -107,21 +105,15 @@ export class Blockchain {
   refreshTimer: number | null = null
   client: Client
 
-  constructor(params: {
-    serverUrl: string
-    serverWS: string
-    allowedWSs: string[]
-    allowedUrls: string[]
-  }) {
+  constructor(params: { serverUrl: string; allowedUrls: string[] }) {
     this.serverUrl = params.serverUrl
     this.allowedUrls = params.allowedUrls
-    this.serverWS = params.serverWS
-    this.allowedWSs = params.allowedWSs
 
-    console.log(params)
+    const writer = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/rpc` }] })
+    const reader = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/query` }] })
 
-    // TODO: Get this values from user interface
-    this.client = new Client('default', `${this.serverWS}/websocket`, `${this.serverWS}/queryws`)
+    // TODO: Get chain id from UI
+    this.client = new Client('default', writer, reader)
   }
 
   dispose() {
@@ -132,17 +124,6 @@ export class Blockchain {
     if (this.serverUrl !== newUrl) {
       this.clearRefreshTimer()
       this.serverUrl = newUrl
-      this.isConnected = false
-      this.blocks = []
-      this.transactions = []
-      this.totalNumBlocks = 0
-    }
-  }
-
-  setServerWS(newWS: string) {
-    if (this.serverUrl !== newWS) {
-      this.clearRefreshTimer()
-      this.serverWS = newWS
       this.isConnected = false
       this.blocks = []
       this.transactions = []
@@ -167,7 +148,7 @@ export class Blockchain {
   }
 
   async fetchStatus(): Promise<IBlockchainStatus> {
-    const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/status`)
+    const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/rpc/status`)
     const latestBlockHeight = statusResp.data.result.sync_info.latest_block_height
     this.totalNumBlocks = latestBlockHeight
     return { latestBlockHeight }
@@ -205,7 +186,7 @@ export class Blockchain {
         firstBlockNum = Math.max(opts.maxHeight - (maxBlocksToFetch - 1), 0)
         lastBlockNum = opts.maxHeight
       }
-      const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/blockchain`, {
+      const chainResp = await Axios.get<IBlockchainResponse>(`${this.serverUrl}/rpc/blockchain`, {
         params: {
           minHeight: firstBlockNum,
           maxHeight: lastBlockNum
@@ -233,7 +214,7 @@ export class Blockchain {
   }
 
   async fetchBlock(blockHeight: number): Promise<IBlockchainBlock> {
-    const chainResp = await Axios.get<IBlockResponse>(`${this.serverUrl}/block`, {
+    const chainResp = await Axios.get<IBlockResponse>(`${this.serverUrl}/rpc/block`, {
       params: { height: blockHeight }
     })
     const meta = chainResp.data.result.block_meta
@@ -290,7 +271,7 @@ export class Blockchain {
   }
 
   async fetchEVMTxDetails(txHash: string): Promise<IEvmTxDetails> {
-    const txResp = await Axios.get<any>(`${this.serverUrl}/tx`, {
+    const txResp = await Axios.get<any>(`${this.serverUrl}/rpc/tx`, {
       params: { hash: `0x${txHash}` }
     })
 
@@ -326,7 +307,7 @@ export class Blockchain {
     }
     try {
       block.isFetchingTxs = true
-      const blockResp = await Axios.get<any>(`${this.serverUrl}/block`, {
+      const blockResp = await Axios.get<any>(`${this.serverUrl}/rpc/block`, {
         params: { height: block.height }
       })
       const rawTxs: any[] = blockResp.data.result.block.data.txs
