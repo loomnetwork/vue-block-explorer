@@ -96,6 +96,7 @@ export interface IBlockchainStatus {
 }
 
 export class Blockchain {
+  chainID: string
   serverUrl: string
   allowedUrls: string[]
   isConnected: boolean = false
@@ -105,25 +106,43 @@ export class Blockchain {
   refreshTimer: number | null = null
   client: Client
 
-  constructor(params: { serverUrl: string; allowedUrls: string[] }) {
+  constructor(params: { chainID: string; serverUrl: string; allowedUrls: string[] }) {
+    this.chainID = params.chainID
     this.serverUrl = params.serverUrl
     this.allowedUrls = params.allowedUrls
-
-    const writer = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/rpc` }] })
-    const reader = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/query` }] })
-
-    // TODO: Get chain id from UI
-    this.client = new Client('default', writer, reader)
+    this.startClientConnection()
   }
 
   dispose() {
     this.clearRefreshTimer()
   }
 
+  async startClientConnection() {
+    const writer = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/rpc` }] })
+    const reader = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/query` }] })
+    console.log('connTest', this.chainID)
+    if (this.client) {
+      this.client.disconnect()
+    }
+    this.client = new Client(this.chainID, writer, reader)
+  }
+
   setServerUrl(newUrl: string) {
     if (this.serverUrl !== newUrl) {
       this.clearRefreshTimer()
       this.serverUrl = newUrl
+      this.isConnected = false
+      this.blocks = []
+      this.transactions = []
+      this.totalNumBlocks = 0
+    }
+  }
+
+  setChainID(chainID: string) {
+    if (this.chainID !== chainID) {
+      this.chainID = chainID
+      this.clearRefreshTimer()
+      this.startClientConnection()
       this.isConnected = false
       this.blocks = []
       this.transactions = []

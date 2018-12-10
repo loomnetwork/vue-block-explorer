@@ -1,5 +1,10 @@
 <template>
-  <Layout :showConnectionDropdown="true" :defaultUrl="defaultUrl" :allowedUrls="allowedUrls"/>
+  <Layout
+    :showConnectionDropdown="true"
+    :defaultChainID="defaultChainID"
+    :defaultUrl="defaultUrl"
+    :allowedUrls="allowedUrls"
+  />
 </template>
 
 <style lang="scss">
@@ -26,6 +31,7 @@ Vue.component('fa', FontAwesomeIcon)
   }
 })
 export default class App extends Vue {
+  defaultChainID = 'default'
   allowedUrls = ['http://127.0.0.1:46658']
   defaultUrl = this.allowedUrls[0]
   mounted() {}

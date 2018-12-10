@@ -9,6 +9,7 @@
             <component
               :is="activeComponent"
               :showConnectionDropdown="showConnectionDropdown"
+              :defaultChainID="defaultChainID"
               :defaultUrl="defaultUrl"
               :allowedUrls="allowedUrls"
               :searchQuery="searchQuery"

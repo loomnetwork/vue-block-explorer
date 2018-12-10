@@ -181,10 +181,23 @@ export default class BlockList extends Vue {
     }
   }
 
+  onChainIDChanged(newChainID: string) {
+    this.blockchain.setChainID(newChainID)
+    this.currentPage = 1
+    if (this.$refs.blocksTable) {
+      ;(this.$refs.blocksTable as any).refresh()
+    }
+  }
+
   onUserInputUrl(url: string) {
     localStorage.customUrl = url
     this.setLocationSearch(url)
     this.onConnectionUrlChanged(url)
+  }
+
+  onUserInputChainID(chainID: string) {
+    localStorage.chainID = chainID
+    this.onChainIDChanged(chainID)
   }
 
   setLocationSearch(url: string) {

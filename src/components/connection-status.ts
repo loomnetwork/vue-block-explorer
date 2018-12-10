@@ -13,6 +13,10 @@ export default class ConnectionStatus extends Vue {
     return this.blockchain.allowedUrls
   }
 
+  get chainID() {
+    return 'default'
+  }
+
   get isConnected(): boolean {
     return this.blockchain.isConnected
   }
@@ -24,6 +28,11 @@ export default class ConnectionStatus extends Vue {
 
   @Emit('urlInput')
   setUrl(url: string) {
+    // this comment is just for avoiding empty warn
+  }
+
+  @Emit('chainIDInput')
+  setChainID(url: string) {
     // this comment is just for avoiding empty warn
   }
 }

@@ -25,6 +25,7 @@ import ISearchQuery from 'block-explorer'
   props: {
     showConnectionDropdown: Boolean,
     defaultUrl: String,
+    defaultChainID: String,
     allowedUrls: Array
   }
 })

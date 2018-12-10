@@ -63,6 +63,7 @@
                 :blockchain="blockchain"
                 @urlClicked="onConnectionUrlChanged"
                 @urlInput="onUserInputUrl"
+                @chainIDInput="onUserInputChainID"
               />
 
               <b-pagination
