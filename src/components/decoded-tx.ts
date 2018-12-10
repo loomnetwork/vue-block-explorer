@@ -33,15 +33,19 @@ export default class DecodedTx extends Vue {
     let jsonData = txValueData
     // if can be parsed to json, then parse it, if not just return raw data
     try {
-      jsonData = JSON.parse(txValueData.toString())
+      jsonData = txValueData.map(v => v)
     } catch (e) {
-      console.log('this is not a valid JSON data')
+      console.error('this is not a valid JSON data', e.message)
     }
     return jsonData
   }
 
   get txMethod(): string {
     return this.tx.method
+  }
+
+  get isEVM(): Boolean {
+    return this.tx.method.endsWith('evm')
   }
 }
 

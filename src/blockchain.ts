@@ -2,8 +2,16 @@ import Axios from 'axios'
 
 import { extractTxDataFromStr, IDecodedTx } from './transaction-reader'
 import { Client, CryptoUtils } from 'loom-js'
-import { VMType } from 'loom-js/dist/proto/loom_pb'
-import { Uint8ArrayToB64 } from 'loom-js/dist/crypto-utils'
+import { VMType, DeployResponse, DeployResponseData } from 'loom-js/dist/proto/loom_pb'
+import { EvmTxReceipt } from 'loom-js/dist/proto/evm_pb'
+import {
+  Uint8ArrayToB64,
+  B64ToUint8Array,
+  bytesToHex,
+  bufferToProtobufBytes,
+  bytesToHexAddr,
+  numberToHex
+} from 'loom-js/dist/crypto-utils'
 
 interface IBlockchainStatusResponse {
   result: {
@@ -24,6 +32,28 @@ interface IBlockchainBlockMeta {
   }
 }
 
+interface IEthReceipt {
+  transactionHash: string
+  transactionIndex: string
+  blockHash: string
+  blockNumber: string
+  gasUsed: string
+  cumulativeGasUsed: string
+  contractAddress: string
+  logs: Array<any>
+  status: string
+}
+
+interface IEvmTxDetails {
+  type: string
+  receipt: Array<any>
+}
+
+enum EVMCall {
+  DeployEVM = 'deploy.evm',
+  CallEVM = 'call.evm'
+}
+
 export interface IBlockchainBlock {
   hash: string
   height: number
@@ -42,7 +72,6 @@ export interface IBlockchainTransaction {
   txType: string
   time: string
   sender: string
-  vmType: number
   data: IDecodedTx
 }
 
@@ -68,7 +97,9 @@ export interface IBlockchainStatus {
 
 export class Blockchain {
   serverUrl: string
+  serverWS: string
   allowedUrls: string[]
+  allowedWSs: string[]
   isConnected: boolean = false
   blocks: IBlockchainBlock[] = []
   transactions: IBlockchainTransaction[] = []
@@ -76,17 +107,21 @@ export class Blockchain {
   refreshTimer: number | null = null
   client: Client
 
-  constructor(params: { serverUrl: string; allowedUrls: string[] }) {
+  constructor(params: {
+    serverUrl: string
+    serverWS: string
+    allowedWSs: string[]
+    allowedUrls: string[]
+  }) {
     this.serverUrl = params.serverUrl
     this.allowedUrls = params.allowedUrls
-    const tmpUrl = new URL(this.serverUrl)
+    this.serverWS = params.serverWS
+    this.allowedWSs = params.allowedWSs
+
+    console.log(params)
 
     // TODO: Get this values from user interface
-    this.client = new Client(
-      'default',
-      'ws://127.0.0.1:46658/websocket',
-      'ws://127.0.0.1:46658/queryws'
-    )
+    this.client = new Client('default', `${this.serverWS}/websocket`, `${this.serverWS}/queryws`)
   }
 
   dispose() {
@@ -97,6 +132,17 @@ export class Blockchain {
     if (this.serverUrl !== newUrl) {
       this.clearRefreshTimer()
       this.serverUrl = newUrl
+      this.isConnected = false
+      this.blocks = []
+      this.transactions = []
+      this.totalNumBlocks = 0
+    }
+  }
+
+  setServerWS(newWS: string) {
+    if (this.serverUrl !== newWS) {
+      this.clearRefreshTimer()
+      this.serverWS = newWS
       this.isConnected = false
       this.blocks = []
       this.transactions = []
@@ -203,6 +249,77 @@ export class Blockchain {
     return block
   }
 
+  private _createReceiptResult(receipt: EvmTxReceipt): IEthReceipt {
+    const transactionHash = bytesToHexAddrLC(receipt.getTxHash_asU8())
+    const transactionIndex = numberToHexLC(receipt.getTransactionIndex())
+    const blockHash = bytesToHexAddrLC(receipt.getBlockHash_asU8())
+    const blockNumber = numberToHexLC(receipt.getBlockNumber())
+    const contractAddress = bytesToHexAddrLC(receipt.getContractAddress_asU8())
+    const logs = receipt.getLogsList().map((logEvent: any, index: number) => {
+      const logIndex = numberToHexLC(index)
+      let data = bytesToHexAddrLC(logEvent.getEncodedBody_asU8())
+
+      if (data === '0x') {
+        data = '0x0'
+      }
+
+      return {
+        logIndex,
+        address: contractAddress,
+        blockHash,
+        blockNumber,
+        transactionHash: bytesToHexAddrLC(logEvent.getTxHash_asU8()),
+        transactionIndex,
+        type: 'mined',
+        data,
+        topics: logEvent.getTopicsList().map((topic: string) => topic.toLowerCase())
+      }
+    })
+
+    return {
+      transactionHash,
+      transactionIndex,
+      blockHash,
+      blockNumber,
+      contractAddress,
+      gasUsed: numberToHexLC(receipt.getGasUsed()),
+      cumulativeGasUsed: numberToHexLC(receipt.getCumulativeGasUsed()),
+      logs,
+      status: numberToHexLC(receipt.getStatus())
+    } as IEthReceipt
+  }
+
+  async fetchEVMTxDetails(txHash: string): Promise<IEvmTxDetails> {
+    const txResp = await Axios.get<any>(`${this.serverUrl}/tx`, {
+      params: { hash: `0x${txHash}` }
+    })
+
+    const { tx_result } = txResp.data.result
+    let loomEVMtxHash: Uint8Array
+
+    // If is a deploy rather than a call need to inspect into protobuf
+    if (tx_result.info == EVMCall.DeployEVM) {
+      const deployResponse = DeployResponse.deserializeBinary(B64ToUint8Array(tx_result.data))
+      const deployResponseData = DeployResponseData.deserializeBinary(
+        deployResponse.getOutput_asU8()
+      )
+      loomEVMtxHash = deployResponseData.getTxHash_asU8()
+    } else {
+      loomEVMtxHash = B64ToUint8Array(tx_result.data)
+    }
+
+    const evmTxReceiptResp = await this.client.getEvmTxReceiptAsync(loomEVMtxHash)
+    const evmTxReceipt = this._createReceiptResult(evmTxReceiptResp!)
+
+    // Turn into already used structure for key/value
+    const evmTxReceiptArray = Object.keys(evmTxReceipt).map((key: string) => ({
+      key,
+      value: (evmTxReceipt as any)[key]
+    }))
+
+    return { type: tx_result.info, receipt: evmTxReceiptArray }
+  }
+
   async fetchTxsInBlock(block: IBlockchainBlock) {
     if (block.numTxs === 0 || block.isFetchingTxs || block.didFetchTxs) {
       return
@@ -217,31 +334,39 @@ export class Blockchain {
       for (let i = 0; i < rawTxs.length; i++) {
         try {
           const data = extractTxDataFromStr(rawTxs[i])
-          let txData
+          let txData = {} as IDecodedTx
+          let txType = ''
 
           if (data.tx.vmType == VMType.EVM) {
-            const evmHash: Uint8Array = Buffer.from(data.txHash, 'hex')
-            txData = await this.client.getEvmTxReceiptAsync(evmHash)
+            const evmTxDetails = await this.fetchEVMTxDetails(data.txHash)
+
+            if (!evmTxDetails) {
+              throw Error('Cannot retrieve EVM tx details')
+            }
+
+            txData.method = evmTxDetails.type
+            txData.arrData = evmTxDetails.receipt
+            txType = evmTxDetails.type
           } else {
             txData = data.tx
+            txType = getTxType(data.tx)
           }
 
           block.txs.push({
             hash: data.txHash,
             blockHeight: block.height,
-            txType: getTxType(data.tx),
+            txType,
             time: block.time,
             sender: getTxSender(data.tx),
-            vmType: data.tx.vmType,
             data: txData
           })
         } catch (e) {
-          console.log(e)
+          console.error(e)
         }
       }
       block.didFetchTxs = true
     } catch (e) {
-      console.log(e)
+      console.error(e)
     } finally {
       block.isFetchingTxs = false
     }
@@ -259,4 +384,12 @@ function getTxType(tx: IDecodedTx): string {
 function getTxSender(tx: IDecodedTx): string {
   // you could use the app user as the sender, please check delegatecall for example
   return 'default'
+}
+
+function bytesToHexAddrLC(bytes: Uint8Array): string {
+  return bytesToHexAddr(bytes).toLowerCase()
+}
+
+function numberToHexLC(num: number): string {
+  return numberToHex(num).toLowerCase()
 }

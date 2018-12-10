@@ -18,12 +18,14 @@ export default Vue.extend({
     return {
       blockchain: new Blockchain({
         serverUrl: this.defaultUrl,
-        allowedUrls: this.allowedUrls
+        allowedUrls: this.allowedUrls,
+        serverWS: this.defaultWS,
+        allowedWSs: this.allowedWSs
       })
     }
   },
   components: {
     TransactionList
   },
-  props: ['defaultUrl', 'allowedUrls']
+  props: ['defaultUrl', 'allowedUrls', 'allowedWSs', 'defaultWS']
 })

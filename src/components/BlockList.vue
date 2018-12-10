@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative">
+  <div class="position-relative mb-5">
     <div>
       <b-row class="block-heading">
         <b-col>
@@ -64,6 +64,7 @@
                 @urlClicked="onConnectionUrlChanged"
                 @urlInput="onUserInputUrl"
               />
+
               <b-pagination
                 v-model="currentPage"
                 size="sm"

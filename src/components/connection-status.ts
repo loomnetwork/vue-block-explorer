@@ -9,8 +9,20 @@ export default class ConnectionStatus extends Vue {
     return this.blockchain.serverUrl
   }
 
+  get connectionWS() {
+    return this.blockchain.serverWS
+  }
+
+  get chainId() {
+    return 'default'
+  }
+
   get allowedUrls(): string[] {
     return this.blockchain.allowedUrls
+  }
+
+  get allowedWSs(): string[] {
+    return this.blockchain.allowedWSs
   }
 
   get isConnected(): boolean {
@@ -22,8 +34,18 @@ export default class ConnectionStatus extends Vue {
     // this comment is just for avoiding empty warn
   }
 
-  @Emit("urlInput")
-  setUrl(url:string){
+  @Emit('urlInput')
+  setUrl(url: string) {
+    // this comment is just for avoiding empty warn
+  }
+
+  @Emit('wsInput')
+  setWS(ws: string) {
+    // this comment is just for avoiding empty warn
+  }
+
+  @Emit('chainIdInput')
+  setChainId(ws: string) {
     // this comment is just for avoiding empty warn
   }
 }

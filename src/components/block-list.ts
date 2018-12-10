@@ -39,8 +39,8 @@ export default class BlockList extends Vue {
     { key: 'blockHeight', label: 'Block', sortable: true },
     { key: 'hash', label: 'Hash', sortable: true },
     { key: 'age', sortable: true },
-    { key: 'time', sortable: true },
-    { key: 'numTransactions', label: 'Tx#', sortable: true }
+    { key: 'time', sortable: true }
+    // { key: 'numTransactions', label: 'Tx#', sortable: true }
   ]
   muted = 'gray'
   selectedItem: IBlockListItem | null = null
@@ -112,7 +112,7 @@ export default class BlockList extends Vue {
         block
       }))
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
 
     if (autoFetch) {
@@ -175,6 +175,15 @@ export default class BlockList extends Vue {
   onConnectionUrlChanged(newUrl: string) {
     this.setLocationSearch(newUrl)
     this.blockchain.setServerUrl(newUrl)
+    this.currentPage = 1
+    if (this.$refs.blocksTable) {
+      ;(this.$refs.blocksTable as any).refresh()
+    }
+  }
+
+  onConnectionWSChanged(WS: string) {
+    this.setLocationSearch(WS)
+    this.blockchain.setServerWS(WS)
     this.currentPage = 1
     if (this.$refs.blocksTable) {
       ;(this.$refs.blocksTable as any).refresh()
