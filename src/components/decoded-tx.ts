@@ -48,7 +48,3 @@ export default class DecodedTx extends Vue {
     return this.tx.method.endsWith('evm')
   }
 }
-
-function getBaseUrl() {
-  return 'https://delegatecall.com'
-}

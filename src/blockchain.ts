@@ -71,6 +71,7 @@ export interface IBlockchainTransaction {
   blockHeight: number
   txType: string
   time: string
+  evmDelayedCall?: Function | null
   sender: string
   data: IDecodedTx
 }
@@ -336,17 +337,21 @@ export class Blockchain {
           const data = extractTxDataFromStr(rawTxs[i])
           let txData = {} as IDecodedTx
           let txType = ''
+          let evmDelayedCall = null
 
-          if (data.tx.vmType == VMType.EVM) {
-            const evmTxDetails = await this.fetchEVMTxDetails(data.txHash)
+          if (data.tx.vmType === VMType.EVM) {
+            evmDelayedCall = async () => {
+              const evmTxDetails = await this.fetchEVMTxDetails(data.txHash)
 
-            if (!evmTxDetails) {
-              throw Error('Cannot retrieve EVM tx details')
+              if (!evmTxDetails) {
+                throw Error('Cannot retrieve EVM tx details')
+              }
+
+              txData.method = evmTxDetails.type
+              txData.arrData = evmTxDetails.receipt
             }
 
-            txData.method = evmTxDetails.type
-            txData.arrData = evmTxDetails.receipt
-            txType = evmTxDetails.type
+            txType = 'EVM Call'
           } else {
             txData = data.tx
             txType = getTxType(data.tx)
@@ -357,6 +362,7 @@ export class Blockchain {
             blockHeight: block.height,
             txType,
             time: block.time,
+            evmDelayedCall,
             sender: getTxSender(data.tx),
             data: txData
           })
