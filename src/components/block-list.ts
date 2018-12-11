@@ -39,8 +39,8 @@ export default class BlockList extends Vue {
     { key: 'blockHeight', label: 'Block', sortable: true },
     { key: 'hash', label: 'Hash', sortable: true },
     { key: 'age', sortable: true },
-    { key: 'time', sortable: true },
-    { key: 'numTransactions', label: 'Tx#', sortable: true }
+    { key: 'time', sortable: true }
+    // { key: 'numTransactions', label: 'Tx#', sortable: true }
   ]
   muted = 'gray'
   selectedItem: IBlockListItem | null = null

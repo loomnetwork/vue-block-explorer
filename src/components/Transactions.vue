@@ -1,11 +1,9 @@
 <template>
-	<TransactionList :blockchain="blockchain"/>
+  <TransactionList :blockchain="blockchain"/>
 </template>
 
 <style lang="scss" scoped>
-
-  @import '~@/styles/app.scss';
-
+@import '~@/styles/app.scss';
 </style>
 
 <script lang="ts" src="./transactions.ts"></script>

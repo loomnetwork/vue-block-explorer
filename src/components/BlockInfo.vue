@@ -9,7 +9,8 @@
       <component :is="txInfoComponent" :tx="selectedTx.data"/>
     </div>
     <div v-if="!isLoading && !selectedTx">
-      <div v-if="block" class="text-muted">On
+      <div v-if="block" class="text-muted">
+        On
         <span class="time-tamp">{{blockTimestamp }}</span>
       </div>
       <div v-if="isVerified" class="text-muted d-flex flex-row align-items-center">

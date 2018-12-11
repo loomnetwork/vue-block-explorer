@@ -1,4 +1,4 @@
-import { Component, Prop, Vue, Watch, Emit } from 'vue-property-decorator'
+import { Component, Prop, Vue, Emit } from 'vue-property-decorator'
 import { Blockchain } from '../blockchain'
 
 @Component

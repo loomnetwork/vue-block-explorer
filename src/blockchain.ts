@@ -121,7 +121,6 @@ export class Blockchain {
   async startClientConnection() {
     const writer = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/rpc` }] })
     const reader = createJSONRPCClient({ protocols: [{ url: `${this.serverUrl}/query` }] })
-    console.log('connTest', this.chainID)
     if (this.client) {
       this.client.disconnect()
     }
