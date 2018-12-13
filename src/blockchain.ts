@@ -11,6 +11,9 @@ interface IBlockchainStatusResponse {
     sync_info: {
       latest_block_height: number
     }
+    node_info: {
+      version: string
+    }
   }
 }
 
@@ -98,6 +101,7 @@ export class Blockchain {
   transactions: IBlockchainTransaction[] = []
   totalNumBlocks: number = 0
   refreshTimer: number | null = null
+  nodeVersion: string
   client: Client
 
   constructor(params: { chainID: string; serverUrl: string; allowedUrls: string[] }) {
@@ -162,7 +166,9 @@ export class Blockchain {
   async fetchStatus(): Promise<IBlockchainStatus> {
     const statusResp = await Axios.get<IBlockchainStatusResponse>(`${this.serverUrl}/rpc/status`)
     const latestBlockHeight = statusResp.data.result.sync_info.latest_block_height
+    const nodeVersion = statusResp.data.result.node_info.version
     this.totalNumBlocks = latestBlockHeight
+    this.nodeVersion = nodeVersion
     return { latestBlockHeight }
   }
 
@@ -290,15 +296,17 @@ export class Blockchain {
     const { tx_result } = txResp.data.result
     let loomEVMtxHash: Uint8Array
 
-    // If is a deploy rather than a call need to inspect into protobuf
-    if (tx_result.info == EVMCall.DeployEVM) {
+    try {
+      // First try deserialize deploy if not is deploy it will be a call
       const deployResponse = DeployResponse.deserializeBinary(B64ToUint8Array(tx_result.data))
       const deployResponseData = DeployResponseData.deserializeBinary(
         deployResponse.getOutput_asU8()
       )
       loomEVMtxHash = deployResponseData.getTxHash_asU8()
-    } else {
+      tx_result.info = EVMCall.DeployEVM
+    } catch (e) {
       loomEVMtxHash = B64ToUint8Array(tx_result.data)
+      tx_result.info = EVMCall.CallEVM
     }
 
     const evmTxReceiptResp = await this.client.getEvmTxReceiptAsync(loomEVMtxHash)
@@ -326,7 +334,8 @@ export class Blockchain {
       block.txs = []
       for (let i = 0; i < rawTxs.length; i++) {
         try {
-          const data = extractTxDataFromStr(rawTxs[i])
+          // Pass the current node version
+          const data = extractTxDataFromStr(rawTxs[i], this.nodeVersion)
           let txData = {} as IDecodedTx
           let txType = ''
           let evmDelayedCall

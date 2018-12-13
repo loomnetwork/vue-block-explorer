@@ -13,6 +13,7 @@ import {
 import { MapEntry } from '@/pbs/common_pb'
 import { sha256 } from 'js-sha256'
 import { bytesToHex } from 'loom-js/dist/crypto-utils'
+import { versionGreaterThan } from './utils'
 
 export interface ISigned {
   sig: Uint8Array
@@ -31,11 +32,16 @@ export interface IDecodedTx {
   vmType?: VMType
 }
 
-export function extractTxDataFromStr(base64Str: string): IOneSigTx {
+// On versions greater than 0.22.8 the bytes for the tx hash id should be 32 bytes
+// Otherwise for lower and equal 0.22.8 should be 20 bytes
+const _20BytesTxVersion = '0.22.8'
+
+export function extractTxDataFromStr(base64Str: string, nodeVersion: string): IOneSigTx {
   const pbBuf = CryptoUtils.bufferToProtobufBytes(CryptoUtils.B64ToUint8Array(base64Str))
   let lastError = Error || null
   try {
-    const txHash = extractTxHashFromPB(pbBuf)
+    const bytesNum = versionGreaterThan(_20BytesTxVersion, nodeVersion) ? 32 : 20
+    const txHash = extractTxHashFromPB(pbBuf, bytesNum)
     const signed = readTxSignature(pbBuf)
     const tx = readTxPayload(pbBuf)
     return { tx, signed, txHash }
@@ -49,8 +55,8 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
   throw lastError
 }
 
-function extractTxHashFromPB(pbBuf: Uint8Array): string {
-  return bytesToHex(Buffer.from(sha256(pbBuf), 'hex').subarray(0, 32))
+function extractTxHashFromPB(pbBuf: Uint8Array, bytesNum: number = 32): string {
+  return bytesToHex(Buffer.from(sha256(pbBuf), 'hex').subarray(0, bytesNum))
 }
 
 function readTxPayload(i: Uint8Array): IDecodedTx {
