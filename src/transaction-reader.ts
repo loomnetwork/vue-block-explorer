@@ -50,7 +50,7 @@ export function extractTxDataFromStr(base64Str: string): IOneSigTx {
 }
 
 function extractTxHashFromPB(pbBuf: Uint8Array): string {
-  return bytesToHex(Buffer.from(sha256(pbBuf), 'hex').subarray(0, 20))
+  return bytesToHex(Buffer.from(sha256(pbBuf), 'hex').subarray(0, 32))
 }
 
 function readTxPayload(i: Uint8Array): IDecodedTx {
