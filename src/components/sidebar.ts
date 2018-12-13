@@ -1,13 +1,4 @@
-// interface IBlockListItem {
-//   blockHeight: number
-//   numTransactions: number
-//   hash: string
-//   age: string
-//   time: string
-//   block: IBlockchainBlock
-// }
-
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class Sidebar extends Vue {

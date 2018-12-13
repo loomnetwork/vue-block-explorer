@@ -1,13 +1,9 @@
 <template>
-  <BlockList :blockchain="blockchain"
-             :showConnectionDropdown="showConnectionDropdown"
-             :searchQuery="curSearchQuery"/>
-<!--   <component
-    :is="viewComponent"
+  <BlockList
     :blockchain="blockchain"
     :showConnectionDropdown="showConnectionDropdown"
-    :searchQuery="curSearchQuery">
-  </component> -->
+    :searchQuery="curSearchQuery"
+  />
 </template>
 
 <style lang="scss">

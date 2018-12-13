@@ -79,8 +79,12 @@ export default Vue.extend({
     }
   },
   methods: {
-    rowClickHandler(item: ITransactionTableItem, index: number, event: Event) {
+    async rowClickHandler(item: ITransactionTableItem, index: number, event: Event) {
       if (this.onRowClicked) {
+        if (item.tx.evmDelayedCall) {
+          await item.tx.evmDelayedCall()
+        }
+
         this.onRowClicked(item, index, event)
       }
     }

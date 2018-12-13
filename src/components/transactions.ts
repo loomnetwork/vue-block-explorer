@@ -7,7 +7,7 @@
 //   block: IBlockchainBlock
 // }
 
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Vue } from 'vue-property-decorator'
 // @ts-ignore
 import TransactionList from './TransactionList.vue'
 import { Blockchain } from '../blockchain'

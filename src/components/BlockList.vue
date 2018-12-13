@@ -1,32 +1,31 @@
 <template>
-  <div class="position-relative">
+  <div class="position-relative mb-5">
     <div>
       <b-row class="block-heading">
         <b-col>
-          <h1 class="page-header">
-            Blocks <fa v-if="isBusy"
-                       icon="spinner"
-                       class="spinner"
-                       spin/>
+          <h1 class="page-header">Blocks
+            <fa v-if="isBusy" icon="spinner" class="spinner" spin/>
           </h1>
         </b-col>
         <b-col>
           <div class="block-search-query d-flex flex-row align-items-center">
             <fa :icon="['fas', 'search']" class="search-icon text-grey" fixed-width/>
             <label for="sq-block-height" class="height-label text-grey">Block Height:</label>
-            <b-form-input id="sq-block-height"
-                          class="custom-input fieldheight-input bg-light"
-                          type="number"
-                          @keypress.enter.native="searchWithBlockHeight"
-                          v-model="blockHeight">
-            </b-form-input>
+            <b-form-input
+              id="sq-block-height"
+              class="custom-input fieldheight-input bg-light"
+              type="number"
+              @keypress.enter.native="searchWithBlockHeight"
+              v-model="blockHeight"
+            ></b-form-input>
           </div>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <div class="table-container">
-            <b-table ref="blocksTable"
+            <b-table
+              ref="blocksTable"
               :sort-by.sync="sortBy"
               :sort-desc.sync="sortDesc"
               :no-provider-sorting="true"
@@ -39,7 +38,8 @@
               :current-page="currentPage"
               :per-page="perPage"
               :busy.sync="isBusy"
-              class="custom-table">
+              class="custom-table"
+            >
               <template slot="blockHeight" slot-scope="row">
                 <span>#{{ row.value }}</span>
               </template>
@@ -52,22 +52,30 @@
               <template slot="time" slot-scope="row">
                 <span>{{ row.value }}</span>
               </template>
+              <template slot="numTransactions" slot-scope="row">
+                <span>{{ row.value }}</span>
+              </template>
             </b-table>
             <div class="d-flex flex-row">
-            <ConnectionStatus v-if="showConnectionDropdown" class="connection-status"
-              :blockchain="blockchain"
-              @urlClicked="onConnectionUrlChanged"
-              @urlInput="onUserInputUrl"/>
-            <b-pagination
-              v-model="currentPage"
-              size="sm"
-              :total-rows="totalNumBlocks"
-              :per-page="perPage"
-              :align="paginationAlignment"
-              first-text="&nbsp;"
-              last-text="&nbsp;"
-              prev-text="&nbsp;"
-              next-text="&nbsp;"
+              <ConnectionStatus
+                v-if="showConnectionDropdown"
+                class="connection-status"
+                :blockchain="blockchain"
+                @urlClicked="onConnectionUrlChanged"
+                @urlInput="onUserInputUrl"
+                @chainIDInput="onUserInputChainID"
+              />
+
+              <b-pagination
+                v-model="currentPage"
+                size="sm"
+                :total-rows="+totalNumBlocks"
+                :per-page="perPage"
+                :align="paginationAlignment"
+                first-text="&nbsp;"
+                last-text="&nbsp;"
+                prev-text="&nbsp;"
+                next-text="&nbsp;"
               />
             </div>
           </div>
@@ -83,7 +91,6 @@
 
 <style lang="scss">
 @import '~@/styles/app.scss';
-
 
 .block-heading {
   align-items: center;

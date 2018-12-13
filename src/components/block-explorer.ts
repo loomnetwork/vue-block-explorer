@@ -27,12 +27,14 @@ export default class BlockExplorer extends Vue {
   @Prop() view!: string // prettier-ignore
   @Prop({ default: true }) showConnectionDropdown!: boolean // prettier-ignore
   @Prop({ required: true }) defaultUrl!: string // prettier-ignore
+  @Prop({ required: true }) defaultChainID!: string // prettier-ignore
   @Prop({ required: true }) allowedUrls!: string[] // prettier-ignore
   @Prop({ default: () => ({ blockHeight: null }) }) searchQuery!: ISearchQuery // prettier-ignore
 
   blockchain: Blockchain | null = new Blockchain({
     serverUrl: this.defaultUrl,
-    allowedUrls: this.allowedUrls
+    allowedUrls: this.allowedUrls,
+    chainID: this.defaultChainID
   })
 
   beforeDestroy() {

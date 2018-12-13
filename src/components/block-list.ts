@@ -40,6 +40,7 @@ export default class BlockList extends Vue {
     { key: 'hash', label: 'Hash', sortable: true },
     { key: 'age', sortable: true },
     { key: 'time', sortable: true }
+    // { key: 'numTransactions', label: 'Tx#', sortable: true }
   ]
   muted = 'gray'
   selectedItem: IBlockListItem | null = null
@@ -111,7 +112,7 @@ export default class BlockList extends Vue {
         block
       }))
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
 
     if (autoFetch) {
@@ -176,17 +177,30 @@ export default class BlockList extends Vue {
     this.blockchain.setServerUrl(newUrl)
     this.currentPage = 1
     if (this.$refs.blocksTable) {
-      (this.$refs.blocksTable as any).refresh()
+      ;(this.$refs.blocksTable as any).refresh()
     }
   }
 
-  onUserInputUrl(url:string){
+  onChainIDChanged(newChainID: string) {
+    this.blockchain.setChainID(newChainID)
+    this.currentPage = 1
+    if (this.$refs.blocksTable) {
+      ;(this.$refs.blocksTable as any).refresh()
+    }
+  }
+
+  onUserInputUrl(url: string) {
     localStorage.customUrl = url
     this.setLocationSearch(url)
     this.onConnectionUrlChanged(url)
   }
 
-  setLocationSearch(url:string){
+  onUserInputChainID(chainID: string) {
+    localStorage.chainID = chainID
+    this.onChainIDChanged(chainID)
+  }
+
+  setLocationSearch(url: string) {
     window.location.search = `rpc=${url}`
   }
 
