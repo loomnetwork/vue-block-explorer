@@ -9,6 +9,7 @@
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
+    "noImplicitAny": false,
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "types": [
