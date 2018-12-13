@@ -687,13 +687,6 @@
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/@nodelib/fs.stat/download/@nodelib/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
-"@types/bn.js@^4.11.3":
-  version "4.11.3"
-  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.3.tgz#0f09e53e98659b007d7019261ddab9178135df38"
-  integrity sha512-auZ3vEo3UW8tZc9NhF0MTnutKlf+YhsfC3+dwskFcil/EoqqZF60pGuJ2v2Ae1OJTUp3DJnjOJMqrpkmKB904w==
-  dependencies:
-    "@types/node" "*"
-
 "@types/chai@^4.1.0":
   version "4.1.4"
   resolved "http://registry.npm.taobao.org/@types/chai/download/@types/chai-4.1.4.tgz#5ca073b330d90b4066d6ce18f60d57f2084ce8ca"
