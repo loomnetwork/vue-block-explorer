@@ -1,17 +1,10 @@
 import Axios from 'axios'
 
 import { extractTxDataFromStr, IDecodedTx } from './transaction-reader'
-import { Client, CryptoUtils, createJSONRPCClient } from 'loom-js'
+import { Client, createJSONRPCClient } from 'loom-js'
 import { VMType, DeployResponse, DeployResponseData } from 'loom-js/dist/proto/loom_pb'
 import { EvmTxReceipt } from 'loom-js/dist/proto/evm_pb'
-import {
-  Uint8ArrayToB64,
-  B64ToUint8Array,
-  bytesToHex,
-  bufferToProtobufBytes,
-  bytesToHexAddr,
-  numberToHex
-} from 'loom-js/dist/crypto-utils'
+import { B64ToUint8Array, bytesToHexAddr, numberToHex } from 'loom-js/dist/crypto-utils'
 
 interface IBlockchainStatusResponse {
   result: {
@@ -336,7 +329,7 @@ export class Blockchain {
           const data = extractTxDataFromStr(rawTxs[i])
           let txData = {} as IDecodedTx
           let txType = ''
-          let evmDelayedCall = null
+          let evmDelayedCall
 
           if (data.tx.vmType === VMType.EVM) {
             evmDelayedCall = async () => {

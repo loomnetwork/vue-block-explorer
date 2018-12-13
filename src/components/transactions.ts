@@ -17,6 +17,7 @@ export default Vue.extend({
   data() {
     return {
       blockchain: new Blockchain({
+        chainID: this.chainID,
         serverUrl: this.defaultUrl,
         allowedUrls: this.allowedUrls
       })
@@ -25,5 +26,5 @@ export default Vue.extend({
   components: {
     TransactionList
   },
-  props: ['defaultUrl', 'allowedUrls']
+  props: ['defaultUrl', 'allowedUrls', 'chainID']
 })

@@ -18,7 +18,7 @@ export default class DecodedTx extends Vue {
   get txData(): Array<any> {
     let txValueData = this.tx.arrData[1]
     let data = txValueData.split(',')
-    let txData = []
+    let txData: Array<any> = []
     for (let i = 0; i < data.length; i += 2) {
       txData.push({
         key: data[i],
