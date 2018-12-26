@@ -32,7 +32,7 @@ Vue.component('fa', FontAwesomeIcon)
 })
 export default class App extends Vue {
   defaultChainID = 'default'
-  allowedUrls = ['https://plasma.dappchains.com']
+  allowedUrls = ['https://plasma.dappchains.com', 'http://127.0.0.1:46658']
   defaultUrl = this.allowedUrls[0]
   mounted() {}
   beforeMount() {
